@@ -20,11 +20,13 @@ namespace ChatApplication.Dbl
         private readonly IDbConnection _dbConnection;
         private readonly IUserRepository _users;
         private readonly IRoleRepository _roles;
+        private readonly IInroleRepository _inrole;
         public DbContext(string connectionString)
         {            
             _dbConnection = new MySqlConnection(connectionString);
             _users = new UserRepository(_dbConnection);
             _roles = new RoleRepository(_dbConnection);
+            _inrole = new InroleRepository(_dbConnection);
         }
 
         /// <summary>
@@ -36,5 +38,10 @@ namespace ChatApplication.Dbl
         /// Репозиторий ролей.
         /// </summary>
         public IRoleRepository Roles => _roles;
+
+        /// <summary>
+        /// Пользователь в роли.
+        /// </summary>
+        public IInroleRepository UserInRole => _inrole;
     }
 }
