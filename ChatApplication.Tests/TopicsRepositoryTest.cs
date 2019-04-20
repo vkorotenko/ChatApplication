@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#region License
+// Разработано: Коротенко Владимиром Николаевичем (Vladimir N. Korotenko)
+// email: koroten@ya.ru
+// skype:vladimir-korotenko 
+// https://vkorotenko.ru
+// Создано:  20.04.2019 9:56
+#endregion
 using ChatApplication.Dbl;
 using ChatApplication.Dbl.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
+using System;
+using System.Threading.Tasks;
 
 namespace ChatApplication.Tests
 {
