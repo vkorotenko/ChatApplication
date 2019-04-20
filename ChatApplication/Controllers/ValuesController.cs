@@ -1,45 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#region License
+// Разработано: Коротенко Владимиром Николаевичем (Vladimir N. Korotenko)
+// email: koroten@ya.ru
+// skype:vladimir-korotenko 
+// https://vkorotenko.ru
+// Создано:  13.04.2019 22:30
+#endregion
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChatApplication.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// Контроллер значений
+    /// </summary>
+    [Route("api/v1/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ValuesController : Controller
     {
-        // GET api/values
+        /// <summary>
+        /// Информация о логоне
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [Route("getlogin")]
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public IActionResult GetLogin()
         {
-            return new string[] { "value1", "value2" };
+            return Ok($"Ваш логин: {User.Identity.Name}");
         }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        /// <summary>
+        /// Получение роли пользователя
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "admin")]
+        [Route("getrole")]
+        [HttpGet]
+        public IActionResult GetRole()
         {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok("Ваша роль: администратор");
         }
     }
 }

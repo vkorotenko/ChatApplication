@@ -1,0 +1,150 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Bare - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/open-iconic-bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- production version, optimized for size and speed -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+    <link rel="stylesheet" href="css/chat.css" />
+</head>
+
+<body>
+    <div id="chatApp">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">Locat message page</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+
+
+                            <span class="sr-only">(messages)</span>
+                            <div class="container" style="font-size: 1.1rem; color: white">
+                                Сообщения:
+                                <button class="btn btn-default btn-lg btn-link">
+                                    <span class="fas fa-envelope"></span>
+                                </button>
+                                <span class="badge badge-notify">{{ unreadMessage }}</span>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-lg-4 ">
+                    <form class="form-inline">
+                        <div class="input-group w100">
+                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="userSearch">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="leftList list-group">                        
+                        <li class="list-group-item d-flex flex-row">
+                            <a class="avatar-list-img" href="javascript:void(0);"> 
+                                <img data-holder-rendered="true" src="Images/avatar.jpg" class="avatar-list-img img-fluid" data-src="avatar.jpg" alt="40x40">
+                            </a>
+                            <div class="media-body">
+                                <h3 class="list-title">Two-line item   <span class="ts-left">22:23</span> </h3> 
+                                <p class="list-subtitle">Secondary text</p>                                 
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex flex-row">
+                            <a href="javascript:void(0);">
+                                <img data-holder-rendered="true" src="Images/avatar.jpg" class="avatar-list-img img-fluid" data-src="avatar.jpg" alt="40x40">
+                            </a>
+                            <div class="media-body">
+                                <h3 class="list-title">Two-line item</h3>
+                                <p class="list-subtitle">Secondary text</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-8">
+                    <div class="chat-area">
+                        <div class="history">
+                            <div class="empty-div">
+                                Нет ни одного сообщения.
+                            </div>
+                        </div>
+                        <form class="form-inline">
+                            <div class="input-group w100">
+                                <input type="text" class="form-control" id="sendChatInput" placeholder="Введите сообщение">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"
+            integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        var app = new Vue({
+            el: '#chatApp',
+            data: {
+                unreadMessage: 6,
+                users: []
+            }
+        });
+
+        var token = sessionStorage.getItem('accessToken');
+        console.log(token);
+        $.ajax({
+            type: 'GET',
+            url: '/api/v1/Values/getlogin',
+            beforeSend: function (xhr) {
+
+                var token = sessionStorage.getItem(token);
+                console.log(token);
+                xhr.setRequestHeader("Authorization", "Bearer " + token)
+            },
+            success: function (data) {
+                alert(data);
+            },
+            fail: function (data) {
+                console.log(data);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
