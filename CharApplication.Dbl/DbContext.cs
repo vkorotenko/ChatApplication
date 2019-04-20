@@ -23,6 +23,7 @@ namespace ChatApplication.Dbl
         private readonly IInroleRepository _inrole;
         private readonly ITopicRepository _topics;
         private readonly IMessageRepository _messages;
+        private readonly IFileRepository _files;
         public DbContext(string connectionString)
         {            
             _dbConnection = new MySqlConnection(connectionString);
@@ -31,6 +32,7 @@ namespace ChatApplication.Dbl
             _inrole = new InroleRepository(_dbConnection);
             _topics = new TopicRepository(_dbConnection); 
             _messages = new MessageRepository(_dbConnection);
+            _files = new FileRepository(_dbConnection);
         }
 
         /// <summary>
@@ -56,6 +58,9 @@ namespace ChatApplication.Dbl
         /// Сообщения.
         /// </summary>
         public IMessageRepository Messages => _messages;
-
+        /// <summary>
+        /// Файлы.
+        /// </summary>
+        public IFileRepository Files => _files;
     }
 }

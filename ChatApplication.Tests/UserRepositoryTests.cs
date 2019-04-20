@@ -11,7 +11,7 @@ namespace ChatApplication.Tests
     [TestClass]
     public class UserRepositoryTests
     {
-        const string _cs = "server=localhost;UserId=chatapp;Password=ffgklmmmk56dfg;database=chatapp;";
+        private const string _cs = Cost.Connection;
         /// <summary>
         /// test id
         /// </summary>

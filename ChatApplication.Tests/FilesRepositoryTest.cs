@@ -3,19 +3,20 @@
 // email: koroten@ya.ru
 // skype:vladimir-korotenko 
 // https://vkorotenko.ru
-// Создано:  20.04.2019 9:56
+// Создано:  20.04.2019 12:22
 #endregion
+
+using System;
+using System.Threading.Tasks;
 using ChatApplication.Dbl;
 using ChatApplication.Dbl.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
-using System;
-using System.Threading.Tasks;
 
 namespace ChatApplication.Tests
 {
     [TestClass]
-    public class TopicsRepositoryTest
+    public class FilesRepositoryTest
     {
         private const string _cs = Cost.Connection;
         /// <summary>
@@ -23,42 +24,42 @@ namespace ChatApplication.Tests
         /// </summary>
         private const long _creatorId = 9103421220;
 
-        private const long _id = 42;
-
+        private const long _topicId = 42;
+        private const long _messageId = 77;
+        private const long _fileId = 99;
         [TestMethod]
         public async Task GetAllTest()
         {
 
             var ctx = new DbContext(_cs);
-            var users = await ctx.Topics.GetAll();
-            Assert.AreEqual(true, users.Count > 0);
+            var items = await ctx.Files.GetAll();
+            Assert.AreEqual(1, items.Capacity);
         }
         [TestMethod]
         public async Task InsertTest()
         {
 
             var ctx = new DbContext(_cs);
-            var item = new DbTopic()
+            var item = new DbFile()
             {
-                Id = _id,
-                Title = "test",
-                AnnouncementId = _id,
+                Id = _fileId,
+                Name = "filetest.txt",
                 AuthorId = _creatorId,
-                Vendor = "TestVendor",
-                VendorCode = "TestVendorCode",
-                Created = new DateTime(2019, 1, 1, 22, 23, 00)
+                Created = new DateTime(2019, 1, 1, 22, 23, 00),
+                MessageId = _messageId                
+                
             };
-            DbTopic ins;
+            DbFile message;
             try
             {
-                ins = await ctx.Topics.Create(item);
-                Assert.AreEqual(item.Id, ins.Id);
+                message = await ctx.Files.Create(item);
+                Assert.AreEqual(item.Id, message.Id);
             }
             catch (MySqlException ex)
             {
-                await ctx.Topics.Delete(_id);
-                ins = await ctx.Topics.Create(item);
-                Assert.AreEqual(item.Id, ins.Id);
+                await ctx.Files.Delete(_fileId);
+                message = await ctx.Files.Create(item);
+                Assert.AreEqual(item.Id, message.Id);
             }
 
 
@@ -67,36 +68,36 @@ namespace ChatApplication.Tests
         public async Task SelectTest()
         {
             var ctx = new DbContext(_cs);
-            var result = await ctx.Topics.Get(_id);
-            Assert.AreEqual(result.Id, _id);
+            var result = await ctx.Files.Get(_fileId);
+            if (result == null) await InsertTest();
+            Assert.AreEqual(result.Id, _fileId);
         }
         [TestMethod]
         public async Task DeleteTest()
         {
             var ctx = new DbContext(_cs);
-            var exist = await ctx.Topics.Get(_id);
+            var exist = await ctx.Files.Get(_fileId);
             if (exist == null)
                 await InsertTest();
-            await ctx.Topics.Delete(_id);
-            exist = await ctx.Topics.Get(_id);
-
+            await ctx.Files.Delete(_fileId);
+            exist = await ctx.Files.Get(_fileId);
             Assert.AreEqual(exist, null);
         }
 
         [TestMethod]
         public async Task UpdateTest()
         {
-            var newname = "petr";
+            var newname = "petr.txt";
             var ctx = new DbContext(_cs);
-            var item = await ctx.Topics.Get(_id);
+            var item = await ctx.Files.Get(_fileId);
             if (item == null) await InsertTest();
-            item = await ctx.Topics.Get(_id);
-            item.Title = newname;
-            await ctx.Topics.Update(item);
+            item = await ctx.Files.Get(_fileId);
+            item.Name = newname;
+            await ctx.Files.Update(item);
 
-            item = await ctx.Topics.Get(_id);
+            item = await ctx.Files.Get(_fileId);
 
-            Assert.AreEqual(item.Title, newname);
+            Assert.AreEqual(item.Name, newname);
         }
     }
 }

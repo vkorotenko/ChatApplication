@@ -15,7 +15,7 @@ namespace ChatApplication.Tests
     [TestClass]
     public class UserInRoleRepositoryTest
     {
-        const string _cs = "server=localhost;UserId=chatapp;Password=ffgklmmmk56dfg;database=chatapp;";
+        private const string _cs = Cost.Connection;
         [TestMethod]
         public async Task GetUserInRolesListTest()
         {
