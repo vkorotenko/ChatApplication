@@ -7,8 +7,8 @@ namespace ChatApplication.Dbl.Repository
     public interface IUserRepository
     {
         Task<DbUser> Create(DbUser user);
-        Task Delete(long id);
-        Task<DbUser> Get(long id);
+        Task Delete(int id);
+        Task<DbUser> Get(int id);
         Task <List<DbUser>> GetUsers();
         Task Update(DbUser user);
     }

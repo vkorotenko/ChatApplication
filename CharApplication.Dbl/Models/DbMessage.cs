@@ -31,7 +31,7 @@ namespace ChatApplication.Dbl.Models
         /// <summary>
         /// Автор сообщения
         /// </summary>
-        public long AuthorId { get; set; }
+        public int AuthorId { get; set; }
         /// <summary>
         /// Флаг прочтения
         /// </summary>

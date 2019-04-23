@@ -75,15 +75,26 @@ SELECT LAST_INSERT_ID()";
         {
 
             const string sqlQuery = @"UPDATE dbtopics
-SET
-title = @Title,
-announcementid = @AnnouncementId,
-vendor = @Vendor,
-vendorcode = @VendorCode,
-authorid = @AuthorId,
-created = @Created
-WHERE id = @Id";
+                                        SET
+                                        title = @Title,
+                                        announcementid = @AnnouncementId,
+                                        vendor = @Vendor,
+                                        vendorcode = @VendorCode,
+                                        authorid = @AuthorId,
+                                        created = @Created
+                                        WHERE id = @Id";
             await _dbConn.ExecuteAsync(sqlQuery, user);
+        }
+
+        /// <summary>
+        /// Получение топиков по идентификатору пользователя
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя</param>
+        /// <returns></returns>
+        public async Task<List<DbTopic>> GetByUserId(int id)
+        {
+            var res = await _dbConn.QueryAsync<DbTopic>("SELECT * FROM dbtopics WHERE authorid = @id", new { id });
+            return res.ToList();            
         }
     }
 }

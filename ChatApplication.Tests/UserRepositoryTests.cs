@@ -3,6 +3,7 @@ using ChatApplication.Dbl.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace ChatApplication.Tests
         /// <summary>
         /// test id
         /// </summary>
-        private const long _id = 9103421220;
+        private const int _id = 52;
         [TestMethod]
         public async Task GetUsersTest()
         {
@@ -49,6 +50,7 @@ namespace ChatApplication.Tests
             }
             catch (MySqlException ex)
             {
+                Debug.WriteLine(ex);
                 await ctx.Users.Delete(_id);
                 ins = await ctx.Users.Create(dbuser);
                 Assert.AreEqual(dbuser.Id, ins.Id);
@@ -59,7 +61,7 @@ namespace ChatApplication.Tests
         [TestMethod]
         public async Task SelectTest()
         {
-            var id = 79103421225;
+            var id = 55;
             var name = "Vladimir";
             var mname = "Nikolaevitch";
             var lname = "Korotenko";

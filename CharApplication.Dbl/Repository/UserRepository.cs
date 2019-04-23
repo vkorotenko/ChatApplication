@@ -26,7 +26,7 @@ namespace ChatApplication.Dbl.Repository
             return (await _dbConn.QueryAsync<DbUser>("SELECT * FROM dbusers")).ToList();
         }
 
-        public async Task<DbUser> Get(long id)
+        public async Task<DbUser> Get(int id)
         {
 
             return (await _dbConn.QueryAsync<DbUser>("SELECT * FROM dbusers WHERE id = @id", new { id })).FirstOrDefault();
@@ -41,10 +41,10 @@ namespace ChatApplication.Dbl.Repository
 
             // если мы хотим получить id добавленного пользователя
 
-            var sqlQuery = @"INSERT INTO dbusers (id, name, lastname, middlename, email, password, lastactive) 
-VALUES(@Id, @Name, @LastName, @MiddleName, @Email, @Password, @LastActive); 
+            var sqlQuery = @"INSERT INTO dbusers (id, username, name, lastname, middlename, email, password, lastactive) 
+VALUES(@Id, @UserName, @Name, @LastName, @MiddleName, @Email, @Password, @LastActive); 
 SELECT LAST_INSERT_ID()";
-            long? userId = (await _dbConn.QueryAsync<long>(sqlQuery, user)).FirstOrDefault();
+            int? userId = (await _dbConn.QueryAsync<int>(sqlQuery, user)).FirstOrDefault();
             user.Id = userId.Value;
             return user;
         }
@@ -56,6 +56,7 @@ SELECT LAST_INSERT_ID()";
             const string sqlQuery = @"UPDATE dbusers
 SET
 `id` = @Id,
+username = @UserName,
 `name` = @Name,
 `lastname` = @LastName,
 `middlename` = @MiddleName,
@@ -67,7 +68,7 @@ WHERE `id` = @Id ;";
 
         }
 
-        public async Task Delete(long id)
+        public async Task Delete(int id)
         {
             const string sqlQuery = "DELETE FROM dbusers WHERE id = @id";
             await _dbConn.ExecuteAsync(sqlQuery, new { id });

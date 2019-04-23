@@ -7,6 +7,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using ChatApplication.Dbl;
 using ChatApplication.Dbl.Models;
@@ -22,7 +23,7 @@ namespace ChatApplication.Tests
         /// <summary>
         /// test id
         /// </summary>
-        private const long _creatorId = 9103421220;
+        private const int _creatorId = 52;
 
         private const long _topicId = 42;
         private const long _messageId = 77;
@@ -57,6 +58,7 @@ namespace ChatApplication.Tests
             }
             catch (MySqlException ex)
             {
+                Debug.WriteLine(ex);
                 await ctx.Messages.Delete(_messageId);
                 message = await ctx.Messages.Create(item);
                 Assert.AreEqual(item.Id, message.Id);

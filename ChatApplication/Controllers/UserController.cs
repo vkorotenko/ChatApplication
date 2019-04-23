@@ -6,11 +6,14 @@
 // Создано:  17.04.2019 23:09
 #endregion
 
+using System.Linq;
 using ChatApplication.Poco;
-using ChatApplication.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using AutoMapper;
+using ChatApplication.Dbl;
+using ChatApplication.Dbl.Models;
 
 namespace ChatApplication.Controllers
 {
@@ -22,23 +25,17 @@ namespace ChatApplication.Controllers
     public class UserController : Controller
     {
         /// <summary>
-        /// пользовательский датастор
+        /// Контекст дб
         /// </summary>
-        private IDataStore<ApplicationUser> _applicationUserDataStore;
-        
-        /// <summary>
-        /// Копаньонский датастор
-        /// </summary>
-        private IDataStore<Companion> _applicationCompanionDataStore;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="applicationUserDataStore"></param>
-        /// <param name="applicationCompanionDataStore"></param>
-        public UserController(IDataStore<ApplicationUser> applicationUserDataStore, IDataStore<Companion> applicationCompanionDataStore)
+        private DbContext _ctx;
+       
+       /// <summary>
+       /// Контроллер для отображения пользовательской информации.
+       /// </summary>
+       /// <param name="ctx"></param>
+        public UserController(DbContext ctx)
         {
-            _applicationCompanionDataStore = applicationCompanionDataStore;
-            _applicationUserDataStore = applicationUserDataStore;
+            _ctx = ctx;
         }
         /// <summary>
         /// Получение залогоненого пользователя
@@ -48,9 +45,12 @@ namespace ChatApplication.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            var t = await _applicationCompanionDataStore.GetItemAsync("1");
-            var r = await _applicationUserDataStore.GetItemAsync("1");
-            return Json(r);
+            var users = await _ctx.Users.GetUsers();
+            var user = users.FirstOrDefault(x=>x.UserName == User.Identity.Name);
+            var appUser = Mapper.Map<ApplicationUser>(user);
+            var topics = await _ctx.Topics.GetByUserId(user.Id);
+            appUser.Topics = topics;
+            return Json(appUser);
             //return Ok($"Ваш логин: {User.Identity.Name}");
         }
     }

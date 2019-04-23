@@ -5,9 +5,8 @@
 // https://vkorotenko.ru
 // Создано:  13.04.2019 22:30
 #endregion
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApplication.Controllers
 {

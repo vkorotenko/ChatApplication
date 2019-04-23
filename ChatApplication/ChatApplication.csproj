@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\" />
+    <Folder Include="wwwroot\upload\faceses\round\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectCapability Include="CSharp;Managed;ClassDesigner" />

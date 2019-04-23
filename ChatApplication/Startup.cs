@@ -10,14 +10,11 @@ using AutoMapper;
 using ChatApplication.Code;
 using ChatApplication.Dbl;
 using ChatApplication.Dbl.Models;
-using ChatApplication.Models;
 using ChatApplication.Poco;
-using ChatApplication.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -54,10 +51,10 @@ namespace ChatApplication
             ConfigureMapper();
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            // добавляем контекст MobileContext в качестве сервиса в приложение
-            services.AddDbContext<ApplicationContext>(options =>
-                options.UseMySql(connection));
-            ConfigureDb(services);            
+            // добавляем контекст DbContext для всего приложения
+            var dbcon = new DbContext(connection);
+            services.AddSingleton<DbContext>(dbcon);
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -115,15 +112,7 @@ namespace ChatApplication
             });
         }
 
-        /// <summary>
-        /// Конфигурируем доступ к данным
-        /// </summary>
-        /// <param name="services"></param>
-        private static void ConfigureDb(IServiceCollection services)
-        {
-            services.AddScoped<IDataStore<ApplicationUser>, UsersDataService>();
-            services.AddScoped<IDataStore<Companion>, CompanionDataService>();
-        }
+        
 
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         private string GetXmlCommentsPath()
@@ -152,7 +141,7 @@ namespace ChatApplication
             app.UseSwagger();            
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Internal messages V1"); });
             app.UseCors();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMvc();

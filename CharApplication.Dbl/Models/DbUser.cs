@@ -10,7 +10,11 @@ namespace ChatApplication.Dbl.Models
         /// <summary>
         /// Телефон пользователя, уникальный в системе.
         /// </summary>
-        public long Id { get; set; }
+        public int Id { get; set; }
+        /// <summary>
+        /// Имя пользователя в системе
+        /// </summary>
+        public string UserName { get; set; }
         /// <summary>
         /// Имя
         /// </summary>

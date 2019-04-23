@@ -42,7 +42,7 @@
         <img class="mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Войдите в систему</h1>
         <label for="inputEmail" class="sr-only">Email</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+        <input type="text" id="inputUserName" class="form-control" placeholder="Имя пользователя" required autofocus>
         <label for="inputPassword" class="sr-only">Пароль</label>
         <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required>
 
@@ -55,6 +55,7 @@
     </form>
     <div>
         <a href="/swagger">swagger</a>
+        <a href="chat.html">chat.html</a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.0.min.js"
@@ -70,7 +71,7 @@
             });
             e.preventDefault();
             var loginData = {
-                email: $('#inputEmail').val(),
+                username: $('#inputUserName').val(),
                 password: $('#inputPassword').val()
             };
 
@@ -85,7 +86,8 @@
                     $('.form-signin').css('display', 'none');
                     // сохраняем в хранилище sessionStorage токен доступа
                     sessionStorage.setItem(tokenKey, data.access_token);
-                    window.location.assign('chat.html');
+                    console.log(data)
+                    //window.location.assign('chat.html');
                 },
                 fail: function (data) {
                     console.log(data);

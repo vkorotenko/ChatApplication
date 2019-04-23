@@ -15,12 +15,12 @@ namespace ChatApplication.Models
     public class LoginModel
     {
         /// <summary>
-        /// Номер телефона пользователя
+        /// Имя пользователя, для обычного используется номер телефона пользователя.
         /// </summary>
-        [JsonProperty("phone")]
-        public string Phone { get; set; }
+        [JsonProperty("username")]
+        public string UserName { get; set; }
         /// <summary>
-        /// Пароль для входа
+        /// Пароль для входа.
         /// </summary>
         [JsonProperty("password")]
         public string Password { get; set; }

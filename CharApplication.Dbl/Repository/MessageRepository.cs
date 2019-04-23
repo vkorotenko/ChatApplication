@@ -51,8 +51,8 @@ namespace ChatApplication.Dbl.Repository
                             @TopicId); 
                             
                             SELECT LAST_INSERT_ID()";
-            long? userId = (await _dbConn.QueryAsync<long>(sqlQuery, item)).FirstOrDefault();
-            item.Id = userId.Value;
+            long? id = (await _dbConn.QueryAsync<long>(sqlQuery, item)).FirstOrDefault();
+            item.Id = id.Value;
             return item;
         }
 

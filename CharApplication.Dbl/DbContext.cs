@@ -15,7 +15,7 @@ namespace ChatApplication.Dbl
     /// <summary>
     /// Контекст базы данных, создается при старте приложения, предоставляет доступ ко всем репозиториям.
     /// </summary>
-    public class DbContext
+    public class DbContext : IDbContext
     {        
         private readonly IDbConnection _dbConnection;
         private readonly IUserRepository _users;

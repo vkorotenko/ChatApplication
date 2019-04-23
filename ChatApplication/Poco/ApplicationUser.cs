@@ -7,6 +7,7 @@
 #endregion
 
 using System.Collections.Generic;
+using ChatApplication.Dbl.Models;
 using Newtonsoft.Json;
 
 namespace ChatApplication.Poco
@@ -22,9 +23,6 @@ namespace ChatApplication.Poco
         /// </summary>
         [JsonProperty("messages")]
         public int NewMessages { get; set; }
-        /// <summary>
-        /// Компаньоны
-        /// </summary>
-        public IEnumerable<Companion> Companions { get; set;}
+        public IEnumerable<DbTopic> Topics { get; set; }
     }
 }

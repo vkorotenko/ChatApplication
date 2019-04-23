@@ -11,6 +11,6 @@ namespace ChatApplication.Dbl.Models
     {
         public long Id { get; set; }
         public int RoleId { get; set; }
-        public long UserId { get; set; }
+        public int UserId { get; set; }
     }
 }

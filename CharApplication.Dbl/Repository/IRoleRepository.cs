@@ -27,5 +27,12 @@ namespace ChatApplication.Dbl.Repository
         /// </summary>
         /// <returns></returns>
         Task<List<DbRole>> GetRoles();
+
+        /// <summary>
+        /// Получение списка ролей для пользователя
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя</param>
+        /// <returns>Список ролей где есть пользователь</returns>
+        Task<List<DbRole>> GetRolesForUser(int id);
     }
 }

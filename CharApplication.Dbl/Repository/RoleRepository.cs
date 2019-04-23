@@ -46,5 +46,20 @@ namespace ChatApplication.Dbl.Repository
         {
             return (await _db.QueryAsync<DbRole>("SELECT * FROM dbroles")).ToList();
         }
+
+        /// <summary>
+        /// Получение списка ролей для пользователя
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя</param>
+        /// <returns>Список ролей где есть пользователь</returns>
+        public async Task<List<DbRole>> GetRolesForUser(int id)
+        {
+            var sql = @"SELECT dr.id, dr.name 
+                            FROM dbroles as dr
+                            INNER JOIN dbuserinroles as uin
+                            ON  uin.roleid = dr.id
+                            WHERE uin.userid = @Id";
+            return (await _db.QueryAsync<DbRole>(sql, new { id })).ToList();
+        }
     }
 }

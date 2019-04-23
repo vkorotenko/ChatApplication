@@ -39,7 +39,7 @@ namespace ChatApplication.Dbl.Models
         /// <summary>
         /// Идентификатор человека создавшего запрос, Номер телефона
         /// </summary>
-        public long AuthorId { get; set; }
+        public int AuthorId { get; set; }
         /// <summary>
         /// Дата создания, автоматически добавляется во время вставки
         /// </summary>

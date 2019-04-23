@@ -47,5 +47,11 @@ namespace ChatApplication.Dbl.Repository
         /// <param name="user"></param>
         /// <returns></returns>
         Task Update(DbTopic user);
+        /// <summary>
+        /// Получение топиков по идентификатору пользователя
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя</param>
+        /// <returns></returns>
+        Task<List<DbTopic>> GetByUserId(int id);
     }
 }

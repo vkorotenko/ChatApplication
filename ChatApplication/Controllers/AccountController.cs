@@ -6,19 +6,17 @@
 // Создано:  14.04.2019 7:38
 #endregion
 using ChatApplication.Code;
+using ChatApplication.Dbl;
 using ChatApplication.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ChatApplication.Poco;
-using ChatApplication.Services;
 
 namespace ChatApplication.Controllers
 {
@@ -31,12 +29,12 @@ namespace ChatApplication.Controllers
         /// <summary>
         /// пользовательский датастор
         /// </summary>
-        private IDataStore<ApplicationUser> _userDs;
+        private DbContext _userDs;
         /// <summary>
         /// Конструктор с пользовательским датасорсом
         /// </summary>
         /// <param name="userDs"></param>
-        public AccountController(IDataStore<ApplicationUser> userDs)
+        public AccountController(DbContext userDs)
         {
             _userDs = userDs;
         }
@@ -46,18 +44,17 @@ namespace ChatApplication.Controllers
         /// <param name="model">Модель входа</param>
         /// <returns></returns>
         [HttpPost("token")]
-        public async Task Token([FromBody]LoginModel model)
+        public async Task<IActionResult> Token([FromBody]LoginModel model)
         {
 
-            var email = model.Phone;
+            var username = model.UserName;
             var password = model.Password;
 
-            var identity = await GetIdentity(email, password);
+            var identity = await GetIdentity(username, password);
             if (identity == null)
             {
-                Response.StatusCode = 400;
-                await Response.WriteAsync("Invalid email or password.");
-                return;
+                Response.StatusCode = 400;                
+                return NotFound("Invalid username or password.");
             }
 
             var now = DateTime.UtcNow;
@@ -86,17 +83,19 @@ namespace ChatApplication.Controllers
                 Path = "/"
             };
             Response.Cookies.Append("Bearer", response.access_token, co);
-            Response.ContentType = "application/json";
-            await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return Json(response);            
         }
 
-        private async Task<ClaimsIdentity> GetIdentity(string email, string password)
+        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            var person = await ((IUserDs) _userDs.GetItemsAsync()).GetItemByPhone(email);
+            var person = (await _userDs.Users.GetUsers()).First(x => x.UserName == username);
+            var role = await _userDs.Roles.GetRolesForUser(person.Id);
+            var roleName = role.First().Name;
             if (person == null) return null; // если пользователя не найдено
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, person.Email),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, person.UserName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName)
             };
             var claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

@@ -45,7 +45,7 @@
             пользовательский датастор
             </summary>
         </member>
-        <member name="M:ChatApplication.Controllers.AccountController.#ctor(ChatApplication.Services.IDataStore{ChatApplication.Poco.ApplicationUser})">
+        <member name="M:ChatApplication.Controllers.AccountController.#ctor(ChatApplication.Dbl.DbContext)">
             <summary>
             Конструктор с пользовательским датасорсом
             </summary>
@@ -63,22 +63,16 @@
             Класс для получения собеседников
             </summary>
         </member>
-        <member name="F:ChatApplication.Controllers.UserController._applicationUserDataStore">
+        <member name="F:ChatApplication.Controllers.UserController._ctx">
             <summary>
-            пользовательский датастор
+            Контекст дб
             </summary>
         </member>
-        <member name="F:ChatApplication.Controllers.UserController._applicationCompanionDataStore">
+        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.DbContext)">
             <summary>
-            Копаньонский датастор
+            Контроллер для отображения пользовательской информации.
             </summary>
-        </member>
-        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Services.IDataStore{ChatApplication.Poco.ApplicationUser},ChatApplication.Services.IDataStore{ChatApplication.Poco.Companion})">
-            <summary>
-            
-            </summary>
-            <param name="applicationUserDataStore"></param>
-            <param name="applicationCompanionDataStore"></param>
+            <param name="ctx"></param>
         </member>
         <member name="M:ChatApplication.Controllers.UserController.Get">
             <summary>
@@ -108,14 +102,14 @@
             Модель для входа в приложение
             </summary>
         </member>
-        <member name="P:ChatApplication.Models.LoginModel.Id">
+        <member name="P:ChatApplication.Models.LoginModel.UserName">
             <summary>
-            Номер телефона пользователя
+            Имя пользователя, для обычного используется номер телефона пользователя.
             </summary>
         </member>
         <member name="P:ChatApplication.Models.LoginModel.Password">
             <summary>
-            Пароль для входа
+            Пароль для входа.
             </summary>
         </member>
         <member name="T:ChatApplication.Models.Message">
@@ -174,11 +168,6 @@
             Общее количество новых сообщений.
             </summary>
         </member>
-        <member name="P:ChatApplication.Poco.ApplicationUser.Companions">
-            <summary>
-            Компаньоны
-            </summary>
-        </member>
         <member name="T:ChatApplication.Poco.BaseUser">
             <summary>
             Базовый класс для всех пользователей
@@ -209,22 +198,6 @@
             Пароль пользователя
             </summary>        
         </member>
-        <member name="T:ChatApplication.Poco.Companion">
-            <inheritdoc />
-            <summary>
-            Класс для компаньона
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.Companion.TotalMessages">
-            <summary>
-            Общее количество новых сообщений.
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.Companion.NewMessages">
-            <summary>
-            количество новых
-            </summary>
-        </member>
         <member name="T:ChatApplication.Program">
             <summary>
             Программа
@@ -241,149 +214,6 @@
             Билдер приложения
             </summary>
             <param name="args"></param>
-            <returns></returns>
-        </member>
-        <member name="T:ChatApplication.Services.CompanionDataService">
-            <summary>
-            Дата сервис для доступа к данным
-            </summary>
-        </member>
-        <member name="M:ChatApplication.Services.CompanionDataService.AddItemAsync(ChatApplication.Poco.Companion)">
-            <summary>
-            Добавить элемент
-            </summary>
-            <param name="item"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.CompanionDataService.UpdateItemAsync(ChatApplication.Poco.Companion)">
-            <summary>
-            Обновить элемент
-            </summary>
-            <param name="item"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.CompanionDataService.DeleteItemAsync(System.String)">
-            <summary>
-            Удалить элемент
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.CompanionDataService.GetItemAsync(System.String)">
-            <summary>
-            Получить элемент по первичному ключу
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.CompanionDataService.GetItemsAsync(System.Boolean)">
-            <summary>
-            Получить элементы 
-            </summary>
-            <param name="forceRefresh"></param>
-            <returns></returns>
-        </member>
-        <member name="T:ChatApplication.Services.IDataStore`1">
-            <summary>
-            Data store interface
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:ChatApplication.Services.IDataStore`1.AddItemAsync(`0)">
-            <summary>
-            Add element to datastore
-            </summary>
-            <param name="item">Added element</param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.IDataStore`1.UpdateItemAsync(`0)">
-            <summary>
-            Update element
-            </summary>
-            <param name="item">Element</param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.IDataStore`1.DeleteItemAsync(System.String)">
-            <summary>
-            Delete element
-            </summary>
-            <param name="id">Element</param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.IDataStore`1.GetItemAsync(System.String)">
-            <summary>
-            Get element by primary key
-            </summary>
-            <param name="id">Key</param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.IDataStore`1.GetItemsAsync(System.Boolean)">
-            <summary>
-            Get all elements
-            </summary>
-            <param name="forceRefresh">Forse refresh datasorce.</param>
-            <returns></returns>
-        </member>
-        <member name="T:ChatApplication.Services.IUserDs">
-            <summary>
-            Методы расширяющие пользовательский датасорс
-            </summary>
-        </member>
-        <member name="M:ChatApplication.Services.IUserDs.GetItemById(System.String)">
-            <summary>
-            Получение пользователя по email
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:ChatApplication.Services.UsersDataService">
-            <summary>
-            Обьект для получения пользователей
-            </summary>
-        </member>
-        <member name="M:ChatApplication.Services.UsersDataService.#ctor">
-            <summary>
-            Конструктор по умолчанию
-            </summary>
-        </member>
-        <member name="M:ChatApplication.Services.UsersDataService.AddItemAsync(ChatApplication.Poco.ApplicationUser)">
-            <summary>
-            Добавление элемента
-            </summary>
-            <param name="item"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.UsersDataService.UpdateItemAsync(ChatApplication.Poco.ApplicationUser)">
-            <summary>
-            Обновление элемента
-            </summary>
-            <param name="item"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.UsersDataService.DeleteItemAsync(System.String)">
-            <summary>
-            Удаление элемента
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.UsersDataService.GetItemAsync(System.String)">
-            <summary>
-            Получение элемента по идентификатору
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.UsersDataService.GetItemsAsync(System.Boolean)">
-            <summary>
-            Получение всех элементов
-            </summary>
-            <param name="forceRefresh"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Services.UsersDataService.GetItemById(System.String)">
-            <summary>
-            Получение по email
-            </summary>
             <returns></returns>
         </member>
         <member name="T:ChatApplication.Startup">
@@ -405,12 +235,6 @@
         <member name="M:ChatApplication.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Конфигурирование сервисов
-            </summary>
-            <param name="services"></param>
-        </member>
-        <member name="M:ChatApplication.Startup.ConfigureDb(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            Конфигурируем доступ к данным
             </summary>
             <param name="services"></param>
         </member>
