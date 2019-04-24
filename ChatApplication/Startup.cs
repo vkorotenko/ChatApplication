@@ -6,6 +6,9 @@
 // Создано:  13.04.2019 22:30
 #endregion
 
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using AutoMapper;
 using ChatApplication.Code;
 using ChatApplication.Dbl;
@@ -17,6 +20,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -27,13 +31,16 @@ namespace ChatApplication
     /// </summary>
     public class Startup
     {
+        private readonly ILogger _logger;
         /// <summary>
         /// Конструктор с конфигурацией сервера. Вызывается инфраструктурой при старте
         /// </summary>
-        /// <param name="configuration"></param>
-        public Startup(IConfiguration configuration)
+        /// <param name="configuration">Конфигурация</param>
+        /// <param name="logger">Логгер</param>
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
+            _logger = logger;
         }
         /// <summary>
         /// Конфигурация приложения
@@ -46,15 +53,15 @@ namespace ChatApplication
         /// <param name="services"></param>
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-
+        {           
+            _logger.LogInformation("Start configure services");
             ConfigureMapper();
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
             // добавляем контекст DbContext для всего приложения
             var dbcon = new DbContext(connection);
             services.AddSingleton<DbContext>(dbcon);
-            
+            services.AddLogging();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -78,11 +85,23 @@ namespace ChatApplication
                         // валидация ключа безопасности
                         ValidateIssuerSigningKey = true,
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Add("Token-Expired", "true");
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);            
             services.AddSwaggerGen(c =>
             {
-                c.IncludeXmlComments(GetXmlCommentsPath());
+                var xml = GetXmlCommentsPath();
+                if(!string.IsNullOrWhiteSpace(xml)) c.IncludeXmlComments(GetXmlCommentsPath());
                 c.DescribeAllEnumsAsStrings();
                 c.SwaggerDoc("v1", new Info
                 {
@@ -102,7 +121,8 @@ namespace ChatApplication
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
-            });            
+            });
+            _logger.LogInformation("End configuring services");
         }
 
         private void ConfigureMapper()
@@ -117,16 +137,27 @@ namespace ChatApplication
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         private string GetXmlCommentsPath()
         {
-            var app = System.AppContext.BaseDirectory;
-            return System.IO.Path.Combine(app, "ChatApplication.xml");
+            try
+            {
+                var app = System.AppContext.BaseDirectory;
+                return System.IO.Path.Combine(app, "ChatApplication.xml");
+            }
+            catch (FileNotFoundException ex)
+            {
+                _logger.LogError("ChatApplication.xml not found");
+                return String.Empty;
+            }
         }
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logs/logger.txt"));
+            var logger = loggerFactory.CreateLogger("FileLogger");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -136,7 +167,7 @@ namespace ChatApplication
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            _logger.LogInformation("App start");
             app.UseAuthentication();
             app.UseSwagger();            
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Internal messages V1"); });
@@ -146,5 +177,6 @@ namespace ChatApplication
             app.UseStaticFiles();
             app.UseMvc();
         }
+        
     }
 }

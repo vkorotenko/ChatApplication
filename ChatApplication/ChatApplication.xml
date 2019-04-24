@@ -35,6 +35,89 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:ChatApplication.Code.FileLogger">
+            <summary>
+            Файловый логгер
+            </summary>
+        </member>
+        <member name="F:ChatApplication.Code.FileLogger._filePath">
+            <summary>
+            Путь к файлу
+            </summary>
+        </member>
+        <member name="M:ChatApplication.Code.FileLogger.#ctor(System.String)">
+            <summary>
+            Логгер
+            </summary>
+            <param name="path">Путь к логгеру</param>
+        </member>
+        <member name="M:ChatApplication.Code.FileLogger.BeginScope``1(``0)">
+            <summary>
+            Создание логгера и выделение ресурсов
+            </summary>
+            <typeparam name="TState">Состояние</typeparam>
+            <param name="state">Значение</param>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Code.FileLogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            Флаг разрешения логгирования
+            </summary>
+            <param name="logLevel">Уровень логгирования</param>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Code.FileLogger.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <summary>
+            Метод для логгирования
+            </summary>
+            <typeparam name="TState"></typeparam>
+            <param name="logLevel"></param>
+            <param name="eventId"></param>
+            <param name="state"></param>
+            <param name="exception"></param>
+            <param name="formatter"></param>
+        </member>
+        <member name="T:ChatApplication.Code.FileLoggerExtensions">
+            <summary>
+            Расширение для конфигурации файлового логгера
+            </summary>
+        </member>
+        <member name="M:ChatApplication.Code.FileLoggerExtensions.AddFile(Microsoft.Extensions.Logging.ILoggerFactory,System.String)">
+            <summary>
+            Добавление файла лога
+            </summary>
+            <param name="factory"></param>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ChatApplication.Code.FileLoggerProvider">
+            <summary>
+            Провайдер логгирования в файл
+            </summary>
+        </member>
+        <member name="F:ChatApplication.Code.FileLoggerProvider._path">
+            <summary>
+            Путь логгирования
+            </summary>
+        </member>
+        <member name="M:ChatApplication.Code.FileLoggerProvider.#ctor(System.String)">
+            <summary>
+            Конструктор провайдера логгирования
+            </summary>
+            <param name="path">Путь к файлу</param>
+        </member>
+        <member name="M:ChatApplication.Code.FileLoggerProvider.CreateLogger(System.String)">
+            <summary>
+            Создание логгера
+            </summary>
+            <param name="categoryName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Code.FileLoggerProvider.Dispose">
+            <summary>
+            Уничтожение обьектов
+            </summary>
+        </member>
         <member name="T:ChatApplication.Controllers.AccountController">
             <summary>
             Контроллер для работы с аккаунтами
@@ -58,9 +141,16 @@
             <param name="model">Модель входа</param>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.AccountController.Refresh(ChatApplication.Models.RefreshTokenModel)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
         <member name="T:ChatApplication.Controllers.UserController">
             <summary>
-            Класс для получения собеседников
+            Контроллер пользователя
             </summary>
         </member>
         <member name="F:ChatApplication.Controllers.UserController._ctx">
@@ -68,17 +158,23 @@
             Контекст дб
             </summary>
         </member>
-        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.DbContext)">
+        <member name="F:ChatApplication.Controllers.UserController._logger">
+            <summary>
+            Логгер
+            </summary>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.DbContext,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.UserController})">
             <summary>
             Контроллер для отображения пользовательской информации.
             </summary>
-            <param name="ctx"></param>
+            <param name="ctx">Контекст бд</param>
+            <param name="logger">Логгер</param>
         </member>
         <member name="M:ChatApplication.Controllers.UserController.Get">
             <summary>
             Получение залогоненого пользователя
             </summary>
-            <returns></returns>
+            <returns>Возвращает основной обьект пользователя, содержит данные о открытых топиках и количестве непрочтенных сообщений.</returns>
         </member>
         <member name="T:ChatApplication.Controllers.ValuesController">
             <summary>
@@ -132,6 +228,16 @@
             Является ли сообщение новым
             </summary>
         </member>
+        <member name="T:ChatApplication.Models.RefreshTokenModel">
+            <summary>
+            Модель обновления токена
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.RefreshTokenModel.Token">
+            <summary>
+            Токен для обновления
+            </summary>
+        </member>
         <member name="T:ChatApplication.Models.UploadFile">
             <summary>
             Загружаемый файл
@@ -168,6 +274,11 @@
             Общее количество новых сообщений.
             </summary>
         </member>
+        <member name="P:ChatApplication.Poco.ApplicationUser.Topics">
+            <summary>
+            Топики открытые пользователем
+            </summary>
+        </member>
         <member name="T:ChatApplication.Poco.BaseUser">
             <summary>
             Базовый класс для всех пользователей
@@ -183,9 +294,19 @@
             Имя пользователя
             </summary>
         </member>
-        <member name="P:ChatApplication.Poco.BaseUser.Description">
+        <member name="P:ChatApplication.Poco.BaseUser.Username">
             <summary>
             Описание или девиз.
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Poco.BaseUser.LastName">
+            <summary>
+            Фамилия
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Poco.BaseUser.MiddleName">
+            <summary>
+            Отчество
             </summary>
         </member>
         <member name="P:ChatApplication.Poco.BaseUser.Email">
@@ -221,11 +342,12 @@
             Конфигурация сервера
             </summary>
         </member>
-        <member name="M:ChatApplication.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:ChatApplication.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{ChatApplication.Startup})">
             <summary>
             Конструктор с конфигурацией сервера. Вызывается инфраструктурой при старте
             </summary>
-            <param name="configuration"></param>
+            <param name="configuration">Конфигурация</param>
+            <param name="logger">Логгер</param>
         </member>
         <member name="P:ChatApplication.Startup.Configuration">
             <summary>
@@ -238,7 +360,7 @@
             </summary>
             <param name="services"></param>
         </member>
-        <member name="M:ChatApplication.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+        <member name="M:ChatApplication.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory)">
             <summary>
             This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             </summary>

@@ -14,13 +14,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ChatApplication.Dbl;
 using ChatApplication.Dbl.Models;
+using Microsoft.Extensions.Logging;
 
 namespace ChatApplication.Controllers
 {
     /// <summary>
-    /// Класс для получения собеседников
+    /// Контроллер пользователя
     /// </summary>
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/user")]
     [Authorize]
     public class UserController : Controller
     {
@@ -28,19 +29,24 @@ namespace ChatApplication.Controllers
         /// Контекст дб
         /// </summary>
         private DbContext _ctx;
-       
+        /// <summary>
+        /// Логгер
+        /// </summary>
+        private ILogger _logger;       
        /// <summary>
        /// Контроллер для отображения пользовательской информации.
        /// </summary>
-       /// <param name="ctx"></param>
-        public UserController(DbContext ctx)
+       /// <param name="ctx">Контекст бд</param>
+       /// <param name="logger">Логгер</param>
+        public UserController(DbContext ctx, ILogger<UserController> logger)
         {
             _ctx = ctx;
+            _logger = logger;
         }
         /// <summary>
         /// Получение залогоненого пользователя
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Возвращает основной обьект пользователя, содержит данные о открытых топиках и количестве непрочтенных сообщений.</returns>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult> Get()
@@ -50,8 +56,9 @@ namespace ChatApplication.Controllers
             var appUser = Mapper.Map<ApplicationUser>(user);
             var topics = await _ctx.Topics.GetByUserId(user.Id);
             appUser.Topics = topics;
-            return Json(appUser);
-            //return Ok($"Ваш логин: {User.Identity.Name}");
+            //TODO: удалить фейк
+            appUser.NewMessages = 122;
+            return Json(appUser);            
         }
     }
 }

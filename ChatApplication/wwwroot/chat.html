@@ -11,8 +11,6 @@
 
     <title>Bare - Start Bootstrap Template</title>
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/open-iconic-bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
     <!-- development version, includes helpful console warnings -->
@@ -22,41 +20,40 @@
     <link rel="stylesheet" href="css/chat.css" />
     <!-- styles from template -->
     <!--Определяем базовый адрес для загрузки картинок -->
-    
-    <link rel="stylesheet" href="http://web.nelikvida-net.ru/template/styles/css/main-old.css">
-    <link rel="stylesheet" href="http://web.nelikvida-net.ru/template/styles/css/style.css">
-    <link rel="stylesheet" href="http://web.nelikvida-net.ru/template/styles/css/responsive.css">
+
+    <link rel="stylesheet" href="/template/styles/css/main-old.css">
+    <link rel="stylesheet" href="/template/styles/css/style.css">
+    <link rel="stylesheet" href="/template/styles/css/responsive.css">
     <!-- end styles from template -->
 </head>
 
 <body>
-    <div id="chatApp">
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-            <div class="container">
-                <a class="navbar-brand" href="#">Locat message page</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item active">
 
+    <header class="header">
+        <div class="panel">
+            <div class="case">
+                <div class="panel__wrap row i-mid">
+                    <div class="panel__logo"><a href="/"><img src="/images/logo.png" alt=""></a></div>
+                    <div class="panel__nav">
+                        <ul class="scroll-block" style="vertical-align: bottom">
+                            <li><a href="/">Главная</a></li>
 
-                            <span class="sr-only">(messages)</span>
-                            <div class="container" style="font-size: 1.1rem; color: white">
-                                Сообщения:
-                                <button class="btn btn-default btn-lg btn-link">
-                                    <span class="fas fa-envelope"></span>
-                                </button>
-                                <span class="badge badge-notify">{{ unreadMessage }}</span>
-                            </div>
-
-                        </li>
-                    </ul>
+                            <li>
+                                <a href="chat.html">
+                                    Сообщения:                                    
+                                    <span class="fas fa-envelope hovered"></span>                                    
+                                    <span id="totalUnreadMessages" style="display: none" class="badge badge-notify"></span>
+                                </a>                                
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </nav>
+        </div>
+    </header>
+    <div id="chatApp">
+        <!-- Navigation -->
+
 
         <main class="main">
             <div class="page page_bg">
@@ -124,7 +121,7 @@
                                     </div>
                                 </div>
                                 <div class="messager__area">
-                                    <div class="messager__message">                                       
+                                    <div class="messager__message">
                                         <div class="messager__body">
                                             <div class="message message_to">
                                                 <div class="message__img"><img src="/upload/faceses/1.png" alt=""></div>
@@ -179,7 +176,7 @@
                     </div>
                 </div>
             </div>
-        </main>       
+        </main>
     </div>
 
 
@@ -189,6 +186,8 @@
             crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script>
+        var tokenKey = "accessToken";
+        var sessionToken = sessionStorage.getItem(tokenKey);    
 
         var app = new Vue({
             el: '#chatApp',
@@ -197,23 +196,53 @@
                 users: []
             }
         });
+        GetUserData();
+        function GetUserData() {
+            var sessionToken = sessionStorage.getItem(tokenKey);    
+            var req = $.ajax({
+                type: 'GET',
+                url: '/api/v1/user',
+                beforeSend: function (xhr) {                
+                    xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
+                },
+                success: function(data) {
+                    var countBox = $('#totalUnreadMessages');
+                    var count = data.messages;
+                    countBox.text(count);
+                    if (count > 0)
+                        countBox.show();
+                    console.log(data);
+                }
+            });
 
-        var token = sessionStorage.getItem('accessToken');
-        console.log(token);
-        $.ajax({
-            type: 'GET',
-            url: '/api/v1/Values/getlogin',
-            beforeSend: function (xhr) {                
-                console.log(token);
-                xhr.setRequestHeader("Authorization", "Bearer " + token)
-            },
-            success: function (data) {
-                alert(data);
-            },
-            fail: function (data) {
-                console.log(data);
-            }
-        });
+            req.fail(function(data, status) {                                   
+                if (data.status == 401) {
+                    var te = data.getResponseHeader('Token-Expired');
+                    if (te)
+                        RefreshToken(sessionToken);
+                }                
+                else
+                    console.log('err');
+            });
+        }
+
+        function RefreshToken(token) {
+            var bd = {token: token};
+            var req = $.ajax({
+                type: 'POST',
+                url: '/api/v1/account/refresh',
+                data: JSON.stringify(bd),
+                contentType: "application/json",
+                beforeSend: function (xhr) {                
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                },
+                success: function (data) {
+                    sessionStorage.setItem(tokenKey, data.access_token);
+                    sessionToken = data.access_token;
+                    GetUserData();
+                }
+            });
+        }
     </script>
 
 </body>

@@ -16,7 +16,10 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Logging;
 
 namespace ChatApplication.Controllers
 {
@@ -57,6 +60,18 @@ namespace ChatApplication.Controllers
                 return NotFound("Invalid username or password.");
             }
 
+            var encodedJwt = CreateToken(identity);
+
+            var response = new
+            {
+                access_token = encodedJwt,
+                username = identity.Name
+            };                      
+            return Json(response);            
+        }
+
+        private string CreateToken(ClaimsIdentity identity)
+        {
             var now = DateTime.UtcNow;
             // создаем JWT-токен
             var jwt = new JwtSecurityToken(
@@ -68,24 +83,60 @@ namespace ChatApplication.Controllers
                 signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
                     SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            return encodedJwt;
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("refresh")]
+        public IActionResult Refresh([FromBody] RefreshTokenModel token)
+        {
+            var principal = GetPrincipalFromExpiredToken(token.Token);            
+            var encodedJwt = CreateToken(principal.Identities.First());
             var response = new
             {
                 access_token = encodedJwt,
-                username = identity.Name
+                username = principal.Identity.Name
+            };
+            return Json(response);
+
+        }       
+        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            
+            var tokenValidationParameters = new TokenValidationParameters
+            {                
+                ValidateIssuer = true,
+                // строка, представляющая издателя
+                ValidIssuer = AuthOptions.ISSUER,
+
+                // будет ли валидироваться потребитель токена
+                ValidateAudience = true,
+                // установка потребителя токена
+                ValidAudience = AuthOptions.AUDIENCE,
+                // будет ли валидироваться время существования
+                ValidateLifetime = true,
+
+                // установка ключа безопасности
+                IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                // валидация ключа безопасности
+                ValidateIssuerSigningKey = true,
             };
 
-            var co = new CookieOptions
-            {
-                Domain = Request.Host.Value,
-                Expires = jwt.ValidTo,
-                HttpOnly = true,
-                Path = "/"
-            };
-            Response.Cookies.Append("Bearer", response.access_token, co);
-            return Json(response);            
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            IdentityModelEventSource.ShowPII = true;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return principal;
         }
-
         private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
             var person = (await _userDs.Users.GetUsers()).First(x => x.UserName == username);

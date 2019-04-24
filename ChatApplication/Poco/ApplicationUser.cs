@@ -23,6 +23,10 @@ namespace ChatApplication.Poco
         /// </summary>
         [JsonProperty("messages")]
         public int NewMessages { get; set; }
+        /// <summary>
+        /// Топики открытые пользователем
+        /// </summary>
+        [JsonProperty("topics")]
         public IEnumerable<DbTopic> Topics { get; set; }
     }
 }

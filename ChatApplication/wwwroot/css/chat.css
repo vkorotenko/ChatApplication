@@ -46,4 +46,7 @@
 }
 .empty-div {    
 }
+.hovered:hover {
+    color: blue;
+}
 

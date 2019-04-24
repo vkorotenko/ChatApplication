@@ -29,8 +29,17 @@ namespace ChatApplication.Poco
         /// <summary>
         /// Описание или девиз.
         /// </summary>
-        [JsonProperty("description")]
-        public string Description { get; set; }
+        [JsonProperty("username")]
+        public string Username { get; set; }
+        
+        /// <summary>
+        /// Фамилия
+        /// </summary>
+        public string LastName { get; set; }
+        /// <summary>
+        /// Отчество
+        /// </summary>
+        public string MiddleName { get; set; }
         /// <summary>
         /// Адрес электронной почты
         /// </summary>
