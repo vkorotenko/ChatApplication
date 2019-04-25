@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Bare - Start Bootstrap Template</title>
+    <title>Служебный чат </title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
@@ -33,21 +33,21 @@
         <div class="panel">
             <div class="case">
                 <div class="panel__wrap row i-mid">
-                    <div class="panel__logo"><a href="/"><img src="/images/logo.png" alt=""></a></div>
-                    <div class="panel__nav">
-                        <ul class="scroll-block" style="vertical-align: bottom">
-                            <li><a href="/">Главная</a></li>
-
-                            <li>
-                                <a href="chat.html">
-                                    Сообщения:                                    
-                                    <span class="fas fa-envelope hovered"></span>                                    
-                                    <span id="totalUnreadMessages" style="display: none" class="badge badge-notify"></span>
-                                </a>                                
-                            </li>
-                        </ul>
+                    <div class="panel__wrap row i-mid">
+                        <div class="panel__logo"><a href="/"><img src="/images/logo.png" alt=""></a></div>
+                        <div class="panel__nav">
+                            <ul class="scroll-block" style="vertical-align: bottom">
+                                <li><a href="/">Главная</a></li>                            
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel__lk row i-mid">                                              
+                        <div class="panel__messages lk-link lk-link_has-hidden hidden-xs lk-link_open">
+                            <div class="lk-link__icon"><a href="buyer-messages.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16a" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z"></path></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16a"></use></g></g></svg><span id="totalUnreadMessages">9</span></a></div>                            
+                        </div>                      
                     </div>
                 </div>
+                
             </div>
         </div>
     </header>
@@ -75,89 +75,37 @@
                                         </div>
                                     </div>
                                     <div class="messager__list">
-                                        <a href="#message-1" class="messager__item row i-mid">
-                                            <div class="messager__img"><img src="/upload/faceses/round/1.png" alt=""></div>
-                                            <div class="messager__persona">
-                                                <div class="messager__name">Диана Светлова</div>
-                                                <div class="messager__text">Привет, как дела?</div>
+                                        <a v-for="topic in topics" 
+                                           :href="'#message-' + topic.id" 
+                                           class="messager__item row i-mid"
+                                           v-bind:class="{ messager__item_selected: topic.selected }" 
+                                           @click="showThread(topic.id, this, $event)" >
+                                            <div class="messager__img">
+                                                <img src="/upload/faceses/round/1.png" alt="">
                                             </div>
-                                        </a>
-                                        <a href="#message-2" class="messager__item messager__item_selected row">
-                                            <div class="messager__img"><img src="/upload/faceses/round/2.png" alt=""></div>
                                             <div class="messager__persona">
-                                                <div class="messager__name">Maксим Петров</div>
-                                                <div class="messager__text">Вот так все было. Я отвлекся...</div>
+                                                <div class="messager__name">{{topic.title}}</div>
+                                                <div class="messager__text">{{topic.vendor}} {{topic.vendorCode}} </div>
                                             </div>
-                                        </a>
-                                        <a href="#message-3" class="messager__item row i-mid">
-                                            <div class="messager__img"><img src="/upload/faceses/round/3.png" alt=""></div>
-                                            <div class="messager__persona">
-                                                <div class="messager__name">Андрей Ветров</div>
-                                                <div class="messager__text">Да это правда. А Вы...</div>
-                                            </div>
-                                        </a>
-                                        <a href="#message-4" class="messager__item row i-mid">
-                                            <div class="messager__img"><img src="/upload/faceses/round/4.png" alt=""></div>
-                                            <div class="messager__persona">
-                                                <div class="messager__name">Maксим</div>
-                                                <div class="messager__text">Вот так все было. Я отвлекся...</div>
-                                            </div>
-                                        </a>
-                                        <a href="#message-5" class="messager__item messager__item_message row">
-                                            <div class="messager__img"><img src="/upload/faceses/round/3.png" alt=""></div>
-                                            <div class="messager__persona">
-                                                <div class="messager__name">Андрей Ветров</div>
-                                                <div class="messager__text">Да это правда. А Вы...</div>
-                                            </div>
-                                            <div class="messager__count">1</div>
-                                        </a>
-                                        <a href="#message-6" class="messager__item row i-mid">
-                                            <div class="messager__img"><img src="/upload/faceses/round/4.png" alt=""></div>
-                                            <div class="messager__persona">
-                                                <div class="messager__name">Maксим</div>
-                                                <div class="messager__text">Вот так все было. Я отвлекся...</div>
-                                            </div>
-                                        </a>
+                                            <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
+                                        </a>                                       
                                     </div>
                                 </div>
                                 <div class="messager__area">
                                     <div class="messager__message">
-                                        <div class="messager__body">
-                                            <div class="message message_to">
-                                                <div class="message__img"><img src="/upload/faceses/1.png" alt=""></div>
-                                                <div class="message__wrap">Добрый день. Меня зовут Оксана.Представляю компанию «Яблоки солнечного Крыма». </div>
-                                                <div class="message__date">18.23</div>
+                                        <div class="messager__body">                                                                                       
+                                            <div v-if="posts.length == 0">
+                                                В данном чате пока нет сообщений.
                                             </div>
-                                            <div class="message message_from">
-                                                <div class="message__img"><img src="/upload/faceses/2.png" alt=""></div>
-                                                <div class="message__wrap">Спасибо за предложение, уверен в том, что Ваш продукт качественный, но мы занимаемся нашими российскими яблоками и менять ничего не хотим. К тому же, у меня сейчас нет времени. </div>
-                                                <div class="message__date">18:27</div>
-                                            </div>
-                                            <div class="message message_to">
-                                                <div class="message__img"><img src="/upload/faceses/1.png" alt=""></div>
-                                                <div class="message__wrap">Я понимаю, что у Вас есть российские яблоки, но я Вам предлагаю новый продукт.</div>
-                                                <div class="message__date">18.39</div>
-                                            </div>
-                                            <div class="message message_from">
-                                                <div class="message__img"><img src="/upload/faceses/2.png" alt=""></div>
-                                                <div class="message__wrap">На данный момент у меня завален склад яблоками, зайдите через две недели…Да это огромный труд, но для нас всегда было важно видеть счастливые лица наших покупателей. К тому же, у меня сейчас нет времени.</div>
-                                                <div class="message__date">23:14</div>
-                                            </div>
-                                            <div class="message message_to">
-                                                <div class="message__img"><img src="/upload/faceses/1.png" alt=""></div>
-                                                <div class="message__wrap">Нет, ну Вы послушайте. Многие, кто самокритично к себе относится, конечно же, узнали в этом поведении себя...</div>
-                                                <div class="message__date">19.43</div>
-                                            </div>
-                                            <div class="message message_from">
-                                                <div class="message__img"><img src="/upload/faceses/2.png" alt=""></div>
-                                                <div class="message__wrap">Да это огромный труд, но для нас всегда было важно видеть счастливые лица наших покупателей. К тому же, у меня сейчас нет времени.</div>
-                                                <div class="message__date">20:07</div>
-                                            </div>
-                                            <div class="message message_to">
-                                                <div class="message__img"><img src="/upload/faceses/1.png" alt=""></div>
-                                                <div class="message__wrap"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="6" viewBox="0 0 24 6"><defs><path id="6o18a" d="M833 945a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm9 0a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm9 0a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"></path></defs><g><g opacity=".6" transform="translate(-830 -945)"><use fill="#828c8f" xlink:href="#6o18a"></use></g></g></svg></div>
-                                                <div class="message__date"></div>
-                                            </div>
+                                            <div v-for="msg in posts" 
+                                                 v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}" 
+                                                 class="message">
+                                                <div class="message__img">
+                                                    <img :src="msg.avatarUrl" alt="">
+                                                </div>
+                                                <div class="message__wrap">{{ msg.body }}</div>
+                                                <div class="message__date">{{ msg.created | formatTime }}</div>
+                                            </div>                                                                                 
                                         </div>
                                         <div class="messager__foot">
                                             <div class="messager__textarea"><textarea placeholder="Напишите сообщение..."></textarea></div>
@@ -173,7 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </main>
@@ -185,66 +133,6 @@
             integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
             crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script>
-        var tokenKey = "accessToken";
-        var sessionToken = sessionStorage.getItem(tokenKey);    
-
-        var app = new Vue({
-            el: '#chatApp',
-            data: {
-                unreadMessage: 6,
-                users: []
-            }
-        });
-        GetUserData();
-        function GetUserData() {
-            var sessionToken = sessionStorage.getItem(tokenKey);    
-            var req = $.ajax({
-                type: 'GET',
-                url: '/api/v1/user',
-                beforeSend: function (xhr) {                
-                    xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
-                },
-                success: function(data) {
-                    var countBox = $('#totalUnreadMessages');
-                    var count = data.messages;
-                    countBox.text(count);
-                    if (count > 0)
-                        countBox.show();
-                    console.log(data);
-                }
-            });
-
-            req.fail(function(data, status) {                                   
-                if (data.status == 401) {
-                    var te = data.getResponseHeader('Token-Expired');
-                    if (te)
-                        RefreshToken(sessionToken);
-                }                
-                else
-                    console.log('err');
-            });
-        }
-
-        function RefreshToken(token) {
-            var bd = {token: token};
-            var req = $.ajax({
-                type: 'POST',
-                url: '/api/v1/account/refresh',
-                data: JSON.stringify(bd),
-                contentType: "application/json",
-                beforeSend: function (xhr) {                
-                    xhr.setRequestHeader("Authorization", "Bearer " + token);
-                },
-                success: function (data) {
-                    sessionStorage.setItem(tokenKey, data.access_token);
-                    sessionToken = data.access_token;
-                    GetUserData();
-                }
-            });
-        }
-    </script>
-
+    <script src="js/chat.js"></script>
 </body>
-
 </html>

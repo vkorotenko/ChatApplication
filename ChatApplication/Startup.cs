@@ -6,13 +6,11 @@
 // Создано:  13.04.2019 22:30
 #endregion
 
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using AutoMapper;
 using ChatApplication.Code;
 using ChatApplication.Dbl;
 using ChatApplication.Dbl.Models;
+using ChatApplication.Models;
 using ChatApplication.Poco;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +21,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ChatApplication
 {
@@ -129,6 +130,7 @@ namespace ChatApplication
         {
             Mapper.Initialize(cfg => {
                 cfg.CreateMap<DbUser, ApplicationUser>();
+                cfg.CreateMap<DbMessage, MessageModel>();
             });
         }
 
@@ -155,8 +157,18 @@ namespace ChatApplication
         /// <param name="env"></param>        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logs/logger.txt"));
-            var logger = loggerFactory.CreateLogger("FileLogger");
+            var fillPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs/logger.txt");
+            try
+            {
+                loggerFactory.AddFile(fillPath);
+                var logger = loggerFactory.CreateLogger("FileLogger");
+            }
+            catch (Exception ex)
+            {                
+                _logger.LogError($"Cold not add log file: {fillPath}");
+                _logger.LogError(ex.Message);
+            }
+            
 
             if (env.IsDevelopment())
             {

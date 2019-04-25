@@ -176,6 +176,20 @@
             </summary>
             <returns>Возвращает основной обьект пользователя, содержит данные о открытых топиках и количестве непрочтенных сообщений.</returns>
         </member>
+        <member name="M:ChatApplication.Controllers.UserController.Messages(System.Int64)">
+            <summary>
+            Получение списка сообщений для топика. 
+            </summary>
+            <param name="id">Идентификатор топика</param>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.Avatar(System.Int64)">
+            <summary>
+            Получаем аватар по идентификатору пользователя.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:ChatApplication.Controllers.ValuesController">
             <summary>
             Контроллер значений
@@ -226,6 +240,46 @@
         <member name="P:ChatApplication.Models.Message.IsNew">
             <summary>
             Является ли сообщение новым
+            </summary>
+        </member>
+        <member name="T:ChatApplication.Models.MessageModel">
+            <summary>
+            Модель для отображения сообщения.
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.Id">
+            <summary>
+            Идентификатор
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.Body">
+            <summary>
+            Тело сообщения
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.Created">
+            <summary>
+            Дата создания
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.AuthorId">
+            <summary>
+            Автор сообщения
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.IsRead">
+            <summary>
+            Флаг прочтения
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.TopicId">
+            <summary>
+            Тред в котором создано сообщение
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.AvatarUrl">
+            <summary>
+            Картинка на профиль.
             </summary>
         </member>
         <member name="T:ChatApplication.Models.RefreshTokenModel">

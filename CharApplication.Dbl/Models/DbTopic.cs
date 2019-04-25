@@ -17,6 +17,14 @@ namespace ChatApplication.Dbl.Models
     public class DbTopic
     {
         /// <summary>
+        /// Дефолтный конструктор
+        /// </summary>
+        public DbTopic()
+        {
+            HasMessages = false;
+            Unread = 0;
+        }
+        /// <summary>
         /// Идентификатор
         /// </summary>
         public long Id { get; set; }
@@ -44,5 +52,13 @@ namespace ChatApplication.Dbl.Models
         /// Дата создания, автоматически добавляется во время вставки
         /// </summary>
         public DateTime Created { get; set; }
+        /// <summary>
+        /// Есть ли сообщения в списке.
+        /// </summary>
+        public bool HasMessages { get; set; }
+        /// <summary>
+        /// Количество непрочтенных сообщений
+        /// </summary>
+        public int Unread { get; set; }
     }
 }

@@ -6,9 +6,10 @@
 // Создано:  24.04.2019 7:11
 #endregion
 
-using System;
-using System.IO;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace ChatApplication.Code
 {
@@ -65,7 +66,15 @@ namespace ChatApplication.Code
             {
                 lock (_lock)
                 {
-                    File.AppendAllText(_filePath, formatter(state, exception) + Environment.NewLine);
+                    try
+                    {
+                        File.AppendAllText(_filePath, formatter(state, exception) + Environment.NewLine);
+                    }
+                    catch (UnauthorizedAccessException ex)
+                    {
+                        Debug.WriteLine("UserName: {0}", Environment.UserName);
+                        Debug.WriteLine(ex);
+                    }
                 }
             }
         }

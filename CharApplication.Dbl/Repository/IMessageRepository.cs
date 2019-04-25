@@ -46,6 +46,13 @@ namespace ChatApplication.Dbl.Repository
         /// </summary>
         /// <returns></returns>
         Task<List<DbMessage>> GetAll();
-        
+
+        /// <summary>
+        /// Получение списка сообщений для топика по идентификатору.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<List<DbMessage>> GetMessagesForTopic(long id);
+
     }
 }
