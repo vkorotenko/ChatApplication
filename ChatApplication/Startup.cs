@@ -15,6 +15,7 @@ using ChatApplication.Poco;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -144,17 +145,19 @@ namespace ChatApplication
                 var app = System.AppContext.BaseDirectory;
                 return System.IO.Path.Combine(app, "ChatApplication.xml");
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException fnfe)
             {
                 _logger.LogError("ChatApplication.xml not found");
+                _logger.LogError(fnfe.Message);
                 return String.Empty;
             }
         }
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
-        /// <param name="app"></param>
-        /// <param name="env"></param>        
+        /// <param name="app">Приложение</param>
+        /// <param name="env">Переменные среды</param>   
+        /// <param name="loggerFactory">Фабрика логгирования</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             var fillPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs/logger.txt");
@@ -180,6 +183,10 @@ namespace ChatApplication
                 app.UseHsts();
             }
             _logger.LogInformation("App start");
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             app.UseAuthentication();
             app.UseSwagger();            
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Internal messages V1"); });

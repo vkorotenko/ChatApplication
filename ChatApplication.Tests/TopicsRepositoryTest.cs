@@ -10,6 +10,7 @@ using ChatApplication.Dbl.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MySql.Data.MySqlClient;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace ChatApplication.Tests
@@ -21,7 +22,7 @@ namespace ChatApplication.Tests
         /// <summary>
         /// test id
         /// </summary>
-        private const long _creatorId = 9103421220;
+        private const int _creatorId = 52;
 
         private const long _id = 42;
 
@@ -56,6 +57,7 @@ namespace ChatApplication.Tests
             }
             catch (MySqlException ex)
             {
+                Debug.WriteLine(ex.Message);
                 await ctx.Topics.Delete(_id);
                 ins = await ctx.Topics.Create(item);
                 Assert.AreEqual(item.Id, ins.Id);
