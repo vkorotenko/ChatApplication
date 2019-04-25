@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChatApplication.Dbl.Models;
 
 namespace ChatApplication.Controllers
 {
@@ -52,9 +53,8 @@ namespace ChatApplication.Controllers
         [Authorize]
         [HttpGet]
         public async Task<ActionResult> Get()
-        {
-            var users = await _ctx.Users.GetUsers();
-            var user = users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+        {            
+            var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
             var appUser = Mapper.Map<ApplicationUser>(user);
             var topics = await _ctx.Topics.GetByUserId(user.Id);
 
@@ -111,6 +111,38 @@ namespace ChatApplication.Controllers
             //TODO: добавить логику для выбора картинки по идентификатору пользователя.
             var url = "/upload/faceses/1.png";
             return RedirectPermanent(url);
+        }
+        /// <summary>
+        /// Добавление сообщения в топик. Используется идентификатор залогоненого пользователя.
+        /// </summary>
+        /// <param name="id">Идентификатор топика</param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        [Route("addtotopic/{id}")]
+        public async Task<ActionResult> AddToTopic([FromRoute] long id, [FromBody]AddMessageModel message)
+        {
+            var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+            var msg = new DbMessage
+            {
+                AuthorId = user.Id,
+                Body = message.Body,
+                Created = DateTime.Now,
+                IsRead = false,
+                TopicId = id
+            };
+            try
+            {
+                var dbMessage = await _ctx.Messages.Create(msg);
+                var model = Mapper.Map<MessageModel>(dbMessage);
+                return Json(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }            
         }
     }
 }

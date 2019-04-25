@@ -190,6 +190,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.UserController.AddToTopic(System.Int64,ChatApplication.Models.AddMessageModel)">
+            <summary>
+            Добавление сообщения в топик. Используется идентификатор залогоненого пользователя.
+            </summary>
+            <param name="id">Идентификатор топика</param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
         <member name="T:ChatApplication.Controllers.ValuesController">
             <summary>
             Контроллер значений
@@ -206,6 +214,16 @@
             Получение роли пользователя
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:ChatApplication.Models.AddMessageModel">
+            <summary>
+            Модель для добавления сообщения
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.AddMessageModel.Body">
+            <summary>
+            Тело сообщения
+            </summary>
         </member>
         <member name="T:ChatApplication.Models.LoginModel">
             <summary>

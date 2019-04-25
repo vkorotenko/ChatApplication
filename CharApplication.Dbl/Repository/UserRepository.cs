@@ -68,6 +68,16 @@ WHERE `id` = @Id ;";
 
         }
 
+        /// <summary>
+        /// Получение пользователя по имени в системе
+        /// </summary>
+        /// <param name="username">Имя пользователя в системе</param>
+        /// <returns></returns>
+        public async Task<DbUser> GetUserBuName(string username)
+        {
+            return (await _dbConn.QueryAsync<DbUser>("SELECT * FROM dbusers WHERE username = @username", new { username })).FirstOrDefault();
+        }
+
         public async Task Delete(int id)
         {
             const string sqlQuery = "DELETE FROM dbusers WHERE id = @id";

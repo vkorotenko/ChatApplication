@@ -7,12 +7,20 @@ var app = new Vue({
         unreadMessages: 0,
         topics: [],
         posts: [],
-        topicAuthor: 0
+        topicAuthor: 0,
+        topicId: null,
+        messageArea: "",
+        userId: null
     },
     methods: {
         showThread: function (id, el, event) {
+            app.topicId = id;
             selectItem(id);
             getMessagesForTopic(id, app.topicAuthor);
+        },
+        sendMessage: function() {
+            if (app.messageArea != "")
+                sendMessageToTopic(app.messageArea, app.topicId);
         }
     }
 });
@@ -116,6 +124,40 @@ function getMessagesForTopic(id, authorId) {
             }
         }
         else
+            console.log('err');
+    });
+}
+
+// Отправка сообщения в топик
+function sendMessageToTopic(body, topicId) {
+
+    if (topicId == null) return;
+    var sessionToken = sessionStorage.getItem(tokenKey);
+    var bd = {
+        body: body        
+    };
+    var req = $.ajax({
+        type: 'POST',
+        url: '/api/v1/user/addtotopic/' + topicId,
+        data: JSON.stringify(bd),
+        contentType: "application/json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
+        },
+        success: function (data) {
+            app.messageArea = "";
+            data.isAuthor = true;
+            app.posts.push(data);
+        }
+    });
+    req.fail(function (data, status) {
+        if (data.status == 401) {
+            var te = data.getResponseHeader('Token-Expired');
+            if (te) {
+                RefreshToken(sessionToken);
+                sendMessageToTopic(body, userId, topicId);
+            }
+        } else
             console.log('err');
     });
 }

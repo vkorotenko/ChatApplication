@@ -86,7 +86,7 @@
                     // сохраняем в хранилище sessionStorage токен доступа
                     sessionStorage.setItem(tokenKey, data.access_token);
                     console.log(data);
-                    //window.location.assign('chat.html');
+                    window.location.assign('chat.html');
                 },
                 fail: function (data) {
                     console.log(data);
