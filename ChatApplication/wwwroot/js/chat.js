@@ -1,7 +1,7 @@
 ﻿var tokenKey = "accessToken";
 var sessionToken = sessionStorage.getItem(tokenKey);
 
-var app = new Vue({
+var ChatApp = new Vue({
     el: '#chatApp',
     data: {
         unreadMessages: 0,
@@ -14,13 +14,17 @@ var app = new Vue({
     },
     methods: {
         showThread: function (id, el, event) {
-            app.topicId = id;
+            ChatApp.topicId = id;
             selectItem(id);
-            getMessagesForTopic(id, app.topicAuthor);
+            getMessagesForTopic(id, ChatApp.topicAuthor);
+            clearNewMessages(id);
         },
         sendMessage: function () {
-            if (app.messageArea != "")
-                sendMessageToTopic(app.messageArea, app.topicId);
+            if (ChatApp.messageArea != "")
+                sendMessageToTopic(ChatApp.messageArea, ChatApp.topicId);
+        },
+        getUserData: function() {
+            GetUserData();
         }
     }
 });
@@ -41,15 +45,9 @@ function GetUserData() {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
-        success: function (data) {
-            var countBox = $('#totalUnreadMessages');
-            var count = data.messages;
-            countBox.text(count);
-            if (count > 0)
-                countBox.show();
-
-            app.topics = applyTopicsSelected(data.topics);
-            app.unreadMessages = data.messages;
+        success: function (data) {            
+            ChatApp.topics = applyTopicsSelected(data.topics);
+            ChatApp.unreadMessages = data.messages;
         }
     });
 
@@ -82,11 +80,11 @@ function RefreshToken(token) {
     });
 }
 function selectItem(id) {
-    for (i = 0; i < app.topics.length; i++) {
-        app.topics[i].selected = false;
-        if (app.topics[i].id == id) {
-            app.topicAuthor = app.topics[i].authorId;
-            app.topics[i].selected = true;
+    for (i = 0; i < ChatApp.topics.length; i++) {
+        ChatApp.topics[i].selected = false;
+        if (ChatApp.topics[i].id == id) {
+            ChatApp.topicAuthor = ChatApp.topics[i].authorId;
+            ChatApp.topics[i].selected = true;
         }
     }
 }
@@ -111,7 +109,7 @@ function getMessagesForTopic(id, authorId) {
                 else data[i].isAuthor = false;
             }
 
-            app.posts = data;
+            ChatApp.posts = data;
         }
     });
 
@@ -145,12 +143,12 @@ function sendMessageToTopic(body, topicId) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
         success: function (data) {
-            app.messageArea = "";
+            ChatApp.messageArea = "";
             data.isAuthor = true;
             if ($('#file-1').prop('files').length > 0) {
-                uploadFile(app.topicId, data.id);
+                uploadFile(ChatApp.topicId, data.id);
             }
-            app.posts.push(data);
+            ChatApp.posts.push(data);
         }
     });
     req.fail(function (data, status) {
@@ -195,5 +193,23 @@ function uploadFile(topicid, messageid) {
             }
         } else
             console.log('err');
+    });
+}
+
+
+// Очистка флага новых сообщений в топике
+
+function clearNewMessages(id) {
+    var token = sessionStorage.getItem(tokenKey);
+    var req = $.ajax({
+        type: 'POST',
+        url: '/api/v1/user/clearmessages/' + id,    
+        contentType: "application/json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+        },
+        success: function (data) {
+            GetUserData();
+        }
     });
 }

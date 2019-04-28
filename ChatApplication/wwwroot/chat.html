@@ -43,7 +43,7 @@
                     </div>
                     <div class="panel__lk row i-mid">                                              
                         <div class="panel__messages lk-link lk-link_has-hidden hidden-xs lk-link_open">
-                            <div class="lk-link__icon"><a href="buyer-messages.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16a" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z"></path></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16a"></use></g></g></svg><span id="totalUnreadMessages">9</span></a></div>                            
+                            <div class="lk-link__icon"><a href="buyer-messages.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16a" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z"></path></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16a"></use></g></g></svg><span style="display: none" id="totalUnreadMessages"></span></a></div>                            
                         </div>                      
                     </div>
                 </div>
@@ -137,6 +137,30 @@
             integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
             crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="js/chat.js"></script>
+<script src="js/chat.js"></script>
+
+<!-- Автоматическая проверка наличия сообщений и разблокировка глобального счетчика. При работе на странице чата так-же вызов цикла подгрузки сообщений-->
+<script>
+    // данная переменная должна формироваться на сервере и содержать числовой идентификатор пользователя в системе (id)
+    var loggedinUserId = 52;
+    var totalMessagesSpan = $('#totalUnreadMessages');
+    var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 3000);
+    function checkMessagesForUser() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/v1/user/totalunread/' + loggedinUserId,
+            success: function (data) {
+                var count = parseInt(data);
+                totalMessagesSpan.text(count);
+                if (count > 0) {
+                    totalMessagesSpan.show();
+                    if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
+                } else {
+                    totalMessagesSpan.hide();
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>

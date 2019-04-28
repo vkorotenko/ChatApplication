@@ -213,6 +213,20 @@
             <param name="messageid">Идентификатор сообщения</param>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.UserController.UnreadMessagesForUser(System.Int32)">
+            <summary>
+            Получение общего количества непрочитанных пользователей для пользователя.
+            </summary>
+            <param name="userid">Числовой идентификатор пользователя, поле в базе id</param>
+            <returns>0 по умолчанию или при ошибках, количество непрочтенных во всех топиках в другом</returns>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.ClearNewMessagesInTopic(System.Int64)">
+            <summary>
+            Устанавливаем флаг прочтения в топике.
+            </summary>
+            <param name="topicid"></param>
+            <returns></returns>
+        </member>
         <member name="T:ChatApplication.Controllers.ValuesController">
             <summary>
             Контроллер значений

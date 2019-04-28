@@ -93,7 +93,11 @@ SELECT LAST_INSERT_ID()";
         /// <returns></returns>
         public async Task<List<DbTopic>> GetByUserId(int id)
         {
-            var res = await _dbConn.QueryAsync<DbTopic>("SELECT * FROM dbtopics WHERE authorid = @id", new { id });
+            var sql = @"SELECT id,title,announcementid, vendor, vendorcode,authorid,created, 
+                        (SELECT COUNT(dbm.id) FROM dbmessages as dbm WHERE dbt.id = dbm.topicid AND dbm.isread = 0) as Unread
+                          FROM dbtopics as dbt
+                          WHERE dbt.authorid = @id";
+            var res = await _dbConn.QueryAsync<DbTopic>(sql, new { id });
             return res.ToList();            
         }
     }

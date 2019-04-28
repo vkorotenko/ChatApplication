@@ -64,24 +64,28 @@ namespace ChatApplication.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
-            var appUser = Mapper.Map<ApplicationUser>(user);
-            var topics = await _ctx.Topics.GetByUserId(user.Id);
-
-            var i = 0;
-            foreach (var topic in topics)
+            try
             {
-                if (i == 2)
+                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                var appUser = Mapper.Map<ApplicationUser>(user);
+                var topics = await _ctx.Topics.GetByUserId(user.Id);
+                var unreadMessage = await _ctx.Users.GetUnreadMessages(user.Id);
+                foreach (var topic in topics)
                 {
-                    topic.HasMessages = true;
-                    topic.Unread = 5;
+                    if (topic.Unread > 0)
+                        topic.HasMessages = true;
                 }
-                i++;
+
+                appUser.Topics = topics;
+                appUser.NewMessages = (int)unreadMessage;
+                return Json(appUser);
             }
-            appUser.Topics = topics;
-            //TODO: удалить фейк
-            appUser.NewMessages = 122;
-            return Json(appUser);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+
         }
 
         /// <summary>
@@ -133,17 +137,17 @@ namespace ChatApplication.Controllers
         [Route("addtotopic/{id}")]
         public async Task<ActionResult> AddToTopic([FromRoute] long id, [FromBody]AddMessageModel message)
         {
-            var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
-            var msg = new DbMessage
-            {
-                AuthorId = user.Id,
-                Body = message.Body,
-                Created = DateTime.Now,
-                IsRead = false,
-                TopicId = id
-            };
             try
             {
+                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                var msg = new DbMessage
+                {
+                    AuthorId = user.Id,
+                    Body = message.Body,
+                    Created = DateTime.Now,
+                    IsRead = false,
+                    TopicId = id
+                };
                 var dbMessage = await _ctx.Messages.Create(msg);
                 var model = Mapper.Map<MessageModel>(dbMessage);
                 return Json(model);
@@ -166,42 +170,94 @@ namespace ChatApplication.Controllers
         public async Task<IActionResult> AddFiles(IFormFileCollection uploads, [FromRoute]long topicId, [FromRoute]long messageid)
         {
             var files = new List<UploadFile>();
-            var user = _ctx.Users.GetUserBuName(User.Identity.Name);
-            foreach (var uploadedFile in uploads)
+            try
             {
-                // Базовый путь
-                var path = Path.Combine(_appEnvironment.WebRootPath, "upload/topic");
-                path = Path.Combine(path, topicId.ToString());
-                try
-                {
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    path = Path.Combine(path, uploadedFile.FileName);
-                    using (var fileStream = new FileStream(path, FileMode.Create))
-                    {
-                        await uploadedFile.CopyToAsync(fileStream);
-                    }
 
-                    var dbf = new DbFile
-                    {
-                        AuthorId = user.Id,
-                        Created = DateTime.Now,
-                        MessageId = messageid,
-                        Name = uploadedFile.FileName
-                    };
-                    var upfile = await _ctx.Files.Create(dbf);
-                    var result = Mapper.Map<UploadFile>(upfile);
-                    files.Add(result);
-                }
-                catch (Exception ex)
+                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                foreach (var uploadedFile in uploads)
                 {
-                    _logger.LogError(ex.Message);
-                    return BadRequest();
-                }                
+                    // Базовый путь
+                    var path = Path.Combine(_appEnvironment.WebRootPath, "upload/topic");
+                    path = Path.Combine(path, topicId.ToString());
+                    try
+                    {
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        path = Path.Combine(path, uploadedFile.FileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await uploadedFile.CopyToAsync(fileStream);
+                        }
+
+                        var dbf = new DbFile
+                        {
+                            AuthorId = user.Id,
+                            Created = DateTime.Now,
+                            MessageId = messageid,
+                            Name = uploadedFile.FileName
+                        };
+                        var upfile = await _ctx.Files.Create(dbf);
+                        var result = Mapper.Map<UploadFile>(upfile);
+                        files.Add(result);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message);
+                        return BadRequest();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
             }
             return Json(files);
+        }
+        /// <summary>
+        /// Получение общего количества непрочитанных пользователей для пользователя.
+        /// </summary>
+        /// <param name="userid">Числовой идентификатор пользователя, поле в базе id</param>
+        /// <returns>0 по умолчанию или при ошибках, количество непрочтенных во всех топиках в другом</returns>
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("totalunread/{userid}")]
+        public async Task<IActionResult> UnreadMessagesForUser([FromRoute]int userid)
+        {
+            long count = 0;
+            try
+            {
+                count = await _ctx.Users.GetUnreadMessages(userid);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }            
+            return Content(count.ToString());
+        }
+        
+        /// <summary>
+        /// Устанавливаем флаг прочтения в топике.
+        /// </summary>
+        /// <param name="topicid"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost]
+        [Route("clearmessages/{topicid}")]
+        public async Task<ActionResult> ClearNewMessagesInTopic([FromRoute] long topicid)
+        {
+            try
+            {
+                await _ctx.Messages.MarkMessagesInTopikAsRead(topicid);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
         }
     }
 }
