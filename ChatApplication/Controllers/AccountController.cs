@@ -8,18 +8,18 @@
 using ChatApplication.Code;
 using ChatApplication.Dbl;
 using ChatApplication.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.Logging;
 
 namespace ChatApplication.Controllers
 {
@@ -32,14 +32,27 @@ namespace ChatApplication.Controllers
         /// <summary>
         /// пользовательский датастор
         /// </summary>
-        private DbContext _userDs;
+        private DbContext _context;
+        /// <summary>
+        /// Переменные среды.
+        /// </summary>
+        private IConfiguration _config;
+
+        /// <summary>
+        /// Логгер
+        /// </summary>
+        private ILogger _logger;
         /// <summary>
         /// Конструктор с пользовательским датасорсом
         /// </summary>
-        /// <param name="userDs"></param>
-        public AccountController(DbContext userDs)
+        /// <param name="context"></param>
+        /// <param name="config">Конфигурация</param>
+        /// <param name="logger">логгер</param>
+        public AccountController(DbContext context, IConfiguration config, ILogger<AccountController> logger)
         {
-            _userDs = userDs;
+            _context = context;
+            _config = config;
+            _logger = logger;
         }
         /// <summary>
         /// Получение токена для приложения
@@ -49,25 +62,31 @@ namespace ChatApplication.Controllers
         [HttpPost("token")]
         public async Task<IActionResult> Token([FromBody]LoginModel model)
         {
-
-            var username = model.UserName;
-            var password = model.Password;
-
-            var identity = await GetIdentity(username, password);
-            if (identity == null)
+            try
             {
-                Response.StatusCode = 400;                
-                return NotFound("Invalid username or password.");
+
+                var identity = await GetIdentity(model.UserName, model.Password);
+                if (identity == null)
+                {
+                    Response.StatusCode = 400;
+                    return NotFound("Invalid username or password.");
+                }
+
+                var encodedJwt = CreateToken(identity);
+
+                var response = new
+                {
+                    access_token = encodedJwt,
+                    username = identity.Name
+                };
+                return Json(response);
             }
-
-            var encodedJwt = CreateToken(identity);
-
-            var response = new
+            catch (Exception e)
             {
-                access_token = encodedJwt,
-                username = identity.Name
-            };                      
-            return Json(response);            
+                _logger.LogError(e.Message);
+                return BadRequest();
+            }
+            
         }
 
         private string CreateToken(ClaimsIdentity identity)
@@ -95,7 +114,7 @@ namespace ChatApplication.Controllers
         [Route("refresh")]
         public IActionResult Refresh([FromBody] RefreshTokenModel token)
         {
-            var principal = GetPrincipalFromExpiredToken(token.Token);            
+            var principal = GetPrincipalFromExpiredToken(token.Token);
             var encodedJwt = CreateToken(principal.Identities.First());
             var response = new
             {
@@ -104,12 +123,46 @@ namespace ChatApplication.Controllers
             };
             return Json(response);
 
-        }       
+        }
+
+        /// <summary>
+        /// Получение серверного токена по идентификатору пользователя и секретному ключу из файла "appsettings.json" и параметра "ServerKey"
+        /// </summary>
+        /// <param name="id">Числовой идентификатор пользователя</param>
+        /// <param name="secret">Секретный ключ из файла "appsettings.json" и параметра "ServerKey"</param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("getservertoken/{id}/{secret}")]
+        public async Task<IActionResult> GetServerToken(int id, string secret)
+        {
+            try
+            {
+                var user = await _context.Users.Get(id);
+                var scr = _config.GetValue<string>("ServerKey:Default");
+                if (scr != secret) return BadRequest();
+                var identity = await GetIdentity(user.UserName, user.Password);
+                if (identity == null)
+                {
+                    Response.StatusCode = 400;
+                    return NotFound("Invalid username or password.");
+                }
+
+                var encodedJwt = CreateToken(identity);
+                return Content(encodedJwt);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return BadRequest();
+            }
+            
+        }
         private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
-            
+
             var tokenValidationParameters = new TokenValidationParameters
-            {                
+            {
                 ValidateIssuer = true,
                 // строка, представляющая издателя
                 ValidIssuer = AuthOptions.ISSUER,
@@ -139,19 +192,27 @@ namespace ChatApplication.Controllers
         }
         private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            var person = (await _userDs.Users.GetUsers()).First(x => x.UserName == username);
-            var role = await _userDs.Roles.GetRolesForUser(person.Id);
-            var roleName = role.First().Name;
-            if (person == null) return null; // если пользователя не найдено
-            var claims = new List<Claim>
+            try
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, person.UserName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName)
-            };
-            var claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-            return claimsIdentity;
+                var person = (await _context.Users.GetUsers()).First(x => x.UserName == username);
+                var role = await _context.Roles.GetRolesForUser(person.Id);
+                var roleName = role.First().Name;
+                if (person == null) return null; // если пользователя не найдено
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.UserName),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName)
+                };
+                var claimsIdentity =
+                    new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                        ClaimsIdentity.DefaultRoleClaimType);
+                return claimsIdentity;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return null;
+            }            
         }
     }
 }

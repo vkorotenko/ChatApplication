@@ -123,16 +123,28 @@
             Контроллер для работы с аккаунтами
             </summary>
         </member>
-        <member name="F:ChatApplication.Controllers.AccountController._userDs">
+        <member name="F:ChatApplication.Controllers.AccountController._context">
             <summary>
             пользовательский датастор
             </summary>
         </member>
-        <member name="M:ChatApplication.Controllers.AccountController.#ctor(ChatApplication.Dbl.DbContext)">
+        <member name="F:ChatApplication.Controllers.AccountController._config">
+            <summary>
+            Переменные среды.
+            </summary>
+        </member>
+        <member name="F:ChatApplication.Controllers.AccountController._logger">
+            <summary>
+            Логгер
+            </summary>
+        </member>
+        <member name="M:ChatApplication.Controllers.AccountController.#ctor(ChatApplication.Dbl.DbContext,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.AccountController})">
             <summary>
             Конструктор с пользовательским датасорсом
             </summary>
-            <param name="userDs"></param>
+            <param name="context"></param>
+            <param name="config">Конфигурация</param>
+            <param name="logger">логгер</param>
         </member>
         <member name="M:ChatApplication.Controllers.AccountController.Token(ChatApplication.Models.LoginModel)">
             <summary>
@@ -146,6 +158,14 @@
             
             </summary>
             <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Controllers.AccountController.GetServerToken(System.Int32,System.String)">
+            <summary>
+            Получение серверного токена по идентификатору пользователя и секретному ключу из файла "appsettings.json" и параметра "ServerKey"
+            </summary>
+            <param name="id">Числовой идентификатор пользователя</param>
+            <param name="secret">Секретный ключ из файла "appsettings.json" и параметра "ServerKey"</param>
             <returns></returns>
         </member>
         <member name="T:ChatApplication.Controllers.UserController">
