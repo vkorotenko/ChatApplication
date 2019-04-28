@@ -10,7 +10,9 @@ var ChatApp = new Vue({
         topicAuthor: 0,
         topicId: null,
         messageArea: "",
-        userId: null
+        userId: null,
+        selectFileName: null,
+        fileAdded:false
     },
     methods: {
         showThread: function (id, el, event) {
@@ -25,6 +27,13 @@ var ChatApp = new Vue({
         },
         getUserData: function() {
             GetUserData();
+        },
+        fileSelected: function () {
+            
+            var file_data = $('#file-1').prop('files')[0];
+            console.log(file_data);
+            ChatApp.fileAdded = true;
+            ChatApp.selectFileName = file_data.name;
         }
     }
 });
@@ -180,7 +189,9 @@ function uploadFile(topicid, messageid) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
-        success: function (data) {            
+        success: function (data) {
+            ChatApp.fileAdded = false;
+            ChatApp.selectFileName = null;
         }
     });
     req.fail(function (data, status) {
