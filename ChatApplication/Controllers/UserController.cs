@@ -259,5 +259,26 @@ namespace ChatApplication.Controllers
                 return BadRequest();
             }
         }
+        /// <summary>
+        /// Получение списка обьявлений, доступных для авторизованного пользователя.
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("articles")]
+        public async Task<IActionResult> Articles()
+        {
+            try
+            {
+                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                var articles = await _ctx.Articles.GetAllFromUser(user.Id);
+                return Json(articles);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return BadRequest();
+            }
+        }
     }
 }

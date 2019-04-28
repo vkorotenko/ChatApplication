@@ -247,6 +247,12 @@
             <param name="topicid"></param>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.UserController.Articles">
+            <summary>
+            Получение списка обьявлений, доступных для авторизованного пользователя.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:ChatApplication.Controllers.ValuesController">
             <summary>
             Контроллер значений

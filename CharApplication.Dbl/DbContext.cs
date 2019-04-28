@@ -24,6 +24,7 @@ namespace ChatApplication.Dbl
         private readonly ITopicRepository _topics;
         private readonly IMessageRepository _messages;
         private readonly IFileRepository _files;
+        private readonly IArticleRepository _articles;
 
         public DbContext(IConfiguration configuration)
         {
@@ -36,6 +37,7 @@ namespace ChatApplication.Dbl
             _topics = new TopicRepository(dbConnection); 
             _messages = new MessageRepository(dbConnection);
             _files = new FileRepository(dbConnection);
+            _articles = new ArticleRepository(dbConnection);
         }
 
         /// <summary>
@@ -65,5 +67,10 @@ namespace ChatApplication.Dbl
         /// Файлы.
         /// </summary>
         public IFileRepository Files => _files;
+
+        /// <summary>
+        /// Репозиторий сообщений
+        /// </summary>
+        public IArticleRepository Articles => _articles;
     }
 }

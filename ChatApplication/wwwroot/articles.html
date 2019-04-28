@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>chat</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- styles from template -->
+    <!--Определяем базовый адрес для загрузки картинок -->
+
+    <link rel="stylesheet" href="/template/styles/css/main-old.css">
+    <link rel="stylesheet" href="/template/styles/css/style.css">
+    <link rel="stylesheet" href="/template/styles/css/responsive.css">
+    <!-- end styles from template -->
+    <style>
+        .simple_list {
+            list-style: circle;
+            display: block;
+        }
+    </style>
+</head>
+<body>    
+    <header class="header">
+        <div class="panel">
+            <div class="case">
+                <div class="panel__wrap row i-mid">
+                    <div class="panel__wrap row i-mid">
+                        <div class="panel__logo"><a href="/"><img src="/images/logo.png" alt=""></a></div>
+                        <div class="panel__nav">
+                            <ul class="scroll-block" style="vertical-align: bottom">
+                                <li><a href="/">Главная</a></li>
+                                <li><a href="/swagger">swagger</a></li>
+                                <li><a href="chat.html">chat.html</a></li>                                
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel__lk row i-mid">
+                        <div class="panel__messages lk-link lk-link_has-hidden hidden-xs lk-link_open">
+                            <div class="lk-link__icon"><a href="buyer-messages.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16a" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z"></path></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16a"></use></g></g></svg><span style="display: none" id="totalUnreadMessages"></span></a></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+
+
+    <main class="main">
+        <div class="page page_bg">
+            <div class="case">
+                <div class="page__wrap page__wrap_pt-more row row- i-strech">
+                    <div class="page__aside col col-lg-3 col-md-12">
+                        <div class="apps apps_aside hidden-md hidden-sm hidden-xs">
+                        </div>
+                    </div>
+                    <div class="page__content col col-lg-9 col-md-12" id="articleApp">
+                        <div class="page__main-title main-title page__main-title main-title_md">Сообщения</div>                        
+                        <ul class="simple_list">
+                            <li v-for="article in articles">
+                                <div>
+                                    <a :href="'chat.html?id=' + article.id">{{article.title}} vendor: {{article.vendor}} code: {{article.code}}</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"
+            integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        var tokenKey = "accessToken";
+        var sessionToken = sessionStorage.getItem(tokenKey);
+
+        var ArticleApp = new Vue({
+            el: '#articleApp',
+            data: {
+                articles:[]
+            },
+            methods: {
+
+            }
+        });
+        GetArticles();
+
+        function GetArticles() {
+            var sessionToken = sessionStorage.getItem(tokenKey);
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/user/articles',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
+                },
+                success: function (data) {            
+                    ArticleApp.articles = data;
+                }
+            });
+        }
+    </script>
+    <!-- Автоматическая проверка наличия сообщений и разблокировка глобального счетчика. При работе на странице чата так-же вызов цикла подгрузки сообщений-->
+    <script>
+        // данная переменная должна формироваться на сервере и содержать числовой идентификатор пользователя в системе (id)
+        var loggedinUserId = 52;
+        var totalMessagesSpan = $('#totalUnreadMessages');
+        //var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
+        function checkMessagesForUser() {
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/user/totalunread/' + loggedinUserId,
+                success: function (data) {
+                    var count = parseInt(data);
+                    totalMessagesSpan.text(count);
+                    if (count > 0) {
+                        totalMessagesSpan.show();
+                        if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
+                    } else {
+                        totalMessagesSpan.hide();
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

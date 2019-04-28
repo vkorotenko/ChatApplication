@@ -40,5 +40,9 @@ namespace ChatApplication.Dbl
         /// Файлы.
         /// </summary>
         IFileRepository Files { get; }
+        /// <summary>
+        /// Репозиторий сообщений
+        /// </summary>
+        IArticleRepository Articles { get; }
     }
 }

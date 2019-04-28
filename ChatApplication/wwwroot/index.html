@@ -25,8 +25,9 @@
                         <div class="panel__nav">
                             <ul class="scroll-block" style="vertical-align: bottom">
                                 <li><a href="/">Главная</a></li>
+                                <li><a href="articles.html">Обьявления</a></li>
+                                <li><a href="chat.html">chat.html</a></li>
                                 <li><a href="/swagger">swagger</a></li>
-                                <li><a href="chat.html">chat.html</a></li>                                
                             </ul>
                         </div>
                     </div>
@@ -175,7 +176,7 @@
         // данная переменная должна формироваться на сервере и содержать числовой идентификатор пользователя в системе (id)
         var loggedinUserId = 52;
         var totalMessagesSpan = $('#totalUnreadMessages');
-        //var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
+        var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
         function checkMessagesForUser() {
             $.ajax({
                 type: 'GET',
