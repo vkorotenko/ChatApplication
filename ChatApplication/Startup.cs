@@ -57,12 +57,8 @@ namespace ChatApplication
         public void ConfigureServices(IServiceCollection services)
         {           
             _logger.LogInformation("Start configure services");
-            ConfigureMapper();
-            // получаем строку подключения из файла конфигурации
-            string connection = Configuration.GetConnectionString("DefaultConnection");
-            // добавляем контекст DbContext для всего приложения
-            var dbcon = new DbContext(connection);
-            services.AddSingleton<DbContext>(dbcon);
+            ConfigureMapper();            
+            services.AddScoped<IDbContext, DbContext>();
             services.AddLogging();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -110,7 +106,12 @@ namespace ChatApplication
                     Version = "v1",
                     Title = "Internal messages API",
                     Description = "ASP.NET Core internal message API",
-                    Contact = new Contact() { Name = "Vladimir Korotenko", Email = "koroten@ya.ru", Url = "www.vkorotenko.ru" }
+                    Contact = new Contact()
+                    {
+                        Name = "Vladimir Korotenko",
+                        Email = "koroten@ya.ru",
+                        Url = "https://vkorotenko.ru"
+                    }
                 });                
             });            
             services.AddCors(options =>
@@ -118,8 +119,7 @@ namespace ChatApplication
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("*",
-                                "http://www.contoso.com")
+                        builder.WithOrigins("*")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
@@ -165,8 +165,8 @@ namespace ChatApplication
             var fillPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs/logger.txt");
             try
             {
-                loggerFactory.AddFile(fillPath);
-                var logger = loggerFactory.CreateLogger("FileLogger");
+                // loggerFactory.AddFile(fillPath);
+                // var logger = loggerFactory.CreateLogger("FileLogger");
             }
             catch (Exception ex)
             {                

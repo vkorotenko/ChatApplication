@@ -138,7 +138,7 @@
             Логгер
             </summary>
         </member>
-        <member name="M:ChatApplication.Controllers.AccountController.#ctor(ChatApplication.Dbl.DbContext,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.AccountController})">
+        <member name="M:ChatApplication.Controllers.AccountController.#ctor(ChatApplication.Dbl.IDbContext,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.AccountController})">
             <summary>
             Конструктор с пользовательским датасорсом
             </summary>
@@ -188,7 +188,7 @@
             Переменные среды.
             </summary>
         </member>
-        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.DbContext,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.UserController},Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.IDbContext,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.UserController},Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
             <summary>
             Контроллер для отображения пользовательской информации.
             </summary>

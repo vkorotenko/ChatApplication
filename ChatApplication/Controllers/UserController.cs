@@ -34,7 +34,7 @@ namespace ChatApplication.Controllers
         /// <summary>
         /// Контекст дб
         /// </summary>
-        private DbContext _ctx;
+        private IDbContext _ctx;
         /// <summary>
         /// Логгер
         /// </summary>
@@ -50,7 +50,7 @@ namespace ChatApplication.Controllers
         /// <param name="ctx">Контекст бд</param>
         /// <param name="logger">Логгер</param>
         /// <param name="appEnvironment">Переменные среды</param>
-        public UserController(DbContext ctx, ILogger<UserController> logger, IHostingEnvironment appEnvironment)
+        public UserController(IDbContext ctx, ILogger<UserController> logger, IHostingEnvironment appEnvironment)
         {
             _ctx = ctx;
             _logger = logger;

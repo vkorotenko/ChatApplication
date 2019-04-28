@@ -32,7 +32,7 @@ namespace ChatApplication.Controllers
         /// <summary>
         /// пользовательский датастор
         /// </summary>
-        private DbContext _context;
+        private IDbContext _context;
         /// <summary>
         /// Переменные среды.
         /// </summary>
@@ -48,7 +48,7 @@ namespace ChatApplication.Controllers
         /// <param name="context"></param>
         /// <param name="config">Конфигурация</param>
         /// <param name="logger">логгер</param>
-        public AccountController(DbContext context, IConfiguration config, ILogger<AccountController> logger)
+        public AccountController(IDbContext context, IConfiguration config, ILogger<AccountController> logger)
         {
             _context = context;
             _config = config;

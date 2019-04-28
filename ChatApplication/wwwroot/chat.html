@@ -145,7 +145,7 @@
         // данная переменная должна формироваться на сервере и содержать числовой идентификатор пользователя в системе (id)
         var loggedinUserId = 52;
         var totalMessagesSpan = $('#totalUnreadMessages');
-        var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
+        //var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
         function checkMessagesForUser() {
             $.ajax({
                 type: 'GET',

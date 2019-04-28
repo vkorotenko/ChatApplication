@@ -8,6 +8,7 @@
 
 using System.Data;
 using ChatApplication.Dbl.Repository;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
 namespace ChatApplication.Dbl
@@ -16,23 +17,25 @@ namespace ChatApplication.Dbl
     /// Контекст базы данных, создается при старте приложения, предоставляет доступ ко всем репозиториям.
     /// </summary>
     public class DbContext : IDbContext
-    {        
-        private readonly IDbConnection _dbConnection;
+    {
         private readonly IUserRepository _users;
         private readonly IRoleRepository _roles;
         private readonly IInroleRepository _inrole;
         private readonly ITopicRepository _topics;
         private readonly IMessageRepository _messages;
         private readonly IFileRepository _files;
-        public DbContext(string connectionString)
-        {            
-            _dbConnection = new MySqlConnection(connectionString);
-            _users = new UserRepository(_dbConnection);
-            _roles = new RoleRepository(_dbConnection);
-            _inrole = new InroleRepository(_dbConnection);
-            _topics = new TopicRepository(_dbConnection); 
-            _messages = new MessageRepository(_dbConnection);
-            _files = new FileRepository(_dbConnection);
+
+        public DbContext(IConfiguration configuration)
+        {
+            // получаем строку подключения из файла конфигурации
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
+            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            _users = new UserRepository(dbConnection);
+            _roles = new RoleRepository(dbConnection);
+            _inrole = new InroleRepository(dbConnection);
+            _topics = new TopicRepository(dbConnection); 
+            _messages = new MessageRepository(dbConnection);
+            _files = new FileRepository(dbConnection);
         }
 
         /// <summary>
