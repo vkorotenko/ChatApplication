@@ -8,6 +8,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using ChatApplication.Dbl;
 using ChatApplication.Dbl.Models;
@@ -100,6 +101,19 @@ namespace ChatApplication.Tests
             item = await ctx.Messages.Get(_messageId);
 
             Assert.AreEqual(item.Body, newname);
+        }
+        [TestMethod]
+        public async Task MarkMessagesIsRead()
+        {
+            long topicid = 52;
+            var ctx = new DbContext(_cs);
+            await ctx.Messages.MarkMessagesInTopikAsRead(topicid);
+            var items = await ctx.Messages.GetMessagesForTopic(topicid);
+            var item = items.FirstOrDefault();
+            if (item != null)
+            {
+                Assert.AreEqual(true, item.IsRead);
+            }
         }
     }
 }

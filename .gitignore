@@ -262,4 +262,4 @@ __pycache__/
 
 
 #ignore log file
-ChatApplication/Logs/logger.txt
+ChatApplication/Logs/

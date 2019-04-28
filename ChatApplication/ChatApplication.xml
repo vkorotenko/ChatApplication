@@ -163,12 +163,18 @@
             Логгер
             </summary>
         </member>
-        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.DbContext,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.UserController})">
+        <member name="F:ChatApplication.Controllers.UserController._appEnvironment">
+            <summary>
+            Переменные среды.
+            </summary>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.DbContext,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.UserController},Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
             <summary>
             Контроллер для отображения пользовательской информации.
             </summary>
             <param name="ctx">Контекст бд</param>
             <param name="logger">Логгер</param>
+            <param name="appEnvironment">Переменные среды</param>
         </member>
         <member name="M:ChatApplication.Controllers.UserController.Get">
             <summary>
@@ -196,6 +202,15 @@
             </summary>
             <param name="id">Идентификатор топика</param>
             <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.AddFiles(Microsoft.AspNetCore.Http.IFormFileCollection,System.Int64,System.Int64)">
+            <summary>
+            Загрузка и сохранение файла 
+            </summary>
+            <param name="uploads">Коллекция файлов</param>
+            <param name="topicId">Топик в который грузим</param>
+            <param name="messageid">Идентификатор сообщения</param>
             <returns></returns>
         </member>
         <member name="T:ChatApplication.Controllers.ValuesController">
@@ -333,6 +348,11 @@
         <member name="P:ChatApplication.Models.UploadFile.Url">
             <summary>
             URL файла
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.UploadFile.Path">
+            <summary>
+            Путь к файлу
             </summary>
         </member>
         <member name="T:ChatApplication.Poco.ApplicationUser">

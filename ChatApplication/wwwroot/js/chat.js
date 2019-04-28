@@ -18,7 +18,7 @@ var app = new Vue({
             selectItem(id);
             getMessagesForTopic(id, app.topicAuthor);
         },
-        sendMessage: function() {
+        sendMessage: function () {
             if (app.messageArea != "")
                 sendMessageToTopic(app.messageArea, app.topicId);
         }
@@ -49,7 +49,7 @@ function GetUserData() {
                 countBox.show();
 
             app.topics = applyTopicsSelected(data.topics);
-            app.unreadMessages = data.messages;            
+            app.unreadMessages = data.messages;
         }
     });
 
@@ -81,7 +81,7 @@ function RefreshToken(token) {
         }
     });
 }
-function selectItem(id) {    
+function selectItem(id) {
     for (i = 0; i < app.topics.length; i++) {
         app.topics[i].selected = false;
         if (app.topics[i].id == id) {
@@ -134,7 +134,7 @@ function sendMessageToTopic(body, topicId) {
     if (topicId == null) return;
     var sessionToken = sessionStorage.getItem(tokenKey);
     var bd = {
-        body: body        
+        body: body
     };
     var req = $.ajax({
         type: 'POST',
@@ -147,10 +147,46 @@ function sendMessageToTopic(body, topicId) {
         success: function (data) {
             app.messageArea = "";
             data.isAuthor = true;
+            if ($('#file-1').prop('files').length > 0) {
+                uploadFile(app.topicId, data.id);
+            }
             app.posts.push(data);
         }
     });
     req.fail(function (data, status) {
+        if (data.status == 401) {
+            var te = data.getResponseHeader('Token-Expired');
+            if (te) {
+                RefreshToken(sessionToken);
+                sendMessageToTopic(body, userId, topicId);
+            }
+        } else
+            console.log('err');
+    });
+}
+
+// загрузка файла
+function uploadFile(topicid, messageid) {
+    var file_data = $('#file-1').prop('files')[0];
+    var form_data = new FormData();
+    form_data.append('uploads', file_data);
+
+    var req = $.ajax({
+        type: 'POST',
+        // addfiles/{topicid}/{ messageid }
+        url: "/api/v1/user/addfiles/" + topicid + "/" + messageid,
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: form_data,              
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
+        },
+        success: function (data) {            
+        }
+    });
+    req.fail(function (data, status) {
+        console.log(status);
         if (data.status == 401) {
             var te = data.getResponseHeader('Token-Expired');
             if (te) {

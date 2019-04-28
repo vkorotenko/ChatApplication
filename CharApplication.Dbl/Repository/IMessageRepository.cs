@@ -54,5 +54,11 @@ namespace ChatApplication.Dbl.Repository
         /// <returns></returns>
         Task<List<DbMessage>> GetMessagesForTopic(long id);
 
+        /// <summary>
+        /// помечает все сообщения топика как прочтенные
+        /// </summary>
+        /// <param name="topicid"></param>
+        /// <returns></returns>
+        Task MarkMessagesInTopikAsRead(long topicid);
     }
 }

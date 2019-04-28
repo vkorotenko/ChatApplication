@@ -42,8 +42,8 @@ namespace ChatApplication.Dbl.Repository
             // если мы хотим получить id добавленного пользователя
 
             var sqlQuery = @"INSERT INTO dbusers (id, username, name, lastname, middlename, email, password, lastactive) 
-VALUES(@Id, @UserName, @Name, @LastName, @MiddleName, @Email, @Password, @LastActive); 
-SELECT LAST_INSERT_ID()";
+                            VALUES(@Id, @UserName, @Name, @LastName, @MiddleName, @Email, @Password, @LastActive); 
+                            SELECT LAST_INSERT_ID()";
             int? userId = (await _dbConn.QueryAsync<int>(sqlQuery, user)).FirstOrDefault();
             user.Id = userId.Value;
             return user;
@@ -54,16 +54,16 @@ SELECT LAST_INSERT_ID()";
         {
 
             const string sqlQuery = @"UPDATE dbusers
-SET
-`id` = @Id,
-username = @UserName,
-`name` = @Name,
-`lastname` = @LastName,
-`middlename` = @MiddleName,
-`email` = @Email,
-`password` = @Password,
-`lastactive` = @LastActive
-WHERE `id` = @Id ;";
+                                        SET
+                                        `id` = @Id,
+                                        username = @UserName,
+                                        `name` = @Name,
+                                        `lastname` = @LastName,
+                                        `middlename` = @MiddleName,
+                                        `email` = @Email,
+                                        `password` = @Password,
+                                        `lastactive` = @LastActive
+                                        WHERE `id` = @Id ;";
             await _dbConn.ExecuteAsync(sqlQuery, user);
 
         }
@@ -75,7 +75,48 @@ WHERE `id` = @Id ;";
         /// <returns></returns>
         public async Task<DbUser> GetUserBuName(string username)
         {
-            return (await _dbConn.QueryAsync<DbUser>("SELECT * FROM dbusers WHERE username = @username", new { username })).FirstOrDefault();
+            var users = await _dbConn.QueryAsync<DbUser>("SELECT * FROM dbusers WHERE username = @username",
+                new { username });
+            var user = users.FirstOrDefault();
+            return user;
+        }
+
+        /// <summary>
+        /// Получение количества непрочтенных писем
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<long> GetUnreadMessages(int userId)
+        {
+            var sql = @"SELECT count(isread) as count
+                          FROM dbmessages
+                         WHERE topicid IN (SELECT id
+                                           FROM dbtopics
+                                          WHERE authorid=@userId) AND NOT isread";
+
+
+            var results = await _dbConn.QueryAsync<long>(sql, new { userId });
+            var result = results.FirstOrDefault();            
+            return result;
+        }
+
+        /// <summary>
+        /// Получение общего количества писем для пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<long> GetTotalMessages(int userId)
+        {
+            var sql = @"SELECT count(isread) as count
+                          FROM dbmessages
+                         WHERE topicid IN (SELECT id
+                                           FROM dbtopics
+                                          WHERE authorid=@userId)";
+
+
+            var results = await _dbConn.QueryAsync<long>(sql, new { userId });
+            var result = results.FirstOrDefault();
+            return result;
         }
 
         public async Task Delete(int id)

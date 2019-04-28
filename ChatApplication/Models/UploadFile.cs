@@ -17,7 +17,7 @@ namespace ChatApplication.Models
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         /// <summary>
         /// Имя файла
         /// </summary>
@@ -31,5 +31,9 @@ namespace ChatApplication.Models
         /// URL файла
         /// </summary>
         public string Url { get; set; }
+        /// <summary>
+        /// Путь к файлу
+        /// </summary>
+        public string Path { get; set; }
     }
 }

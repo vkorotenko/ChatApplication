@@ -25,6 +25,7 @@
     <Folder Include="wwwroot\template\fonts\" />
     <Folder Include="wwwroot\template\styles\css\" />
     <Folder Include="wwwroot\upload\faceses\round\" />
+    <Folder Include="wwwroot\upload\topic\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectCapability Include="CSharp;Managed;ClassDesigner" />

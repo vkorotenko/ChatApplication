@@ -132,6 +132,8 @@ namespace ChatApplication
             Mapper.Initialize(cfg => {
                 cfg.CreateMap<DbUser, ApplicationUser>();
                 cfg.CreateMap<DbMessage, MessageModel>();
+                cfg.CreateMap<DbFile, UploadFile>()
+                    .ForMember(dest => dest.Upload, opt => opt.MapFrom(src => src.Created));
             });
         }
 

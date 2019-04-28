@@ -114,5 +114,19 @@ namespace ChatApplication.Dbl.Repository
         {
             return (await _dbConn.QueryAsync<DbMessage>("SELECT * FROM dbmessages WHERE topicid= @id ORDER BY created ASC", new { id })).ToList();
         }
+
+        /// <summary>
+        /// Помечает все сообщения топика как прочтенные
+        /// </summary>
+        /// <param name="topicid"></param>
+        /// <returns></returns>
+        public async Task MarkMessagesInTopikAsRead(long topicid)
+        {
+            var sql = @"UPDATE dbmessages
+                            SET
+                            isread = 1
+                            WHERE topicid = @topicid";
+            await _dbConn.QueryAsync<DbMessage>(sql, new { topicid });
+        }
     }
 }
