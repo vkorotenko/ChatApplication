@@ -209,6 +209,13 @@
             <param name="id">Идентификатор топика</param>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.UserController.IsImage(System.String)">
+            <summary>
+            Определение является ли файл картинкой
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
         <member name="M:ChatApplication.Controllers.UserController.Avatar(System.Int64)">
             <summary>
             Получаем аватар по идентификатору пользователя.
@@ -287,6 +294,31 @@
             Тело сообщения
             </summary>
         </member>
+        <member name="T:ChatApplication.Models.AttachmentModel">
+            <summary>
+            Файл аттачмент
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.AttachmentModel.Name">
+            <summary>
+            Имя файла
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.AttachmentModel.Created">
+            <summary>
+            Дата создания
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.AttachmentModel.Url">
+            <summary>
+            Адрес по которому доступен файл
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.AttachmentModel.IsImage">
+            <summary>
+            Является ли файл картинкой
+            </summary>
+        </member>
         <member name="T:ChatApplication.Models.LoginModel">
             <summary>
             Модель для входа в приложение
@@ -360,6 +392,11 @@
         <member name="P:ChatApplication.Models.MessageModel.AvatarUrl">
             <summary>
             Картинка на профиль.
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.Attachment">
+            <summary>
+            Файл прикрепленный к сообщению
             </summary>
         </member>
         <member name="T:ChatApplication.Models.RefreshTokenModel">

@@ -69,6 +69,17 @@ namespace ChatApplication.Dbl.Repository
         }
 
         /// <summary>
+        /// Получение аттача для сообщения.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DbFile> GetForMessage(long id)
+        {
+            var sql = @"SELECT * FROM dbfiles WHERE messageid = @id";
+            return (await _dbConn.QueryAsync<DbFile>(sql, new { id })).FirstOrDefault();
+        }
+
+        /// <summary>
         /// Удаление элемента
         /// </summary>
         /// <param name="id">Идентификатор</param>

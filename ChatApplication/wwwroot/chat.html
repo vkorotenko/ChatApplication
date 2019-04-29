@@ -104,8 +104,15 @@
                                                 <div class="message__img">
                                                     <img :src="msg.avatarUrl" alt="">
                                                 </div>
-                                                <div class="message__wrap">{{ msg.body }}</div>
-                                                <div class="message__date">{{ msg.created | formatTime }}</div>
+                                                <div class="message__wrap">
+                                                    {{ msg.body }}
+                                                    <template v-if="msg.attachment && msg.attachment.name != null">
+                                                        <br/>
+                                                        Ссылка: <b><a :href="msg.attachment.url">{{msg.attachment.name}} {{msg.attachment.created | formatDateTime}}</a></b>
+                                                        <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name"/>
+                                                    </template>
+                                                </div>
+                                                <div class="message__date">{{ msg.created | formatTime }}</div>                                                
                                             </div>
                                         </div>
                                         <div class="messager__foot">

@@ -134,6 +134,7 @@ namespace ChatApplication
                 cfg.CreateMap<DbMessage, MessageModel>();
                 cfg.CreateMap<DbFile, UploadFile>()
                     .ForMember(dest => dest.Upload, opt => opt.MapFrom(src => src.Created));
+                cfg.CreateMap<DbFile, AttachmentModel>();
             });
         }
 

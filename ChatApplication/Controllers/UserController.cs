@@ -103,6 +103,22 @@ namespace ChatApplication.Controllers
             {                
                 var messages = await _ctx.Messages.GetMessagesForTopic(id);
                 var rt = Mapper.Map<IEnumerable<MessageModel>>(messages);
+
+                foreach (var message in rt)
+                {
+                    var dbattachment = await _ctx.Files.GetForMessage(message.Id);
+                    var attachment = Mapper.Map<AttachmentModel>(dbattachment);
+                    if (attachment != null)
+                    {
+                        attachment.Url = $"/upload/topic/{id}/{attachment.Name}";
+                        attachment.IsImage = IsImage(attachment.Name);
+                        message.Attachment = attachment;
+                    }
+                    else
+                    {
+                        message.Attachment = new AttachmentModel();
+                    }
+                }                
                 return Json(rt);
             }
             catch (Exception ex)
@@ -110,6 +126,25 @@ namespace ChatApplication.Controllers
                 _logger.LogError(ex.Message);
                 return BadRequest();
             }
+        }
+        /// <summary>
+        /// Определение является ли файл картинкой
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private static bool IsImage(string name)
+        {
+            var nameLower = name.ToLower();
+
+            if (nameLower.EndsWith(".jpg") ||
+                nameLower.EndsWith(".jpeg") ||
+                nameLower.EndsWith(".png") ||
+                nameLower.EndsWith(".gif") ||
+                nameLower.EndsWith(".bmp") ||
+                nameLower.EndsWith(".webm")
+            )
+                return true;
+            return false;
         }
 
         /// <summary>

@@ -7,6 +7,7 @@
 #endregion
 
 using System;
+using ChatApplication.Dbl.Models;
 
 namespace ChatApplication.Models
 {
@@ -14,7 +15,11 @@ namespace ChatApplication.Models
     /// Модель для отображения сообщения.
     /// </summary>
     public class MessageModel
-    {        
+    {
+        public MessageModel()
+        {
+            Attachment = new AttachmentModel();
+        }
         /// <summary>
         /// Идентификатор
         /// </summary>
@@ -43,5 +48,9 @@ namespace ChatApplication.Models
         /// Картинка на профиль.
         /// </summary>
         public string AvatarUrl => $"/api/v1/user/avatar/{AuthorId}";        
+        /// <summary>
+        /// Файл прикрепленный к сообщению
+        /// </summary>
+        public AttachmentModel Attachment { get; set; }
     }
 }

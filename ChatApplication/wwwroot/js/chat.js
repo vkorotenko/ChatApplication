@@ -45,6 +45,15 @@ Vue.filter('formatTime', function (value) {
     }
 });
 
+
+Vue.filter('formatDateTime', function (value) {
+    if (value) {
+        var d = new Date(value);   
+
+        return  d.getDay() + '/' + d.getMonth() + '/' + d.getFullYear() + ' ' + d.getHours() + ":" + d.getMinutes();
+    }
+});
+
 if (id > -1) {
     GetUserData(id);
 } else GetUserData();

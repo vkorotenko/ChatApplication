@@ -43,5 +43,12 @@ namespace ChatApplication.Dbl.Repository
         /// <param name="user"></param>
         /// <returns></returns>
         Task Update(DbFile item);
+
+        /// <summary>
+        /// Получение аттача для сообщения.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<DbFile> GetForMessage(long id);
     }
 }
