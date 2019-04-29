@@ -37,7 +37,7 @@ namespace ChatApplication.Dbl.Repository
                         FROM admin_zap.article as da
                         INNER JOIN admin_zap.manufacturer as dm
                         ON dm.id = da.manufacture_id
-                        WHERE da.user_id = @id";
+                        WHERE da.id = @id";
             var articles = await _db.QueryAsync<DbArticle>(sql, new { id });
             return articles.FirstOrDefault();
         }

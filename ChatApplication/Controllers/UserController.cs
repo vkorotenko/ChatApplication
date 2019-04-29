@@ -97,10 +97,10 @@ namespace ChatApplication.Controllers
         [HttpGet]
         [Route("messages/{id}")]
         public async Task<ActionResult> Messages([FromRoute] long id)
-        {
+        {            
             _logger.LogInformation($"Retrive data for topic id: {id}");
             try
-            {
+            {                
                 var messages = await _ctx.Messages.GetMessagesForTopic(id);
                 var rt = Mapper.Map<IEnumerable<MessageModel>>(messages);
                 return Json(rt);
@@ -234,10 +234,10 @@ namespace ChatApplication.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-            }            
+            }
             return Content(count.ToString());
         }
-        
+
         /// <summary>
         /// Устанавливаем флаг прочтения в топике.
         /// </summary>
@@ -277,6 +277,46 @@ namespace ChatApplication.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
+                return BadRequest();
+            }
+        }
+        /// <summary>
+        /// Создание топика на основе обьявления
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("createtopic/{id}")]
+        public async Task<IActionResult> CreateTopic([FromRoute]int id)
+        {
+            _logger.LogInformation($"Create topic from article id: {id}");
+            try
+            {
+                var topic = await _ctx.Topics.Get(id);
+                if (topic == null)
+                {
+                    var article = await _ctx.Articles.Get((int)id);
+                    if (article != null)
+                    {
+                        var newTopic = new DbTopic
+                        {
+                            Id = article.Id,
+                            AnnouncementId = article.Id,
+                            AuthorId = article.UserId,
+                            Created = DateTime.Now,
+                            Title = article.Title,
+                            Vendor = article.Vendor,
+                            VendorCode = article.Code
+                        };
+                        await _ctx.Topics.Create(newTopic);
+                    }
+                }                                
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
                 return BadRequest();
             }
         }

@@ -1,6 +1,6 @@
 ﻿var tokenKey = "accessToken";
 var sessionToken = sessionStorage.getItem(tokenKey);
-
+var id = findIdFromUrl();
 var ChatApp = new Vue({
     el: '#chatApp',
     data: {
@@ -12,7 +12,7 @@ var ChatApp = new Vue({
         messageArea: "",
         userId: null,
         selectFileName: null,
-        fileAdded:false
+        fileAdded: false
     },
     methods: {
         showThread: function (id, el, event) {
@@ -25,11 +25,11 @@ var ChatApp = new Vue({
             if (ChatApp.messageArea != "")
                 sendMessageToTopic(ChatApp.messageArea, ChatApp.topicId);
         },
-        getUserData: function() {
+        getUserData: function () {
             GetUserData();
         },
         fileSelected: function () {
-            
+
             var file_data = $('#file-1').prop('files')[0];
             console.log(file_data);
             ChatApp.fileAdded = true;
@@ -45,18 +45,25 @@ Vue.filter('formatTime', function (value) {
     }
 });
 
-GetUserData();
-function GetUserData() {
+if (id > -1) {
+    GetUserData(id);
+} else GetUserData();
+
+function GetUserData(id) {
     var sessionToken = sessionStorage.getItem(tokenKey);
+    if (id) createTopic(id);
     var req = $.ajax({
         type: 'GET',
         url: '/api/v1/user',
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
-        success: function (data) {            
+        success: function (data) {
             ChatApp.topics = applyTopicsSelected(data.topics);
             ChatApp.unreadMessages = data.messages;
+            if (id) {
+                ChatApp.showThread(id);
+            }
         }
     });
 
@@ -185,7 +192,7 @@ function uploadFile(topicid, messageid) {
         cache: false,
         contentType: false,
         processData: false,
-        data: form_data,              
+        data: form_data,
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
@@ -214,13 +221,50 @@ function clearNewMessages(id) {
     var token = sessionStorage.getItem(tokenKey);
     var req = $.ajax({
         type: 'POST',
-        url: '/api/v1/user/clearmessages/' + id,    
+        url: '/api/v1/user/clearmessages/' + id,
         contentType: "application/json",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + token);
         },
         success: function (data) {
             GetUserData();
+        }
+    });
+}
+
+
+function findIdFromUrl() {
+    console.log(window.location.search);
+
+    var search = window.location.search;
+    var id = -1;
+    if (search != "") {
+        search = search.replace('?', '');
+        var arr = search.split('&');
+        for (i = 0; i < arr.length; i++) {
+            var kv = arr[i].split('=');
+            if (kv.length == 2) {
+                if (kv[0].toLowerCase() == 'id') {
+                    id = parseInt(kv[1]);
+                    console.log('id: ' + id);
+                }
+            }
+        }
+    }
+    return id;
+}
+
+// создание нового топика
+function createTopic(id) {
+    var sessionToken = sessionStorage.getItem(tokenKey);
+    $.ajax({
+        type: 'GET',
+        url: '/api/v1/user/createtopic/' + id,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
+        },
+        success: function () {
+            console.log('Created topic from article id: ' + id);
         }
     });
 }

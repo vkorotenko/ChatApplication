@@ -253,6 +253,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.UserController.CreateTopic(System.Int32)">
+            <summary>
+            Создание топика на основе обьявления
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:ChatApplication.Controllers.ValuesController">
             <summary>
             Контроллер значений

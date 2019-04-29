@@ -7,8 +7,6 @@
 #endregion
 
 using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace ChatApplication.Models
 {
