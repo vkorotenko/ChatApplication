@@ -5,6 +5,8 @@
 // https://vkorotenko.ru
 // Создано:  13.04.2019 22:30
 #endregion
+
+using ChatApplication.Code;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +34,7 @@ namespace ChatApplication.Controllers
         /// Получение роли пользователя
         /// </summary>
         /// <returns></returns>
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = UserRoles.Administrator)]
         [Route("getrole")]
         [HttpGet]
         public IActionResult GetRole()

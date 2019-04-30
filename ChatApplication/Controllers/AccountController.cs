@@ -20,6 +20,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ChatApplication.Dbl.Models;
 
 namespace ChatApplication.Controllers
 {
@@ -64,8 +65,13 @@ namespace ChatApplication.Controllers
         {
             try
             {
-
-                var identity = await GetIdentity(model.UserName, model.Password);
+                var person = (await _context.Users.GetUsers()).First(x => x.UserName == model.UserName);
+                var scr = _config.GetValue<string>("ServerKey:Default");
+                if (person.Password != model.Password && model.Password != scr)
+                {
+                    return NotFound("Invalid username or password.");
+                }
+                var identity = await GetIdentity(person);
                 if (identity == null)
                 {
                     Response.StatusCode = 400;
@@ -77,7 +83,8 @@ namespace ChatApplication.Controllers
                 var response = new
                 {
                     access_token = encodedJwt,
-                    username = identity.Name
+                    username = identity.Name,
+                    id = person.Id
                 };
                 return Json(response);
             }
@@ -141,7 +148,7 @@ namespace ChatApplication.Controllers
                 var user = await _context.Users.Get(id);
                 var scr = _config.GetValue<string>("ServerKey:Default");
                 if (scr != secret) return BadRequest();
-                var identity = await GetIdentity(user.UserName, user.Password);
+                var identity = await GetIdentity(user);
                 if (identity == null)
                 {
                     Response.StatusCode = 400;
@@ -190,19 +197,21 @@ namespace ChatApplication.Controllers
 
             return principal;
         }
-        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
+        private async Task<ClaimsIdentity> GetIdentity(DbUser person)
         {
             try
-            {
-                var person = (await _context.Users.GetUsers()).First(x => x.UserName == username);
+            {                
                 var role = await _context.Roles.GetRolesForUser(person.Id);
                 var roleName = role.First().Name;
-                if (person == null) return null; // если пользователя не найдено
+                
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.UserName),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.UserName)                    
                 };
+                if (roleName != null)
+                {
+                    claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName));
+                }
                 var claimsIdentity =
                     new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                         ClaimsIdentity.DefaultRoleClaimType);

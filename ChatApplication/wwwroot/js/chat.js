@@ -277,3 +277,21 @@ function createTopic(id) {
         }
     });
 }
+
+
+// производится вход, получение тикета и обновление сессии, так же обновляется идентификатор
+function specialLogin(username, password) {
+    var tokenKey = "accessToken";
+    var loginData = {userName: username, password: password};
+    $.ajax({
+        type: 'POST',
+        contentType: "application/json",
+        url: '/api/v1/Account/token',
+        data: JSON.stringify(loginData),        
+        success: function (data) {
+            sessionStorage.setItem(tokenKey, data.access_token);
+            console.log(data);
+            if (loggedinUserId) loggedinUserId = data.id;
+        }
+    });
+}

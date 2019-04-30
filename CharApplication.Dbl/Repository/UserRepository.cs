@@ -5,6 +5,8 @@
 // https://vkorotenko.ru
 // Создано:  19.04.2019 22:06
 #endregion
+
+using System;
 using Dapper;
 using System.Collections.Generic;
 using System.Data;
@@ -23,24 +25,21 @@ namespace ChatApplication.Dbl.Repository
         }
         public async Task<List<DbUser>> GetUsers()
         {
-            return (await _dbConn.QueryAsync<DbUser>("SELECT * FROM dbusers")).ToList();
+            var sql = @"SELECT id,username,email, generate_password as password FROM admin_zap.user";
+            return (await _dbConn.QueryAsync<DbUser>(sql)).ToList();
         }
 
         public async Task<DbUser> Get(int id)
         {
-
-            return (await _dbConn.QueryAsync<DbUser>("SELECT * FROM dbusers WHERE id = @id", new { id })).FirstOrDefault();
+            var sql = @"SELECT id,username,email, generate_password as password FROM admin_zap.user WHERE id = @id";
+            return (await _dbConn.QueryAsync<DbUser>(sql, new { id })).FirstOrDefault();
 
         }
 
         public async Task<DbUser> Create(DbUser user)
-        {
-
-            // var sqlQuery = "INSERT INTO Users (Name, Age) VALUES(@Name, @Age)";
-            // await  db.ExecuteAsync(sqlQuery, user);
-
-            // если мы хотим получить id добавленного пользователя
-
+        {            
+            // Доступ только на чтение
+            throw new NotImplementedException();
             var sqlQuery = @"INSERT INTO dbusers (id, username, name, lastname, middlename, email, password, lastactive) 
                             VALUES(@Id, @UserName, @Name, @LastName, @MiddleName, @Email, @Password, @LastActive); 
                             SELECT LAST_INSERT_ID()";
@@ -52,7 +51,8 @@ namespace ChatApplication.Dbl.Repository
 
         public async Task Update(DbUser user)
         {
-
+            // Доступ только на чтение
+            throw new NotImplementedException();
             const string sqlQuery = @"UPDATE dbusers
                                         SET
                                         `id` = @Id,
@@ -75,7 +75,7 @@ namespace ChatApplication.Dbl.Repository
         /// <returns></returns>
         public async Task<DbUser> GetUserBuName(string username)
         {
-            var users = await _dbConn.QueryAsync<DbUser>("SELECT * FROM dbusers WHERE username = @username",
+            var users = await _dbConn.QueryAsync<DbUser>("SELECT * FROM admin_zap.user WHERE username = @username",
                 new { username });
             var user = users.FirstOrDefault();
             return user;
@@ -121,6 +121,8 @@ namespace ChatApplication.Dbl.Repository
 
         public async Task Delete(int id)
         {
+            // только чтение
+            throw new NotImplementedException();
             const string sqlQuery = "DELETE FROM dbusers WHERE id = @id";
             await _dbConn.ExecuteAsync(sqlQuery, new { id });
         }

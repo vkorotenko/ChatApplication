@@ -118,6 +118,26 @@
             Уничтожение обьектов
             </summary>
         </member>
+        <member name="T:ChatApplication.Code.UserRoles">
+            <summary>
+            символические имена в системе ролей
+            </summary>
+        </member>
+        <member name="F:ChatApplication.Code.UserRoles.Administrator">
+            <summary>
+            Символическое имя роли в системе
+            </summary>
+        </member>
+        <member name="F:ChatApplication.Code.UserRoles.Manager">
+            <summary>
+            Символическое имя роли в системе
+            </summary>
+        </member>
+        <member name="F:ChatApplication.Code.UserRoles.User">
+            <summary>
+            Символическое имя роли в системе
+            </summary>
+        </member>
         <member name="T:ChatApplication.Controllers.AccountController">
             <summary>
             Контроллер для работы с аккаунтами

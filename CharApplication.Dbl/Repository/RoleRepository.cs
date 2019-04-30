@@ -35,7 +35,8 @@ namespace ChatApplication.Dbl.Repository
         /// <returns></returns>
         public async Task<DbRole> Get(int id)
         {
-            return (await _db.QueryAsync<DbRole>("SELECT * FROM dbroles WHERE id = @id", new { id })).FirstOrDefault();
+            var sql = @"SELECT item_name as name FROM admin_zap.rbac_auth_assignment WHERE user_id = @id";
+            return (await _db.QueryAsync<DbRole>(sql, new { id })).FirstOrDefault();
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace ChatApplication.Dbl.Repository
         /// <returns></returns>
         public async Task<List<DbRole>> GetRoles()
         {
-            return (await _db.QueryAsync<DbRole>("SELECT * FROM dbroles")).ToList();
+            return (await _db.QueryAsync<DbRole>("SELECT distinct(item_name) as name FROM admin_zap.rbac_auth_assignment")).ToList();
         }
 
         /// <summary>
@@ -53,12 +54,8 @@ namespace ChatApplication.Dbl.Repository
         /// <param name="id">Идентификатор пользователя</param>
         /// <returns>Список ролей где есть пользователь</returns>
         public async Task<List<DbRole>> GetRolesForUser(int id)
-        {
-            var sql = @"SELECT dr.id, dr.name 
-                            FROM dbroles as dr
-                            INNER JOIN dbuserinroles as uin
-                            ON  uin.roleid = dr.id
-                            WHERE uin.userid = @Id";
+        {            
+            var sql = @"SELECT item_name as name FROM admin_zap.rbac_auth_assignment WHERE user_id = @id";
             return (await _db.QueryAsync<DbRole>(sql, new { id })).ToList();
         }
     }
