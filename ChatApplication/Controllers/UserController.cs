@@ -221,6 +221,7 @@ namespace ChatApplication.Controllers
         {
             
             var files = new List<UploadFile>();
+            var gattachment = new AttachmentModel();
             try
             {
 
@@ -252,6 +253,16 @@ namespace ChatApplication.Controllers
                         };
                         var upfile = await _ctx.Files.Create(dbf);
                         var result = Mapper.Map<UploadFile>(upfile);
+
+                        var dbattachment = await _ctx.Files.GetForMessage(messageid);
+                        var attachment = Mapper.Map<AttachmentModel>(dbattachment);
+                        if (attachment != null)
+                        {
+                            attachment.Url = $"/upload/topic/{topicId}/{attachment.Name}";
+                            attachment.IsImage = IsImage(attachment.Name);
+                            gattachment = attachment;
+                        }
+
                         files.Add(result);
                     }
                     catch (Exception ex)
@@ -266,7 +277,7 @@ namespace ChatApplication.Controllers
                 _logger.LogError(ex.Message);
                 return BadRequest();
             }
-            return Json(files);
+            return Json(gattachment);
         }
         /// <summary>
         /// Получение общего количества непрочитанных пользователей для пользователя.

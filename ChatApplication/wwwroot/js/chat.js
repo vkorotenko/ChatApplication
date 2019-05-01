@@ -215,6 +215,7 @@ function uploadFile(topicid, messageid) {
             ChatApp.fileAdded = false;
             ChatApp.selectFileName = null;
             ChatApp.showLoader = false;
+            assignAttacmentToMessage(messageid, data);
         },
         error: function(data) {
             ChatApp.showLoader = false;
@@ -234,7 +235,15 @@ function uploadFile(topicid, messageid) {
     });
 }
 
-
+// Добавляем пришедший файл к сообщению.
+function assignAttacmentToMessage(messageid, data) {
+    for (var i = 0; i < ChatApp.posts.length; i++) {
+        var item = ChatApp.posts[i];
+        if (item && item.id == messageid) {
+            item.attachment = data;
+        }
+    }
+}
 // Очистка флага новых сообщений в топике
 
 function clearNewMessages(id) {
