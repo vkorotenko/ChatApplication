@@ -57,17 +57,16 @@ var ChatApp = new Vue({
 
 Vue.filter('formatTime', function (value) {
     if (value) {
-        var date = new Date(value);
-        return date.getHours() + ":" + date.getMinutes();
+        var d = new Date(Date.parse(value));        
+        return d.toLocaleTimeString('ru-ru');
     }
 });
 
 
 Vue.filter('formatDateTime', function (value) {
     if (value) {
-        var d = new Date(value);   
-
-        return  d.getDay() + '/' + d.getMonth() + '/' + d.getFullYear() + ' ' + d.getHours() + ":" + d.getMinutes();
+        var d = new Date(Date.parse(value));        
+        return d.toDateString('ru-ru');
     }
 });
 
