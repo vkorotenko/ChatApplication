@@ -1,10 +1,16 @@
 ﻿var tokenKey = "accessToken";
 var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
+window.addEventListener('keyup', keyUpHandlerCtrlShiftL);
 var ChatApp = new Vue({
     el: '#chatApp',
     data: {
         unreadMessages: 0,
+        username: "",
+        user: {
+            username: "",
+            password: ""
+        },
         topics: [],
         posts: [],
         topicAuthor: 0,
@@ -13,8 +19,10 @@ var ChatApp = new Vue({
         userId: null,
         selectFileName: null,
         fileAdded: false,
-        showLoader: false
-    },
+        showLoader: false,
+        showDeveloperConsole: false,
+        mailRefresh:true
+    },    
     methods: {
         showThread: function (id, el, event) {
             ChatApp.topicId = id;
@@ -35,6 +43,14 @@ var ChatApp = new Vue({
             console.log(file_data);
             ChatApp.fileAdded = true;
             ChatApp.selectFileName = file_data.name;
+        },
+        changeRefresh: function() {
+            processRefresh = !processRefresh;
+            ChatApp.mailRefresh = processRefresh;
+        },
+        newLogin: function () {
+            var user = ChatApp.user;
+            specialLogin(user.username, user.password);
         }
     }
 });
@@ -59,6 +75,15 @@ if (id > -1) {
     GetUserData(id);
 } else GetUserData();
 
+// глобальная консоль для всяких девелоперских нужд
+function keyUpHandlerCtrlShiftL(e) {
+    if (e.code == "KeyL" && e.ctrlKey && e.shiftKey) {        
+        ChatApp.showDeveloperConsole = !ChatApp.showDeveloperConsole;
+        if (ChatApp.showDeveloperConsole) {
+            processRefresh = ChatApp.mailRefresh = false;
+        }
+    }    
+}
 function GetUserData(id) {
     var sessionToken = sessionStorage.getItem(tokenKey);
     if (id) createTopic(id);
@@ -310,7 +335,10 @@ function specialLogin(username, password) {
         data: JSON.stringify(loginData),        
         success: function (data) {
             sessionStorage.setItem(tokenKey, data.access_token);
+            ChatApp.username = data.username;
+            ChatApp.id = data.id;
             console.log(data);
+            ChatApp.getUserData();
             if (loggedinUserId) loggedinUserId = data.id;
         }
     });

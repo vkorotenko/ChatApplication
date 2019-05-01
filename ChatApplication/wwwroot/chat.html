@@ -12,7 +12,7 @@
     <title>Служебный чат </title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-
+    
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- production version, optimized for size and speed -->
@@ -70,6 +70,17 @@
                 left: 100%;
             }
         }
+
+        .developer-console {
+            margin-bottom: 0.5rem;
+            background-color: white;
+            padding: 0.5rem;
+            width: 100%
+        }
+
+            .developer-console input {
+                border: 1px solid #ccc;
+            }
     </style>
 </head>
 
@@ -113,6 +124,22 @@
                     </div>
                     <div class="page__content col col-lg-9 col-md-12" id="chatApp">
                         <div class="page__main-title main-title page__main-title main-title_md">Сообщения</div>
+                        <div v-if="showDeveloperConsole" class="developer-console">
+                            <h2>Консоль отладки</h2>
+                            <br/>
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    Текущее:
+                                    <input type="text" readonly class="form-control userName" :value="username" id="currentUser">
+                                    Имя: <input type="text" class="form-control" v-model="user.username">
+                                    Пароль: <input type="text" class="form-control" v-model="user.password">
+                                </div>
+                                <div class="btn-group" role="group" aria-label="First group">                                    
+                                    <input type="button" class="btn btn-outline-secondary" :value="'Автообновление почты: ' + mailRefresh" @click="changeRefresh"/>
+                                    <input type="button" class="btn btn-outline-secondary" value="Войти" @click="newLogin"/>
+                                </div>
+                            </form>
+                        </div>
                         <div class="messager row i-strech">
                             <div class="messager__nav">
                                 <div class="messager__search-wrap">
