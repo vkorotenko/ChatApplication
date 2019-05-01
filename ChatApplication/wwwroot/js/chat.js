@@ -1,6 +1,7 @@
 ﻿var tokenKey = "accessToken";
 var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
+var chatRefreshTockenTimer = setInterval(function () { RefreshToken(sessionToken); }, 55000);
 window.addEventListener('keyup', keyUpHandlerCtrlShiftL);
 var ChatApp = new Vue({
     el: '#chatApp',
@@ -74,7 +75,7 @@ if (id > -1) {
     GetUserData(id);
 } else GetUserData();
 
-// глобальная консоль для всяких девелоперских нужд
+// консоль отладки
 function keyUpHandlerCtrlShiftL(e) {
     if (e.code == "KeyL" && e.ctrlKey && e.shiftKey) {        
         ChatApp.showDeveloperConsole = !ChatApp.showDeveloperConsole;

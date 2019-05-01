@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatApplication", "ChatAppl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatApplication.Dbl", "CharApplication.Dbl\ChatApplication.Dbl.csproj", "{F62DBBDA-9B39-429C-88F2-9910D77263BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApplication.Tests", "ChatApplication.Tests\ChatApplication.Tests.csproj", "{F71F5884-EB43-43D5-A370-030CCCDD4385}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatApplication.Tests", "ChatApplication.Tests\ChatApplication.Tests.csproj", "{F71F5884-EB43-43D5-A370-030CCCDD4385}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
