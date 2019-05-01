@@ -25,6 +25,34 @@
     <link rel="stylesheet" href="/template/styles/css/style.css">
     <link rel="stylesheet" href="/template/styles/css/responsive.css">
     <!-- end styles from template -->
+    <style>
+        .loader {
+            height: 4px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background-color: #ddd;
+        }
+        .loader:before {
+            display: block;
+            position: absolute;
+            content: "";
+            left: -200px;
+            width: 200px;
+            height: 4px;
+            background-color: #f1c400;
+            animation: loading 2s linear infinite;
+        }
+
+        @keyframes loading {
+            from {left: -200px; width: 30%;}
+            50% {width: 30%;}
+            70% {width: 70%;}
+            80% { left: 50%;}
+            95% {left: 120%;}
+            to {left: 100%;}
+        }
+    </style>
 </head>
 
 <body>
@@ -65,7 +93,7 @@
 
                             </div>
                         </div>
-                        <div class="page__content col col-lg-9 col-md-12" id="chatApp">
+                        <div class="page__content col col-lg-9 col-md-12" id="chatApp">                            
                             <div class="page__main-title main-title page__main-title main-title_md">Сообщения</div>
                             <div class="messager row i-strech">
                                 <div class="messager__nav">
@@ -112,8 +140,9 @@
                                                         <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name"/>
                                                     </template>
                                                 </div>
-                                                <div class="message__date">{{ msg.created | formatTime }}</div>                                                
+                                                <div class="message__date">{{ msg.created | formatTime }}</div>
                                             </div>
+                                            <div class="loader" v-if="showLoader"></div>
                                         </div>
                                         <div class="messager__foot">
                                             <div class="messager__textarea">

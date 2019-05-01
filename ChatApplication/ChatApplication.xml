@@ -242,7 +242,7 @@
             <param name="name"></param>
             <returns></returns>
         </member>
-        <member name="M:ChatApplication.Controllers.UserController.Avatar(System.Int64)">
+        <member name="M:ChatApplication.Controllers.UserController.Avatar(System.Int32)">
             <summary>
             Получаем аватар по идентификатору пользователя.
             </summary>
@@ -259,7 +259,7 @@
         </member>
         <member name="M:ChatApplication.Controllers.UserController.AddFiles(Microsoft.AspNetCore.Http.IFormFileCollection,System.Int64,System.Int64)">
             <summary>
-            Загрузка и сохранение файла 
+            Загрузка и сохранение файла в топик. 
             </summary>
             <param name="uploads">Коллекция файлов</param>
             <param name="topicId">Топик в который грузим</param>

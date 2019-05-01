@@ -161,11 +161,20 @@ namespace ChatApplication.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("avatar/{id}")]
-        public ActionResult Avatar([FromRoute] long id)
+        public async  Task<IActionResult> Avatar([FromRoute] int id)
         {
-            //TODO: добавить логику для выбора картинки по идентификатору пользователя.
-            var url = "/upload/faceses/1.png";
-            return RedirectPermanent(url);
+            try
+            {
+                var user = await _ctx.Users.Get(id);
+                var url = user.Url;
+                return RedirectPermanent(url);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed retrive awatar image user id: {id}");
+                //TODO: изменить картинку на нормальную заглушку
+                return Redirect("/storage/web/source//1/cCWSkAuV00sjh4QZ8JlphkA21tYFQWBT.jpg");
+            }
         }
         /// <summary>
         /// Добавление сообщения в топик. Используется идентификатор залогоненого пользователя.
@@ -200,7 +209,7 @@ namespace ChatApplication.Controllers
             }
         }
         /// <summary>
-        /// Загрузка и сохранение файла 
+        /// Загрузка и сохранение файла в топик. 
         /// </summary>
         /// <param name="uploads">Коллекция файлов</param>
         /// <param name="topicId">Топик в который грузим</param>

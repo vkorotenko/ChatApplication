@@ -118,9 +118,7 @@ namespace ChatApplication.Dbl.Repository
         public async Task Delete(int id)
         {
             // только чтение
-            throw new NotImplementedException();
-            const string sqlQuery = "DELETE FROM dbusers WHERE id = @id";
-            await _dbConn.ExecuteAsync(sqlQuery, new { id });
+            throw new NotImplementedException();            
         }
     }
 }

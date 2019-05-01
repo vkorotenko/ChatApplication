@@ -12,7 +12,8 @@ var ChatApp = new Vue({
         messageArea: "",
         userId: null,
         selectFileName: null,
-        fileAdded: false
+        fileAdded: false,
+        showLoader: false
     },
     methods: {
         showThread: function (id, el, event) {
@@ -22,7 +23,7 @@ var ChatApp = new Vue({
             clearNewMessages(id);
         },
         sendMessage: function () {
-            if (ChatApp.messageArea != "")
+            if (ChatApp.messageArea != "" || isFileSelected())
                 sendMessageToTopic(ChatApp.messageArea, ChatApp.topicId);
         },
         getUserData: function () {
@@ -170,7 +171,7 @@ function sendMessageToTopic(body, topicId) {
         success: function (data) {
             ChatApp.messageArea = "";
             data.isAuthor = true;
-            if ($('#file-1').prop('files').length > 0) {
+            if (isFileSelected()) {
                 uploadFile(ChatApp.topicId, data.id);
             }
             ChatApp.posts.push(data);
@@ -188,12 +189,17 @@ function sendMessageToTopic(body, topicId) {
     });
 }
 
+
+// есть ли файл в форме отправки
+function isFileSelected() {
+    return $('#file-1').prop('files').length > 0;
+}
 // загрузка файла
 function uploadFile(topicid, messageid) {
     var file_data = $('#file-1').prop('files')[0];
     var form_data = new FormData();
     form_data.append('uploads', file_data);
-
+    ChatApp.showLoader = true;
     var req = $.ajax({
         type: 'POST',
         // addfiles/{topicid}/{ messageid }
@@ -208,10 +214,15 @@ function uploadFile(topicid, messageid) {
         success: function (data) {
             ChatApp.fileAdded = false;
             ChatApp.selectFileName = null;
+            ChatApp.showLoader = false;
+        },
+        error: function(data) {
+            ChatApp.showLoader = false;
         }
     });
     req.fail(function (data, status) {
         console.log(status);
+        ChatApp.showLoader = false;
         if (data.status == 401) {
             var te = data.getResponseHeader('Token-Expired');
             if (te) {
