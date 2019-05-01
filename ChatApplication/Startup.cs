@@ -130,7 +130,8 @@ namespace ChatApplication
         private void ConfigureMapper()
         {
             Mapper.Initialize(cfg => {
-                cfg.CreateMap<DbUser, ApplicationUser>();
+                cfg.CreateMap<DbUser, ApplicationUser>()
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FirstName));
                 cfg.CreateMap<DbMessage, MessageModel>();
                 cfg.CreateMap<DbFile, UploadFile>()
                     .ForMember(dest => dest.Upload, opt => opt.MapFrom(src => src.Created));

@@ -50,5 +50,9 @@ namespace ChatApplication.Poco
         /// </summary>        
         [JsonIgnore]
         public string Password { get; set; }
+        /// <summary>
+        /// Картинка аватара
+        /// </summary>
+        public string Url { get; set; }
     }
 }

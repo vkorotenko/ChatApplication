@@ -18,7 +18,7 @@ namespace ChatApplication.Dbl.Models
         /// <summary>
         /// Имя
         /// </summary>
-        public string Name { get; set; }
+        public string FirstName { get; set; }
         /// <summary>
         /// Фамилия
         /// </summary>
@@ -30,7 +30,7 @@ namespace ChatApplication.Dbl.Models
         /// <summary>
         /// Вычисляемое поле для полного имени
         /// </summary>
-        public string FullName => $"{LastName} {Name} {MiddleName}";
+        public string FullName => $"{LastName} {FirstName} {MiddleName}";
 
        
         /// <summary>
@@ -45,6 +45,9 @@ namespace ChatApplication.Dbl.Models
         /// Время последней активности
         /// </summary>
         public DateTime LastActive { get; set; }
-
+        /// <summary>
+        /// url аватара
+        /// </summary>
+        public string Url { get; set; }
     }
 }

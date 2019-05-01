@@ -35,7 +35,7 @@ namespace ChatApplication.Tests
             var dbuser = new DbUser
             {
                 LastName = "Ivanov",
-                Name = "Ivan",
+                FirstName = "Ivan",
                 MiddleName = "Ivanovitch",
                 Id = _id,
                 Email = "ivanov@test.com",
@@ -71,7 +71,7 @@ namespace ChatApplication.Tests
             var result = await ctx.Users.Get(id);
 
             Assert.AreEqual(result.Id, id);
-            Assert.AreEqual(result.Name, name);
+            Assert.AreEqual(result.FirstName, name);
             Assert.AreEqual(result.LastName, lname);
             Assert.AreEqual(result.MiddleName, mname);
             Assert.AreEqual(result.Password, pwd);
@@ -99,12 +99,12 @@ namespace ChatApplication.Tests
             var item = await  ctx.Users.Get(_id);
             if (item == null) await InsertTest();
             item = await ctx.Users.Get(_id);
-            item.Name = newname;
+            item.FirstName = newname;
             await ctx.Users.Update(item);
 
             item = await ctx.Users.Get(_id);
 
-            Assert.AreEqual(item.Name, newname);
+            Assert.AreEqual(item.FirstName, newname);
         }
     }
 }

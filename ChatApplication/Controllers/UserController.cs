@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using ChatApplication.Dbl.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace ChatApplication.Controllers
 {
@@ -39,7 +40,10 @@ namespace ChatApplication.Controllers
         /// Логгер
         /// </summary>
         private ILogger _logger;
-
+        /// <summary>
+        /// Конфигурация
+        /// </summary>
+        private IConfiguration _config;
         /// <summary>
         /// Переменные среды.
         /// </summary>
@@ -50,11 +54,13 @@ namespace ChatApplication.Controllers
         /// <param name="ctx">Контекст бд</param>
         /// <param name="logger">Логгер</param>
         /// <param name="appEnvironment">Переменные среды</param>
-        public UserController(IDbContext ctx, ILogger<UserController> logger, IHostingEnvironment appEnvironment)
+        /// <param name="config">Конфигурация системы</param>
+        public UserController(IDbContext ctx, ILogger<UserController> logger, IHostingEnvironment appEnvironment, IConfiguration config)
         {
             _ctx = ctx;
             _logger = logger;
             _appEnvironment = appEnvironment;
+            _config = config;
         }
         /// <summary>
         /// Получение залогоненого пользователя
@@ -204,15 +210,17 @@ namespace ChatApplication.Controllers
         [Route("addfiles/{topicid}/{messageid}")]
         public async Task<IActionResult> AddFiles(IFormFileCollection uploads, [FromRoute]long topicId, [FromRoute]long messageid)
         {
+            
             var files = new List<UploadFile>();
             try
             {
 
+                var basePath = _config.GetValue<string>("Upload:Path");
                 var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
                 foreach (var uploadedFile in uploads)
                 {
                     // Базовый путь
-                    var path = Path.Combine(_appEnvironment.WebRootPath, "upload/topic");
+                    var path = Path.Combine(basePath, "topic");
                     path = Path.Combine(path, topicId.ToString());
                     try
                     {

@@ -203,18 +203,24 @@
             Логгер
             </summary>
         </member>
+        <member name="F:ChatApplication.Controllers.UserController._config">
+            <summary>
+            Конфигурация
+            </summary>
+        </member>
         <member name="F:ChatApplication.Controllers.UserController._appEnvironment">
             <summary>
             Переменные среды.
             </summary>
         </member>
-        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.IDbContext,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.UserController},Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+        <member name="M:ChatApplication.Controllers.UserController.#ctor(ChatApplication.Dbl.IDbContext,Microsoft.Extensions.Logging.ILogger{ChatApplication.Controllers.UserController},Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Контроллер для отображения пользовательской информации.
             </summary>
             <param name="ctx">Контекст бд</param>
             <param name="logger">Логгер</param>
             <param name="appEnvironment">Переменные среды</param>
+            <param name="config">Конфигурация системы</param>
         </member>
         <member name="M:ChatApplication.Controllers.UserController.Get">
             <summary>
@@ -514,6 +520,11 @@
             <summary>
             Пароль пользователя
             </summary>        
+        </member>
+        <member name="P:ChatApplication.Poco.BaseUser.Url">
+            <summary>
+            Картинка аватара
+            </summary>
         </member>
         <member name="T:ChatApplication.Program">
             <summary>
