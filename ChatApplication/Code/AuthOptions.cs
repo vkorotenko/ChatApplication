@@ -14,12 +14,12 @@ namespace ChatApplication.Code
     /// <summary>
     /// Опции для аутентификации
     /// </summary>
-    public class AuthOptions
+    public static class AuthOptions
     {
         /// <summary>
         /// Кто выдал
         /// </summary>
-        public const string ISSUER = "VKorotenko"; // издатель токена
+        public const string ISSUER = "VKOROTENKO"; // издатель токена
         /// <summary>
         /// Для кого этот ключ
         /// </summary>
@@ -31,7 +31,7 @@ namespace ChatApplication.Code
         /// <summary>
         /// Время жизни токена
         /// </summary>
-        public const int LIFETIME = 1; // время жизни токена - 1 минута
+        public const int LIFETIME = 5; // время жизни токена - 5 минут
         /// <summary>
         /// Получить ключ для шифрования
         /// </summary>

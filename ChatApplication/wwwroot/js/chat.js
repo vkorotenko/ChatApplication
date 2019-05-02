@@ -2,7 +2,6 @@
 var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
 var chatRefreshTockenTimer = setInterval(function () { RefreshToken(sessionToken); }, 55000);
-window.addEventListener('keyup', keyUpHandlerCtrlShiftL);
 var ChatApp = new Vue({
     el: '#chatApp',
     data: {
@@ -22,7 +21,8 @@ var ChatApp = new Vue({
         fileAdded: false,
         showLoader: false,
         showDeveloperConsole: false,
-        mailRefresh:true
+        mailRefresh: true,
+        showSearchLoader: false
     },    
     methods: {
         showThread: function (id, el, event) {
@@ -52,6 +52,11 @@ var ChatApp = new Vue({
         newLogin: function () {
             var user = ChatApp.user;
             specialLogin(user.username, user.password);
+        },
+        search: function(event) {
+            ChatApp.showSearchLoader = true;
+            var query = event.target.value;            
+            searchTopics(query);
         }
     }
 });
@@ -94,11 +99,14 @@ function GetUserData(id) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
         success: function (data) {
-            ChatApp.topics = applyTopicsSelected(data.topics);
+            ChatApp.topics = applyTopicsSelected(data.topics);            
             ChatApp.unreadMessages = data.messages;
+            ChatApp.user.username = data.username;
+            ChatApp.username = data.username;
             if (id) {
                 ChatApp.showThread(id);
             }
+            window.addEventListener('keyup', keyUpHandlerCtrlShiftL);
         }
     });
 
@@ -116,7 +124,7 @@ function GetUserData(id) {
 }
 function RefreshToken(token) {
     var bd = { token: token };
-    var req = $.ajax({
+    $.ajax({
         type: 'POST',
         url: '/api/v1/account/refresh',
         data: JSON.stringify(bd),
@@ -281,7 +289,7 @@ function clearNewMessages(id) {
             xhr.setRequestHeader("Authorization", "Bearer " + token);
         },
         success: function (data) {
-            GetUserData();
+            // GetUserData();
         }
     });
 }
@@ -323,7 +331,30 @@ function createTopic(id) {
     });
 }
 
-
+// 
+function searchTopics(query) {
+    var sessionToken = sessionStorage.getItem(tokenKey);
+    
+    var req = $.ajax({
+        type: 'GET',
+        url: '/api/v1/user/search/' + query,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
+        },
+        success: function (data) {
+            ChatApp.topics = applyTopicsSelected(data.topics);            
+            ChatApp.unreadMessages = data.messages;
+            ChatApp.user.username = data.username;
+            ChatApp.username = data.username;       
+            ChatApp.showSearchLoader = false;
+        }
+    });  
+    req.fail(function (data, status) {
+        console.log('Failed search query');
+        console.log(data);
+        ChatApp.showSearchLoader = false;
+    });
+}
 // производится вход, получение тикета и обновление сессии, так же обновляется идентификатор
 function specialLogin(username, password) {
     var tokenKey = "accessToken";

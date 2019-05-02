@@ -16,6 +16,9 @@ namespace ChatApplication.Models
     /// </summary>
     public class MessageModel
     {
+        /// <summary>
+        /// Дефолтный конструктор для модели.
+        /// </summary>
         public MessageModel()
         {
             Attachment = new AttachmentModel();

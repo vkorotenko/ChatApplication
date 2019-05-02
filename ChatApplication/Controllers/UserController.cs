@@ -103,10 +103,10 @@ namespace ChatApplication.Controllers
         [HttpGet]
         [Route("messages/{id}")]
         public async Task<ActionResult> Messages([FromRoute] long id)
-        {            
+        {
             _logger.LogInformation($"Retrive data for topic id: {id}");
             try
-            {                
+            {
                 var messages = await _ctx.Messages.GetMessagesForTopic(id);
                 var rt = Mapper.Map<IEnumerable<MessageModel>>(messages);
 
@@ -124,7 +124,7 @@ namespace ChatApplication.Controllers
                     {
                         message.Attachment = new AttachmentModel();
                     }
-                }                
+                }
                 return Json(rt);
             }
             catch (Exception ex)
@@ -161,7 +161,7 @@ namespace ChatApplication.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("avatar/{id}")]
-        public async  Task<IActionResult> Avatar([FromRoute] int id)
+        public async Task<IActionResult> Avatar([FromRoute] int id)
         {
             try
             {
@@ -172,8 +172,7 @@ namespace ChatApplication.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Failed retrive awatar image user id: {id}");
-                //TODO: изменить картинку на нормальную заглушку
-                return Redirect("/storage/web/source//1/cCWSkAuV00sjh4QZ8JlphkA21tYFQWBT.jpg");
+                return Redirect("/upload/faceses/round/2.png");
             }
         }
         /// <summary>
@@ -219,7 +218,7 @@ namespace ChatApplication.Controllers
         [Route("addfiles/{topicid}/{messageid}")]
         public async Task<IActionResult> AddFiles(IFormFileCollection uploads, [FromRoute]long topicId, [FromRoute]long messageid)
         {
-            
+
             var files = new List<UploadFile>();
             var gattachment = new AttachmentModel();
             try
@@ -374,12 +373,64 @@ namespace ChatApplication.Controllers
                         };
                         await _ctx.Topics.Create(newTopic);
                     }
-                }                                
+                }
                 return Ok();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Поиск топиков соответствующих шаблону. Поиск происходит слудующим полям:
+        /// Title - заголовок топика
+        /// Vendor - производитель
+        /// Vendor code -  код производителя
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("search/{query}")]
+        [Route("search")]
+        public async Task<IActionResult> Search(string query="")
+        {
+            try
+            {
+                query = query.ToLower();
+                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                var appUser = Mapper.Map<ApplicationUser>(user);
+                var topics = await _ctx.Topics.GetByUserId(user.Id);
+                var matchTopics = new List<DbTopic>();
+
+                // поиск по пустой строке, все результаты
+                if (string.IsNullOrWhiteSpace(query))
+                {
+                    matchTopics = topics;
+                }
+                else // поиск по значению
+                {
+
+                    matchTopics = topics.Where(x => x.Title.ToLower().Contains(query)
+                                      || x.Vendor.ToLower().Contains(query)
+                                      || x.VendorCode.ToLower().Contains(query)).ToList();
+                }
+
+                foreach (var topic in matchTopics)
+                {
+                    if (topic.Unread > 0)
+                        topic.HasMessages = true;
+                }
+                appUser.Topics = matchTopics;                
+                var unreadMessage = await _ctx.Users.GetUnreadMessages(user.Id);
+                appUser.NewMessages = (int)unreadMessage;
+                return Json(appUser);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Search error. {e.Message}");
                 return BadRequest();
             }
         }

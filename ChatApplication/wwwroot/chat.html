@@ -33,7 +33,7 @@
             background-color: #ddd;
         }
 
-            .loader:before {
+        .loader:before {
                 display: block;
                 position: absolute;
                 content: "";
@@ -81,6 +81,37 @@
             .developer-console input {
                 border: 1px solid #ccc;
             }
+        .autocomplete {
+            /*the container must be positioned relative:*/
+            position: relative;
+            display: inline-block;
+        }
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff; 
+            border-bottom: 1px solid #d4d4d4; 
+        }
+        .autocomplete-items div:hover {
+            /*when hovering an item:*/
+            background-color: #e9e9e9; 
+        }
+        .autocomplete-active {
+            /*when navigating through the items using the arrow keys:*/
+            background-color: #f1c400 !important;
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -143,10 +174,11 @@
                         <div class="messager row i-strech">
                             <div class="messager__nav">
                                 <div class="messager__search-wrap">
-                                    <div class="messager__search">
+                                    <div class="messager__search autocomplete">
                                         <div class="messager__search-icon"><svg id="SVGDoc" width="18" height="17" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 23 23"><defs><path d="M171.92848,110.56483c-0.22333,0.21613 -0.51713,0.33486 -0.82715,0.33486c-0.32744,0 -0.633,-0.13077 -0.86011,-0.36812l-5.43489,-5.6864c-1.54332,1.09088 -3.34834,1.66559 -5.24254,1.66559c-5.0453,0 -9.15032,-4.12953 -9.15032,-9.2051c0,-5.07581 4.10502,-9.20534 9.15032,-9.20534c5.04556,0 9.15041,4.12953 9.15041,9.20534c0,2.17235 -0.75986,4.25923 -2.14671,5.91779l5.39394,5.64361c0.45628,0.47743 0.44126,1.2387 -0.03296,1.69778zM152.80051,97.30566c0,3.75164 3.03394,6.80387 6.76329,6.80387c3.72934,0 6.76337,-3.05223 6.76337,-6.80387c0,-3.75187 -3.03403,-6.80411 -6.76337,-6.80411c-3.72934,0 -6.76329,3.05223 -6.76329,6.80411z" id="Path-0"></path></defs><desc>Generated with Avocode.</desc><g transform="matrix(1,0,0,1,-150,-88)"><g><title>Forma 1</title><use xlink:href="#Path-0" fill="#7b7d80" fill-opacity="1"></use></g></g></svg></div>
-                                        <input type="text" class="messager__search-input" placeholder="Поиск...">
+                                        <input type="text" id="chatSearchInput" class="messager__search-input" placeholder="Поиск..." @input="search">
                                     </div>
+                                    <div class="loader" v-if="showSearchLoader"></div>
                                 </div>
                                 <div class="messager__list">
                                     <a v-for="topic in topics"

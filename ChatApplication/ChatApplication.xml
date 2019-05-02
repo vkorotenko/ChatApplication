@@ -293,6 +293,16 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.UserController.Search(System.String)">
+            <summary>
+            Поиск топиков соответствующих шаблону. Поиск происходит слудующим полям:
+            Title - заголовок топика
+            Vendor - производитель
+            Vendor code -  код производителя
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
         <member name="T:ChatApplication.Controllers.ValuesController">
             <summary>
             Контроллер значений
@@ -383,6 +393,11 @@
         <member name="T:ChatApplication.Models.MessageModel">
             <summary>
             Модель для отображения сообщения.
+            </summary>
+        </member>
+        <member name="M:ChatApplication.Models.MessageModel.#ctor">
+            <summary>
+            Дефолтный конструктор для модели.
             </summary>
         </member>
         <member name="P:ChatApplication.Models.MessageModel.Id">

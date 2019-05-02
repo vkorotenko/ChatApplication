@@ -121,15 +121,22 @@ namespace ChatApplication.Controllers
         [Route("refresh")]
         public IActionResult Refresh([FromBody] RefreshTokenModel token)
         {
-            var principal = GetPrincipalFromExpiredToken(token.Token);
-            var encodedJwt = CreateToken(principal.Identities.First());
-            var response = new
+            try
             {
-                access_token = encodedJwt,
-                username = principal.Identity.Name
-            };
-            return Json(response);
-
+                var principal = GetPrincipalFromExpiredToken(token.Token);
+                var encodedJwt = CreateToken(principal.Identities.First());
+                var response = new
+                {
+                    access_token = encodedJwt,
+                    username = principal.Identity.Name
+                };
+                return Json(response);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return NotFound(e.Message);
+            }
         }
 
         /// <summary>
