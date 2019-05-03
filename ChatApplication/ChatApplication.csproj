@@ -21,6 +21,7 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\storage\web\source\1\" />
     <Folder Include="wwwroot\template\libs\fancybox\dist\" />
     <Folder Include="wwwroot\template\fonts\" />
     <Folder Include="wwwroot\template\styles\css\" />

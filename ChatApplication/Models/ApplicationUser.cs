@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using ChatApplication.Dbl.Models;
 using Newtonsoft.Json;
 
-namespace ChatApplication.Poco
+namespace ChatApplication.Models
 {
     /// <inheritdoc />
     /// <summary>

@@ -330,6 +330,22 @@
             Тело сообщения
             </summary>
         </member>
+        <member name="T:ChatApplication.Models.ApplicationUser">
+            <inheritdoc />
+            <summary>
+            Модель пользователя в приложении
+            </summary>    
+        </member>
+        <member name="P:ChatApplication.Models.ApplicationUser.NewMessages">
+            <summary>
+            Общее количество новых сообщений.
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.ApplicationUser.Topics">
+            <summary>
+            Топики открытые пользователем
+            </summary>
+        </member>
         <member name="T:ChatApplication.Models.AttachmentModel">
             <summary>
             Файл аттачмент
@@ -353,6 +369,51 @@
         <member name="P:ChatApplication.Models.AttachmentModel.IsImage">
             <summary>
             Является ли файл картинкой
+            </summary>
+        </member>
+        <member name="T:ChatApplication.Models.BaseUser">
+            <summary>
+            Базовый класс для всех пользователей
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.BaseUser.Id">
+            <summary>
+            Идентификатор пользователя
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.BaseUser.Name">
+            <summary>
+            Имя пользователя
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.BaseUser.Username">
+            <summary>
+            Описание или девиз.
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.BaseUser.LastName">
+            <summary>
+            Фамилия
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.BaseUser.MiddleName">
+            <summary>
+            Отчество
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.BaseUser.Email">
+            <summary>
+            Адрес электронной почты
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.BaseUser.Password">
+            <summary>
+            Пароль пользователя
+            </summary>        
+        </member>
+        <member name="P:ChatApplication.Models.BaseUser.Url">
+            <summary>
+            Картинка аватара
             </summary>
         </member>
         <member name="T:ChatApplication.Models.LoginModel">
@@ -478,67 +539,6 @@
         <member name="P:ChatApplication.Models.UploadFile.Path">
             <summary>
             Путь к файлу
-            </summary>
-        </member>
-        <member name="T:ChatApplication.Poco.ApplicationUser">
-            <inheritdoc />
-            <summary>
-            Модель пользователя в приложении
-            </summary>    
-        </member>
-        <member name="P:ChatApplication.Poco.ApplicationUser.NewMessages">
-            <summary>
-            Общее количество новых сообщений.
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.ApplicationUser.Topics">
-            <summary>
-            Топики открытые пользователем
-            </summary>
-        </member>
-        <member name="T:ChatApplication.Poco.BaseUser">
-            <summary>
-            Базовый класс для всех пользователей
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.BaseUser.Id">
-            <summary>
-            Идентификатор пользователя
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.BaseUser.Name">
-            <summary>
-            Имя пользователя
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.BaseUser.Username">
-            <summary>
-            Описание или девиз.
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.BaseUser.LastName">
-            <summary>
-            Фамилия
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.BaseUser.MiddleName">
-            <summary>
-            Отчество
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.BaseUser.Email">
-            <summary>
-            Адрес электронной почты
-            </summary>
-        </member>
-        <member name="P:ChatApplication.Poco.BaseUser.Password">
-            <summary>
-            Пароль пользователя
-            </summary>        
-        </member>
-        <member name="P:ChatApplication.Poco.BaseUser.Url">
-            <summary>
-            Картинка аватара
             </summary>
         </member>
         <member name="T:ChatApplication.Program">

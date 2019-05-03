@@ -6,10 +6,9 @@
 // Создано:  18.04.2019 8:50
 #endregion
 
-using System;
 using Newtonsoft.Json;
 
-namespace ChatApplication.Poco
+namespace ChatApplication.Models
 {
     /// <summary>
     /// Базовый класс для всех пользователей

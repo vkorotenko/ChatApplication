@@ -60,5 +60,9 @@ namespace ChatApplication.Dbl.Models
         /// Количество непрочтенных сообщений
         /// </summary>
         public int Unread { get; set; }
+        /// <summary>
+        /// Аватар автора топика.
+        /// </summary>
+        public string Url { get; set; }
     }
 }

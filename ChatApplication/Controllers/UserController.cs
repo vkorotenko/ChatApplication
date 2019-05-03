@@ -8,20 +8,19 @@
 
 using AutoMapper;
 using ChatApplication.Dbl;
+using ChatApplication.Dbl.Models;
 using ChatApplication.Models;
-using ChatApplication.Poco;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ChatApplication.Dbl.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 
 namespace ChatApplication.Controllers
 {
@@ -78,6 +77,7 @@ namespace ChatApplication.Controllers
                 var unreadMessage = await _ctx.Users.GetUnreadMessages(user.Id);
                 foreach (var topic in topics)
                 {
+                    topic.Url = Url.Action("Avatar", "User", new {id = topic.AuthorId});
                     if (topic.Unread > 0)
                         topic.HasMessages = true;
                 }
@@ -420,6 +420,7 @@ namespace ChatApplication.Controllers
 
                 foreach (var topic in matchTopics)
                 {
+                    topic.Url = Url.Action("Avatar", "User", new { id = topic.AuthorId });
                     if (topic.Unread > 0)
                         topic.HasMessages = true;
                 }
