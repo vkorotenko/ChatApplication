@@ -26,102 +26,10 @@
     <link rel="stylesheet" href="css/right-nav-style.css" />
     <!-- end styles from template -->
     <style>
-        .loader {
-            height: 4px;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            background-color: #ddd;
-        }
-
-            .loader:before {
-                display: block;
-                position: absolute;
-                content: "";
-                left: -200px;
-                width: 200px;
-                height: 4px;
-                background-color: #f1c400;
-                animation: loading 2s linear infinite;
-            }
-
-        @keyframes loading {
-            from {
-                left: -200px;
-                width: 30%;
-            }
-
-            50% {
-                width: 30%;
-            }
-
-            70% {
-                width: 70%;
-            }
-
-            80% {
-                left: 50%;
-            }
-
-            95% {
-                left: 120%;
-            }
-
-            to {
-                left: 100%;
-            }
-        }
-
-        .developer-console {
-            margin-bottom: 0.5rem;
-            background-color: white;
-            padding: 0.5rem;
-            width: 100%
-        }
-
-            .developer-console input {
-                border: 1px solid #ccc;
-            }
-
-        .autocomplete {
-            /*the container must be positioned relative:*/
-            position: relative;
-            display: inline-block;
-        }
-
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid #d4d4d4;
-            border-bottom: none;
-            border-top: none;
-            z-index: 99;
-            /*position the autocomplete items to be the same width as the container:*/
-            top: 100%;
-            left: 0;
-            right: 0;
-        }
-
-            .autocomplete-items div {
-                padding: 10px;
-                cursor: pointer;
-                background-color: #fff;
-                border-bottom: 1px solid #d4d4d4;
-            }
-
-                .autocomplete-items div:hover {
-                    /*when hovering an item:*/
-                    background-color: #e9e9e9;
-                }
-
-        .autocomplete-active {
-            /*when navigating through the items using the arrow keys:*/
-            background-color: #f1c400 !important;
-            color: #ffffff;
-        }
     </style>
 </head>
 
-<body>   
+<body>
     <header class="header">
         <div class="panel">
             <div class="case">
@@ -259,12 +167,12 @@
             </div>
         </div>
     </main>
-<!-- right-chat-toggle-->
-<input type="checkbox" id="right-chat-toggle" hidden>
+    <!-- right-chat-toggle-->
+    <input type="checkbox" id="right-chat-toggle" hidden>
 
-<nav class="nav" id="rigth-chat-app">
+   <nav class="nav" id="rigth-chat-app" style="z-index: 99998">
     <div class="nav-header">
-        <label for="right-chat-toggle" class="nav-toggle" onclick></label>
+   <!--     <label for="right-chat-toggle" class="nav-toggle" onclick></label>-->
         <h2 class="logo">
             Сообщения
         </h2>
@@ -273,8 +181,9 @@
         <!-- Кнопка назад -->
         <span>&#8249;</span><span>Назад к темам</span>
     </div>
-    <div class="messager__list">
-        <input type="text" placeholder="Поиск..." class="form-control" @input="search" v-if="!showMessagePanel"/>
+    <input type="text" placeholder="Поиск..." class="form-control" @input="search" v-if="!showMessagePanel"/>
+    <div class=" messager__list " v-show="!showMessagePanel">
+        
         <ul class="post_list" v-if="!showMessagePanel">
             <li v-for="topic in topics">
                 <a :href="'#message-' + topic.id"
@@ -297,8 +206,10 @@
                 </div>
             </li>
         </ul>
-
-        <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
+       
+    </div>
+    <div class="messager__list msg_h" v-if="showMessagePanel">
+     <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
             <div v-if="posts.length == 0">
                 В данном чате пока нет сообщений.
             </div>
@@ -310,6 +221,8 @@
                 </div>
                 <div class="message__wrap">
                     {{ msg.body }}
+                    <br/>
+                    <div >{{ msg.created | formatTime }}</div>
                     <template v-if="msg.attachment && msg.attachment.name != null">
                         <br/>
                         <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name"/>
@@ -322,10 +235,12 @@
                         </b>
                     </template>
                 </div>
-                <div class="message__date">{{ msg.created | formatTime }}</div>
-            </div>
-            <!-- send message bar-->
-            <div class="messager__foot">
+                
+            </div>            
+        </div>	
+    </div>
+    <!-- send message bar-->
+            <div class="messager__foot" v-if="showMessagePanel">
                 <div class="loader" v-if="showLoader"></div>
                 <div class="messager__textarea">
                     <textarea placeholder="Напишите сообщение..." v-model="messageArea"></textarea>
@@ -343,13 +258,8 @@
                     </div>
                     <button class="messager__btn btn btn_bg-yellow" @click="sendMessage"><span>Отправить</span></button>
                 </div>
-                <br/>
-                <br/>
-                <br/>
             </div>
-        </div>
-    </div>
-</nav>
+</nav>	
 
     <!-- Bootstrap core JavaScript -->
     <script src="https://code.jquery.com/jquery-3.4.0.min.js"

@@ -32,6 +32,16 @@ var RigthChatApp = new Vue({
             getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
             clearNewMessagesRc(id);
             RigthChatApp.getUserData();
+            try {
+                $('#bodyContentLeft').removeClass('col-md-10');
+                $('#bodyContentRight').removeClass('col-md-2');
+                $('#bodyContentLeft').addClass('col-md-8');
+                $('#bodyContentRight').addClass('col-md-4');
+
+
+            } catch (e) {
+                console.log(e);
+            }             
         },
         sendMessage: function () {
             if (RigthChatApp.messageArea != "" || isFileSelectedRc())
@@ -58,6 +68,17 @@ var RigthChatApp = new Vue({
         },
         backToTopics: function() {
             RigthChatApp.showMessagePanel = false;
+            try {
+                $('#bodyContentLeft').removeClass('col-md-8');
+                $('#bodyContentRight').removeClass('col-md-4');
+
+                $('#bodyContentLeft').addClass('col-md-10');
+                $('#bodyContentRight').addClass('col-md-2');
+
+
+            } catch (e) {
+                console.log(e);
+            }     
         }
     }
 });
@@ -155,6 +176,11 @@ function getMessagesForTopicRc(id, authorId) {
             }
 
             RigthChatApp.posts = data;
+
+
+            setTimeout(function() {
+                $('.msg_h').scrollTop(99999);
+            }, 300);            
         }
     });
 
@@ -189,6 +215,9 @@ function sendMessageToTopicRc(body, topicId) {
         success: function (data) {
             RigthChatApp.messageArea = "";
             data.isAuthor = true;
+            setTimeout(function () {
+                $('.msg_h').scrollTop(99999);
+            }, 300);   
             if (isFileSelectedRc()) {
                 uploadFileRc(ChatApp.topicId, data.id);
             }
@@ -222,6 +251,9 @@ function uploadFileRc(topicid, messageid) {
             RigthChatApp.selectFileName = null;
             RigthChatApp.showLoader = false;
             assignAttacmentToMessageRc(messageid, data);
+            setTimeout(function () {
+                $('.msg_h').scrollTop(99999);
+            }, 300);   
         },
         error: function (data) {
             RigthChatApp.showLoader = false;

@@ -7,18 +7,17 @@
 
 .nav {
     /*  ширна произвольная, не стесняйтесь экспериментировать */
-    width: 320px;
-    min-width: 320px;
+    width: 100%;
+    /*max-width: 300px;*/
     /* фиксируем и выставляем высоту панели на максимум */
     height: 100%;
-    position: fixed;
     top: 0;
     bottom: 0;
     margin: 0;
     /* сдвигаем (прячем) панель относительно правого края страницы */
     right: -320px;
     /* внутренние отступы */
-    padding: 0px 0px;
+    padding: 9px 9px;
     /* плавный переход смещения панели */
     -webkit-transition: right 0.3s;
     -moz-transition: right 0.3s;
@@ -26,7 +25,9 @@
     /* определяем цвет фона панели */
     background: white;
     /* поверх других элементов */
-    z-index: 2000;
+    z-index: 99999;
+    border: solid 1px #ccc;
+    
 }
 
 
@@ -189,7 +190,7 @@ body {
 /**
  * Формируем стиль заголовка (логотип) панели 
 */
-
+/*
 .nav h2 {
     width: 90%;
     padding: 0;
@@ -213,7 +214,16 @@ body {
     -moz-transition: opacity 0.8s, -moz-transform 0.8s;
     -webkit-transition: opacity 0.8s, -webkit-transform 0.8s;
 }
+*/
 
+.nav h2 {
+    text-transform: uppercase;
+    padding: 0;
+    color: #000;
+    background-color: #f1c400;
+    font-size: 1.3em;
+    background: none;
+}
 .nav h2 a {
     color: #dadada;
     text-decoration: none;
@@ -387,7 +397,7 @@ body {
     background-color: white;
 }
 .post_list .messager__item {
-    padding: 0 0px 0px 9px;    
+    padding: 0 0px 0px 0px;  
 }
 .post_list .messager__img {
     padding-top: 18px;
@@ -411,5 +421,115 @@ body {
 }
 .nav-header {
     padding: 15px 0;
-    background-color: #f1c400;
+  /*  background-color: #f1c400;*/
+}
+
+/*стили лоадера */
+.loader {
+    height: 4px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #ddd;
+}
+
+    .loader:before {
+        display: block;
+        position: absolute;
+        content: "";
+        left: -200px;
+        width: 200px;
+        height: 4px;
+        background-color: #f1c400;
+        animation: loading 2s linear infinite;
+    }
+
+@keyframes loading {
+    from {
+        left: -200px;
+        width: 30%;
+    }
+
+    50% {
+        width: 30%;
+    }
+
+    70% {
+        width: 70%;
+    }
+
+    80% {
+        left: 50%;
+    }
+
+    95% {
+        left: 120%;
+    }
+
+    to {
+        left: 100%;
+    }
+}
+
+.developer-console {
+    margin-bottom: 0.5rem;
+    background-color: white;
+    padding: 0.5rem;
+    width: 100%
+}
+
+    .developer-console input {
+        border: 1px solid #ccc;
+    }
+
+.autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: inline-block;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+    .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+        .autocomplete-items div:hover {
+            /*when hovering an item:*/
+            background-color: #e9e9e9;
+        }
+
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: #f1c400 !important;
+    color: #ffffff;
+}
+.message__wrap{
+	width: calc(100% - ((24px + 13px) * 2));	
+}
+.nav .messager__textarea > textarea{
+	margin-top: 1em;
+	border: solid 1px #ccc;
+}
+.nav > .messager__list{
+	height: -webkit-calc(100% - 80px); 
+    height: calc(100% - 80px); 
+}
+
+.msg_h{
+	height: -webkit-calc(100% - 200px)!important; 
+    height: calc(100% - 200px)!important; 
 }

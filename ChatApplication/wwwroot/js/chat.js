@@ -1,7 +1,6 @@
 ﻿var tokenKey = "accessToken";
 var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
-var chatRefreshTockenTimer = setInterval(function () { RefreshToken(sessionToken); }, 55000);
 var ChatApp = new Vue({
     el: '#chatApp',
     data: {
