@@ -67,31 +67,9 @@ namespace ChatApplication.Controllers
         /// <returns>Возвращает основной обьект пользователя, содержит данные о открытых топиках и количестве непрочтенных сообщений.</returns>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<IActionResult> Get()
         {
-            try
-            {
-                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
-                var appUser = Mapper.Map<ApplicationUser>(user);
-                var topics = await _ctx.Topics.GetByUserId(user.Id);
-                var unreadMessage = await _ctx.Users.GetUnreadMessages(user.Id);
-                foreach (var topic in topics)
-                {
-                    topic.Url = Url.Action("Avatar", "User", new {id = topic.AuthorId});
-                    if (topic.Unread > 0)
-                        topic.HasMessages = true;
-                }
-
-                appUser.Topics = topics;
-                appUser.NewMessages = (int)unreadMessage;
-                return Json(appUser);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest();
-            }
-
+            return await Search(string.Empty);
         }
 
         /// <summary>
@@ -163,16 +141,22 @@ namespace ChatApplication.Controllers
         [Route("avatar/{id}")]
         public async Task<IActionResult> Avatar([FromRoute] int id)
         {
+            var url = await GetAvatarImage(id);
+            return Redirect(url);
+        }
+
+        private async Task<string> GetAvatarImage(int id)
+        {
             try
             {
                 var user = await _ctx.Users.Get(id);
                 var url = user.Url;
-                return RedirectPermanent(url);
+                return url;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed retrive awatar image user id: {id}");
-                return Redirect("/upload/faceses/round/2.png");
+                return "/upload/faceses/round/2.png";
             }
         }
         /// <summary>
@@ -395,7 +379,7 @@ namespace ChatApplication.Controllers
         [HttpGet]
         [Route("search/{query}")]
         [Route("search")]
-        public async Task<IActionResult> Search(string query="")
+        public async Task<IActionResult> Search(string query = "")
         {
             try
             {
@@ -418,13 +402,27 @@ namespace ChatApplication.Controllers
                                       || x.VendorCode.ToLower().Contains(query)).ToList();
                 }
 
+                var authId = -1;
+                var url = string.Empty;
                 foreach (var topic in matchTopics)
                 {
-                    topic.Url = Url.Action("Avatar", "User", new { id = topic.AuthorId });
+                    if (string.IsNullOrWhiteSpace(url))
+                    {
+                        url = await GetAvatarImage(topic.AuthorId);
+                        authId = topic.AuthorId;
+                    }
+
+                    if (authId != topic.AuthorId)
+                    {
+                        url = await GetAvatarImage(topic.AuthorId);
+                        authId = topic.AuthorId;
+                    }
+
+                    
                     if (topic.Unread > 0)
                         topic.HasMessages = true;
                 }
-                appUser.Topics = matchTopics;                
+                appUser.Topics = matchTopics;
                 var unreadMessage = await _ctx.Users.GetUnreadMessages(user.Id);
                 appUser.NewMessages = (int)unreadMessage;
                 return Json(appUser);

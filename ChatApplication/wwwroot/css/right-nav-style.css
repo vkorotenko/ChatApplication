@@ -18,13 +18,13 @@
     /* сдвигаем (прячем) панель относительно правого края страницы */
     right: -320px;
     /* внутренние отступы */
-    padding: 15px 0px;
+    padding: 0px 0px;
     /* плавный переход смещения панели */
     -webkit-transition: right 0.3s;
     -moz-transition: right 0.3s;
     transition: right 0.3s;
     /* определяем цвет фона панели */
-    background: #f1c400;
+    background: white;
     /* поверх других элементов */
     z-index: 2000;
 }
@@ -99,10 +99,10 @@
  * когда навигация раскрыта, распологаем внутри панели
 */
 
-    [id='right-chat-toggle']:checked ~ .nav > .nav-toggle {
+    [id='right-chat-toggle']:checked ~ .nav > div > .nav-toggle {
         left: auto;
         right: 2px;
-        top: 1em;
+        /*top: 1em;*/
     }
 
 
@@ -139,7 +139,7 @@
  * вы можете испльзовать любой другой значок
 */
 
-    [id='right-chat-toggle']:checked ~ .nav > .nav-toggle:after {
+    [id='right-chat-toggle']:checked ~ .nav > div > .nav-toggle:after {
         content: '\2715';
     }
 
@@ -193,7 +193,8 @@ body {
 .nav h2 {
     width: 90%;
     padding: 0;
-    margin: 10px 0;
+    margin: 0 0 0px 10px;
+    background-color: #f1c400;
     text-align: center;
     text-shadow: rgba(255, 255, 255, .1) -1px -1px 1px, rgba(0, 0, 0, .5) 1px 1px 1px;
     font-size: 1.3em;
@@ -396,6 +397,7 @@ body {
     border: 1px solid #ccc;
     padding: 6px 12px;
     line-height: 20px;
+    cursor: pointer;
 }
 .back_container span:nth-child(1) {
     font-weight: bold;
@@ -406,4 +408,8 @@ body {
 }
 .message__img img {
     border-radius: 20px;
+}
+.nav-header {
+    padding: 15px 0;
+    background-color: #f1c400;
 }

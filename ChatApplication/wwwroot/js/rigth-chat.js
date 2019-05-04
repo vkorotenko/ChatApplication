@@ -29,10 +29,12 @@ var RigthChatApp = new Vue({
             RigthChatApp.showMessagePanel = true;
             RigthChatApp.topicId = id;
             selectItemRc(id);
-            getMessagesForTopicRc(id, RigthChatApp.topicAuthor);            
+            getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
+            clearNewMessagesRc(id);
+            RigthChatApp.getUserData();
         },
         sendMessage: function () {
-            if (RigthChatApp.messageArea != "" || isFileSelected())
+            if (RigthChatApp.messageArea != "" || isFileSelectedRc())
                 sendMessageToTopicRc(RigthChatApp.messageArea, RigthChatApp.topicId);
         },
         getUserData: function () {
@@ -52,7 +54,7 @@ var RigthChatApp = new Vue({
         search: function (event) {
             RigthChatApp.showSearchLoader = true;
             var query = event.target.value;
-            searchTopics(query);
+            searchTopicsRc(query);
         },
         backToTopics: function() {
             RigthChatApp.showMessagePanel = false;
@@ -246,4 +248,18 @@ function assignAttacmentToMessageRc(messageid, data) {
             item.attachment = data;
         }
     }
+}
+function clearNewMessagesRc(id) {
+    var token = sessionStorage.getItem(tokenKey);
+    var req = $.ajax({
+        type: 'POST',
+        url: '/api/v1/user/clearmessages/' + id,
+        contentType: "application/json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+        },
+        success: function (data) {
+            // GetUserData();
+        }
+    });
 }

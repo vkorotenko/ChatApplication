@@ -192,7 +192,7 @@
                                        v-bind:class="{ messager__item_selected: topic.selected }"
                                        @click="showThread(topic.id, this, $event)">
                                         <div class="messager__img">
-                                            <img :src="topic.url" alt="">
+                                            <img :src="topic.avatarUrl" alt="">
                                         </div>
                                         <div class="messager__persona">
                                             <div class="messager__name">{{topic.title}}</div>
@@ -263,10 +263,16 @@
 <input type="checkbox" id="right-chat-toggle" hidden>
 
 <nav class="nav" id="rigth-chat-app">
-    <label for="right-chat-toggle" class="nav-toggle" onclick></label>
-    <h2 class="logo">
-        Сообщения
-    </h2>
+    <div class="nav-header">
+        <label for="right-chat-toggle" class="nav-toggle" onclick></label>
+        <h2 class="logo">
+            Сообщения
+        </h2>
+    </div>    
+    <div @click="backToTopics" class="back_container" v-if="showMessagePanel">
+        <!-- Кнопка назад -->
+        <span>&#8249;</span><span>Назад к темам</span>
+    </div>
     <div class="messager__list">
         <input type="text" placeholder="Поиск..." class="form-control" @input="search" v-if="!showMessagePanel"/>
         <ul class="post_list" v-if="!showMessagePanel">
@@ -276,7 +282,7 @@
                    v-bind:class="{ selected: topic.selected }"
                    @click="showThread(topic.id, this, $event)">
                     <div class="messager__img">
-                        <img class="thumbnail" :src="topic.url" alt="">
+                        <img class="thumbnail" :src="topic.avatarUrl" alt="">
                     </div>
                     <div class="messager__persona">
                         <div class="messager__name">{{topic.title}}</div>
@@ -287,14 +293,11 @@
             </li>
             <li v-if="topics.length == 0">
                 <div class="messager__persona">
-                    <div class="messager__name">Нет результатов</div>                    
+                    <div class="messager__name">Нет результатов</div>
                 </div>
             </li>
         </ul>
-        <div @click="backToTopics" class="back_container" v-if="showMessagePanel">
-            <!-- Кнопка назад -->
-            <span>&#8249;</span><span>Назад к темам</span>
-        </div>
+
         <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
             <div v-if="posts.length == 0">
                 В данном чате пока нет сообщений.
@@ -308,12 +311,12 @@
                 <div class="message__wrap">
                     {{ msg.body }}
                     <template v-if="msg.attachment && msg.attachment.name != null">
-                        <br />
-                        <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name" />
+                        <br/>
+                        <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name"/>
                         <b>
                             <a :href="msg.attachment.url" v-if="!msg.attachment.isImage">
-                                <img class="img-responsive" v-if="!msg.attachment.isImage" src="/upload/document.png" :alt="msg.attachment.name" />
-                                <br />
+                                <img class="img-responsive" v-if="!msg.attachment.isImage" src="/upload/document.png" :alt="msg.attachment.name"/>
+                                <br/>
                                 {{msg.attachment.name}}
                             </a>
                         </b>
@@ -340,9 +343,12 @@
                     </div>
                     <button class="messager__btn btn btn_bg-yellow" @click="sendMessage"><span>Отправить</span></button>
                 </div>
+                <br/>
+                <br/>
+                <br/>
             </div>
         </div>
-    </div>        
+    </div>
 </nav>
 
     <!-- Bootstrap core JavaScript -->
@@ -371,6 +377,7 @@
                     if (count > 0) {
                         totalMessagesSpan.show();
                         if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
+                        if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
                     } else {
                         totalMessagesSpan.hide();
                     }

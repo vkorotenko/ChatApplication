@@ -45,7 +45,7 @@ namespace ChatApplication.Dbl.Models
         /// </summary>
         public string VendorCode { get; set; }
         /// <summary>
-        /// Идентификатор человека создавшего запрос, Номер телефона
+        /// Идентификатор человека создавшего запрос.
         /// </summary>
         public int AuthorId { get; set; }
         /// <summary>
@@ -63,6 +63,6 @@ namespace ChatApplication.Dbl.Models
         /// <summary>
         /// Аватар автора топика.
         /// </summary>
-        public string Url { get; set; }
+        public string AvatarUrl => $"/api/v1/user/avatar/{AuthorId}";
     }
 }
