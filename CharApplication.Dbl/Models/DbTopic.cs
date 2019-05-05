@@ -64,5 +64,9 @@ namespace ChatApplication.Dbl.Models
         /// Аватар автора топика.
         /// </summary>
         public string AvatarUrl => $"/api/v1/user/avatar/{AuthorId}";
+        /// <summary>
+        /// Время последнего обновления топика.
+        /// </summary>
+        public DateTime Updated { get; set; }
     }
 }

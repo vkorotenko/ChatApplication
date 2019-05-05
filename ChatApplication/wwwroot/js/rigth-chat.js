@@ -31,17 +31,7 @@ var RigthChatApp = new Vue({
             selectItemRc(id);
             getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
             clearNewMessagesRc(id);
-            RigthChatApp.getUserData();
-            try {
-                $('#bodyContentLeft').removeClass('col-md-10');
-                $('#bodyContentRight').removeClass('col-md-2');
-                $('#bodyContentLeft').addClass('col-md-8');
-                $('#bodyContentRight').addClass('col-md-4');
-
-
-            } catch (e) {
-                console.log(e);
-            }             
+            RigthChatApp.getUserData();                        
         },
         sendMessage: function () {
             if (RigthChatApp.messageArea != "" || isFileSelectedRc())
@@ -67,18 +57,7 @@ var RigthChatApp = new Vue({
             searchTopicsRc(query);
         },
         backToTopics: function() {
-            RigthChatApp.showMessagePanel = false;
-            try {
-                $('#bodyContentLeft').removeClass('col-md-8');
-                $('#bodyContentRight').removeClass('col-md-4');
-
-                $('#bodyContentLeft').addClass('col-md-10');
-                $('#bodyContentRight').addClass('col-md-2');
-
-
-            } catch (e) {
-                console.log(e);
-            }     
+            RigthChatApp.showMessagePanel = false;             
         }
     }
 });
@@ -221,6 +200,8 @@ function sendMessageToTopicRc(body, topicId) {
             if (isFileSelectedRc()) {
                 uploadFileRc(ChatApp.topicId, data.id);
             }
+            var arr = RigthChatApp.topics;
+            RigthChatApp.topics = sortTopics(arr, topicId);        
             RigthChatApp.posts.push(data);
         }
     });    
@@ -294,4 +275,18 @@ function clearNewMessagesRc(id) {
             // GetUserData();
         }
     });
+}
+function sortTopics(array, id) {
+    for (i = 0; i < array.length; i++) {
+        if (array[i].id == id) {
+            array[i].updated = Date().toLocaleString();
+            console.log(Date().toLocaleString());
+            break;
+        }
+    }
+    var na = array.sort(function (a, b) {
+        var x = new Date(a.updated) > new Date(b.updated) ? -1 : 1;
+        return x;
+    });
+    return na;
 }

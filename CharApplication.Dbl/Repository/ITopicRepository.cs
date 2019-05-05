@@ -48,6 +48,12 @@ namespace ChatApplication.Dbl.Repository
         /// <returns></returns>
         Task Update(DbTopic user);
         /// <summary>
+        /// Обновляем время последнего доступа к топику.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task UpdateTs(long id);
+        /// <summary>
         /// Получение топиков по идентификатору пользователя
         /// </summary>
         /// <param name="id">Идентификатор пользователя</param>

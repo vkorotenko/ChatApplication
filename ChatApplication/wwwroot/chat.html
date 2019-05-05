@@ -55,7 +55,8 @@
     </header>
 
     <!-- Navigation -->
-
+<div class="row">
+<div class="col-md-9" id="bodyContentLeft">
 
     <main class="main">
         <div class="page page_bg">
@@ -167,134 +168,140 @@
             </div>
         </div>
     </main>
-    <!-- right-chat-toggle-->
+
+    
+</div>
+<div class="col-md-3" style="padding-right: 5px; padding-left: 5px;height: 580px;" id="bodyContentRight">
+    <nav class="nav" id="rigth-chat-app" style="z-index: 99998">
+        <div class="nav-header">
+            <!--     <label for="right-chat-toggle" class="nav-toggle" onclick></label>-->
+            <h2 class="logo">
+                Сообщения
+            </h2>
+        </div>
+        <div @click="backToTopics" class="back_container" v-if="showMessagePanel">
+            <!-- Кнопка назад -->
+            <span>&#8249;</span><span>Назад к темам</span>
+        </div>
+        <input type="text" placeholder="Поиск..." class="form-control" @input="search" v-if="!showMessagePanel" />
+        <div class=" messager__list " v-show="!showMessagePanel">
+
+            <ul class="post_list" v-if="!showMessagePanel">
+                <li v-for="topic in topics">
+                    <a :href="'#message-' + topic.id"
+                       class="messager__item row i-mid"
+                       v-bind:class="{ selected: topic.selected }"
+                       @click="showThread(topic.id, this, $event)">
+                        <div class="messager__img">
+                            <img class="thumbnail" :src="topic.avatarUrl" alt="">
+                        </div>
+                        <div class="messager__persona">
+                            <div class="messager__name">{{topic.title}}</div>
+                            <div class="messager__text">{{topic.vendor}} {{topic.vendorCode}} </div>
+                        </div>
+                        <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
+                    </a>
+                </li>
+                <li v-if="topics.length == 0">
+                    <div class="messager__persona">
+                        <div class="messager__name">Нет результатов</div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="messager__list msg_h" v-if="showMessagePanel">
+            <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
+                <div v-if="posts.length == 0">
+                    В данном чате пока нет сообщений.
+                </div>
+                <div v-for="msg in posts"
+                     v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
+                     class="message">
+                    <div class="message__img">
+                        <img :src="msg.avatarUrl" alt="" class="thumbnail">
+                    </div>
+                    <div class="message__wrap">
+                        {{ msg.body }}
+                        <br />
+                        <div class="time_label">{{ msg.created | formatTime }}</div>
+                        <template v-if="msg.attachment && msg.attachment.name != null">
+                            <br />
+                            <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name" />
+                            <b>
+                                <a :href="msg.attachment.url" v-if="!msg.attachment.isImage">
+                                    <img class="img-responsive" v-if="!msg.attachment.isImage" src="/upload/document.png" :alt="msg.attachment.name" />
+                                    <br />
+                                    {{msg.attachment.name}}
+                                </a>
+                            </b>
+                        </template>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- send message bar-->
+        <div class="messager__foot" v-if="showMessagePanel">
+            <div class="loader" v-if="showLoader"></div>
+            <div class="messager__textarea">
+                <textarea placeholder="Напишите сообщение..." v-model="messageArea"></textarea>
+            </div>
+            <div class="messager__control row">
+                <div class="messager__file file file_small">
+                    <form>
+                        <label for="file-rch">
+                            <svg id="clip" width="16" height="14" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 23 21"><defs><path d="M175.5096,860.07065l-0.10454,-0.10207c-2.30241,-2.21256 -5.99004,-2.1892 -8.26318,0.06829l-10.52525,10.44786c-0.79299,0.78892 -1.64675,2.22011 -1.64675,3.50215c0,1.20297 0.47318,2.33584 1.33132,3.18694c0.85848,0.85218 2.00046,1.32229 3.21548,1.32229h0.00069c1.21493,-0.00144 2.357,-0.47083 3.21479,-1.32373l9.08569,-9.01703c0.62407,-0.61963 0.96602,-1.47792 0.93616,-2.35669c-0.02918,-0.80581 -0.36092,-1.5631 -0.93616,-2.13242c-0.60442,-0.59951 -1.40694,-0.92945 -2.26172,-0.92945c-0.85539,0 -1.65851,0.32958 -2.26164,0.92945l-6.95804,6.90618c-0.17535,0.17216 -0.28487,0.41045 -0.28487,0.67391c0,0.52151 0.42598,0.94598 0.95238,0.94598c0.2629,0 0.50065,-0.10675 0.67266,-0.27783l0.00069,0.00144l6.96507,-6.91373c0.24899,-0.24656 0.59232,-0.36768 0.93478,-0.36193c0.32907,0.00503 0.65472,0.12651 0.89478,0.36409c0.23131,0.22967 0.36572,0.53589 0.37723,0.85972c0.01287,0.36049 -0.12145,0.69978 -0.37851,0.95425l-9.08544,9.01775c-0.49928,0.49492 -1.16241,0.76807 -1.86785,0.76879h-0.00069c-0.70553,0 -1.36934,-0.27387 -1.86862,-0.76879c-0.4979,-0.4942 -0.77299,-1.15121 -0.77299,-1.8492c0,-0.58693 0.49928,-1.57784 1.08945,-2.16512l10.52525,-10.4475c1.54126,-1.53183 4.04451,-1.54261 5.59994,-0.03774l0.10111,0.10064c1.49174,1.548 1.47071,4.01144 -0.0624,5.53429l-8.71164,8.64575c-0.17467,0.17216 -0.28324,0.40937 -0.28324,0.67283c0,0.52151 0.42598,0.9449 0.95281,0.9449c0.26281,0 0.49996,-0.10567 0.67223,-0.27603l0.00069,0.00072l8.71636,-8.65007c2.2861,-2.27079 2.297,-5.95516 0.03399,-8.23889z" id="Path-03333"></path></defs><desc></desc><g transform="matrix(1,0,0,1,-155,-858)"><g><title>Forma 1</title><use xlink:href="#Path-03333" fill="#5d6064" fill-opacity="1"></use></g></g></svg>
+                            <span v-if="!fileAdded">Добавить файл</span>
+                            <span v-if="fileAdded">{{selectFileName}}</span>
+                        </label>
+                        <input type="file" id="file-rch" name="uploads" @change="fileSelected">
+                    </form>
+                </div>
+                <button class="messager__btn btn btn_bg-yellow" @click="sendMessage"><span>Отправить</span></button>
+            </div>
+        </div>
+    </nav>
+</div>
+</div>
+
+<!-- right-chat-toggle-->
     <input type="checkbox" id="right-chat-toggle" hidden>
 
-   <nav class="nav" id="rigth-chat-app" style="z-index: 99998">
-    <div class="nav-header">
-   <!--     <label for="right-chat-toggle" class="nav-toggle" onclick></label>-->
-        <h2 class="logo">
-            Сообщения
-        </h2>
-    </div>    
-    <div @click="backToTopics" class="back_container" v-if="showMessagePanel">
-        <!-- Кнопка назад -->
-        <span>&#8249;</span><span>Назад к темам</span>
-    </div>
-    <input type="text" placeholder="Поиск..." class="form-control" @input="search" v-if="!showMessagePanel"/>
-    <div class=" messager__list " v-show="!showMessagePanel">
-        
-        <ul class="post_list" v-if="!showMessagePanel">
-            <li v-for="topic in topics">
-                <a :href="'#message-' + topic.id"
-                   class="messager__item row i-mid"
-                   v-bind:class="{ selected: topic.selected }"
-                   @click="showThread(topic.id, this, $event)">
-                    <div class="messager__img">
-                        <img class="thumbnail" :src="topic.avatarUrl" alt="">
-                    </div>
-                    <div class="messager__persona">
-                        <div class="messager__name">{{topic.title}}</div>
-                        <div class="messager__text">{{topic.vendor}} {{topic.vendorCode}} </div>
-                    </div>
-                    <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
-                </a>
-            </li>
-            <li v-if="topics.length == 0">
-                <div class="messager__persona">
-                    <div class="messager__name">Нет результатов</div>
-                </div>
-            </li>
-        </ul>
-       
-    </div>
-    <div class="messager__list msg_h" v-if="showMessagePanel">
-     <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
-            <div v-if="posts.length == 0">
-                В данном чате пока нет сообщений.
-            </div>
-            <div v-for="msg in posts"
-                 v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
-                 class="message">
-                <div class="message__img">
-                    <img :src="msg.avatarUrl" alt="" class="thumbnail">
-                </div>
-                <div class="message__wrap">
-                    {{ msg.body }}
-                    <br/>
-                    <div >{{ msg.created | formatTime }}</div>
-                    <template v-if="msg.attachment && msg.attachment.name != null">
-                        <br/>
-                        <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name"/>
-                        <b>
-                            <a :href="msg.attachment.url" v-if="!msg.attachment.isImage">
-                                <img class="img-responsive" v-if="!msg.attachment.isImage" src="/upload/document.png" :alt="msg.attachment.name"/>
-                                <br/>
-                                {{msg.attachment.name}}
-                            </a>
-                        </b>
-                    </template>
-                </div>
-                
-            </div>            
-        </div>	
-    </div>
-    <!-- send message bar-->
-            <div class="messager__foot" v-if="showMessagePanel">
-                <div class="loader" v-if="showLoader"></div>
-                <div class="messager__textarea">
-                    <textarea placeholder="Напишите сообщение..." v-model="messageArea"></textarea>
-                </div>
-                <div class="messager__control row">
-                    <div class="messager__file file file_small">
-                        <form>
-                            <label for="file-rch">
-                                <svg id="clip" width="16" height="14" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 23 21"><defs><path d="M175.5096,860.07065l-0.10454,-0.10207c-2.30241,-2.21256 -5.99004,-2.1892 -8.26318,0.06829l-10.52525,10.44786c-0.79299,0.78892 -1.64675,2.22011 -1.64675,3.50215c0,1.20297 0.47318,2.33584 1.33132,3.18694c0.85848,0.85218 2.00046,1.32229 3.21548,1.32229h0.00069c1.21493,-0.00144 2.357,-0.47083 3.21479,-1.32373l9.08569,-9.01703c0.62407,-0.61963 0.96602,-1.47792 0.93616,-2.35669c-0.02918,-0.80581 -0.36092,-1.5631 -0.93616,-2.13242c-0.60442,-0.59951 -1.40694,-0.92945 -2.26172,-0.92945c-0.85539,0 -1.65851,0.32958 -2.26164,0.92945l-6.95804,6.90618c-0.17535,0.17216 -0.28487,0.41045 -0.28487,0.67391c0,0.52151 0.42598,0.94598 0.95238,0.94598c0.2629,0 0.50065,-0.10675 0.67266,-0.27783l0.00069,0.00144l6.96507,-6.91373c0.24899,-0.24656 0.59232,-0.36768 0.93478,-0.36193c0.32907,0.00503 0.65472,0.12651 0.89478,0.36409c0.23131,0.22967 0.36572,0.53589 0.37723,0.85972c0.01287,0.36049 -0.12145,0.69978 -0.37851,0.95425l-9.08544,9.01775c-0.49928,0.49492 -1.16241,0.76807 -1.86785,0.76879h-0.00069c-0.70553,0 -1.36934,-0.27387 -1.86862,-0.76879c-0.4979,-0.4942 -0.77299,-1.15121 -0.77299,-1.8492c0,-0.58693 0.49928,-1.57784 1.08945,-2.16512l10.52525,-10.4475c1.54126,-1.53183 4.04451,-1.54261 5.59994,-0.03774l0.10111,0.10064c1.49174,1.548 1.47071,4.01144 -0.0624,5.53429l-8.71164,8.64575c-0.17467,0.17216 -0.28324,0.40937 -0.28324,0.67283c0,0.52151 0.42598,0.9449 0.95281,0.9449c0.26281,0 0.49996,-0.10567 0.67223,-0.27603l0.00069,0.00072l8.71636,-8.65007c2.2861,-2.27079 2.297,-5.95516 0.03399,-8.23889z" id="Path-03333"></path></defs><desc></desc><g transform="matrix(1,0,0,1,-155,-858)"><g><title>Forma 1</title><use xlink:href="#Path-03333" fill="#5d6064" fill-opacity="1"></use></g></g></svg>
-                                <span v-if="!fileAdded">Добавить файл</span>
-                                <span v-if="fileAdded">{{selectFileName}}</span>
-                            </label>
-                            <input type="file" id="file-rch" name="uploads" @change="fileSelected">
-                        </form>
-                    </div>
-                    <button class="messager__btn btn btn_bg-yellow" @click="sendMessage"><span>Отправить</span></button>
-                </div>
-            </div>
-</nav>	
+<!-- Bootstrap core JavaScript -->
+            <script src="https://code.jquery.com/jquery-3.4.0.min.js"
+                    integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+                    crossorigin="anonymous"></script>
+            <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>-->
+            <script src="js/chat.js"></script>
+            <script src="js/rigth-chat.js"></script>
+            <!-- Автоматическая проверка наличия сообщений и разблокировка глобального счетчика. При работе на странице чата так-же вызов цикла подгрузки сообщений-->
+            <script>
+                // данная переменная должна формироваться на сервере и содержать числовой идентификатор пользователя в системе (id)
+                var loggedinUserId = 52;
+                var totalMessagesSpan = $('#totalUnreadMessages');
+                var processRefresh = false;
+                var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.4.0.min.js"
-            integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
-            crossorigin="anonymous"></script>
-    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>-->
-    <script src="js/chat.js"></script>
-    <script src="js/rigth-chat.js"></script>
-    <!-- Автоматическая проверка наличия сообщений и разблокировка глобального счетчика. При работе на странице чата так-же вызов цикла подгрузки сообщений-->
-    <script>
-        // данная переменная должна формироваться на сервере и содержать числовой идентификатор пользователя в системе (id)
-        var loggedinUserId = 52;
-        var totalMessagesSpan = $('#totalUnreadMessages');
-        var processRefresh = false;
-        var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
-
-        function checkMessagesForUser() {
-            if (!processRefresh) return;
-            $.ajax({
-                type: 'GET',
-                url: '/api/v1/user/totalunread/' + loggedinUserId,
-                success: function (data) {
-                    var count = parseInt(data);
-                    totalMessagesSpan.text(count);
-                    if (count > 0) {
-                        totalMessagesSpan.show();
-                        if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
-                        if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
-                    } else {
-                        totalMessagesSpan.hide();
-                    }
+                function checkMessagesForUser() {
+                    if (!processRefresh) return;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/api/v1/user/totalunread/' + loggedinUserId,
+                        success: function (data) {
+                            var count = parseInt(data);
+                            totalMessagesSpan.text(count);
+                            if (count > 0) {
+                                totalMessagesSpan.show();
+                                if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
+                                if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
+                            } else {
+                                totalMessagesSpan.hide();
+                            }
+                        }
+                    });
                 }
-            });
-        }
-    </script>
+            </script>
 
 
 </body>

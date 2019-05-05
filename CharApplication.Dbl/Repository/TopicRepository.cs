@@ -5,6 +5,8 @@
 // https://vkorotenko.ru
 // Создано:  20.04.2019 9:59
 #endregion
+
+using System;
 using ChatApplication.Dbl.Models;
 using Dapper;
 using System.Collections.Generic;
@@ -63,7 +65,7 @@ SELECT LAST_INSERT_ID()";
         /// <returns></returns>
         public async Task<List<DbTopic>> GetAll()
         {
-            return (await _dbConn.QueryAsync<DbTopic>("SELECT * FROM dbtopics")).ToList();
+            return (await _dbConn.QueryAsync<DbTopic>("SELECT * FROM dbtopics ORDER BY updated DESC")).ToList();
         }
 
         /// <summary>
@@ -81,9 +83,25 @@ SELECT LAST_INSERT_ID()";
                                         vendor = @Vendor,
                                         vendorcode = @VendorCode,
                                         authorid = @AuthorId,
-                                        created = @Created
+                                        created = @Created,
+                                        updated = @Updated
                                         WHERE id = @Id";
             await _dbConn.ExecuteAsync(sqlQuery, user);
+        }
+
+        /// <summary>
+        /// Обновляем время последнего доступа к топику.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task UpdateTs(long id)
+        {
+            const string sqlQuery = @"UPDATE dbtopics
+                                        SET                                        
+                                        updated = @Updated
+                                        WHERE id = @id";
+            var updated = DateTime.Now;
+            await _dbConn.ExecuteAsync(sqlQuery, new { id, updated });
         }
 
         /// <summary>
@@ -93,12 +111,13 @@ SELECT LAST_INSERT_ID()";
         /// <returns></returns>
         public async Task<List<DbTopic>> GetByUserId(int id)
         {
-            var sql = @"SELECT id,title,announcementid, vendor, vendorcode,authorid,created, 
+            var sql = @"SELECT id,title,announcementid, vendor, vendorcode,authorid,created, updated, 
                         (SELECT COUNT(dbm.id) FROM dbmessages as dbm WHERE dbt.id = dbm.topicid AND dbm.isread = 0) as Unread
                           FROM dbtopics as dbt
-                          WHERE dbt.authorid = @id";
+                          WHERE dbt.authorid = @id
+                          ORDER BY updated DESC";
             var res = await _dbConn.QueryAsync<DbTopic>(sql, new { id });
-            return res.ToList();            
+            return res.ToList();
         }
     }
 }

@@ -206,6 +206,8 @@ function sendMessageToTopic(body, topicId) {
             if (isFileSelected()) {
                 uploadFile(ChatApp.topicId, data.id);
             }
+            var arr = ChatApp.topics;
+            ChatApp.topics = sortTopics(arr, topicId);        
             ChatApp.posts.push(data);
         }
     });
@@ -372,4 +374,19 @@ function specialLogin(username, password) {
             if (loggedinUserId) loggedinUserId = data.id;
         }
     });
+}
+
+function sortTopics(array, id) {
+    for (i = 0; i < array.length; i++) {
+        if (array[i].id == id) {
+            array[i].updated = Date().toLocaleString();
+            console.log(Date().toLocaleString());
+            break;
+        }
+    }
+    var na = array.sort(function (a, b) {
+        var x = new Date(a.updated) > new Date(b.updated) ? -1 : 1;
+        return x;
+    });
+    return na;
 }

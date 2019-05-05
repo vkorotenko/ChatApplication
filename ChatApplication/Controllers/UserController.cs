@@ -182,6 +182,7 @@ namespace ChatApplication.Controllers
                     TopicId = id
                 };
                 var dbMessage = await _ctx.Messages.Create(msg);
+                await _ctx.Topics.UpdateTs(id);
                 var model = Mapper.Map<MessageModel>(dbMessage);
                 return Json(model);
             }
@@ -351,6 +352,7 @@ namespace ChatApplication.Controllers
                             AnnouncementId = article.Id,
                             AuthorId = article.UserId,
                             Created = DateTime.Now,
+                            Updated = DateTime.Now,
                             Title = article.Title,
                             Vendor = article.Vendor,
                             VendorCode = article.Code
@@ -422,6 +424,7 @@ namespace ChatApplication.Controllers
                     if (topic.Unread > 0)
                         topic.HasMessages = true;
                 }
+                
                 appUser.Topics = matchTopics;
                 var unreadMessage = await _ctx.Users.GetUnreadMessages(user.Id);
                 appUser.NewMessages = (int)unreadMessage;
