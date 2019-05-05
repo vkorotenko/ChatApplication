@@ -179,11 +179,11 @@
                 Сообщения
             </h2>
         </div>
-        <div @click="backToTopics" class="back_container" v-if="showMessagePanel">
+        <div @click="backToTopics" class="back_container mb-1r" v-if="showMessagePanel">
             <!-- Кнопка назад -->
             <span>&#8249;</span><span>Назад к темам</span>
         </div>
-        <input type="text" placeholder="Поиск..." class="form-control" @input="search" v-if="!showMessagePanel" />
+        <input type="text" placeholder="Поиск..." class="form-control mb-1r" @input="search" v-if="!showMessagePanel" />
         <div class=" messager__list " v-show="!showMessagePanel">
 
             <ul class="post_list" v-if="!showMessagePanel">

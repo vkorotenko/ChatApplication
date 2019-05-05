@@ -18,6 +18,7 @@
     right: -320px;
     /* внутренние отступы */
     padding: 9px 9px;
+    padding-right: 0;
     /* плавный переход смещения панели */
     -webkit-transition: right 0.3s;
     -moz-transition: right 0.3s;
@@ -26,8 +27,8 @@
     background: white;
     /* поверх других элементов */
     z-index: 99999;
-    border: solid 1px #ccc;
-    
+    border-left: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
 }
 
 
@@ -525,13 +526,13 @@ body {
 	border: solid 1px #ccc;
 }
 .nav > .messager__list{
-	height: -webkit-calc(100% - 80px); 
-    height: calc(100% - 80px); 
+	height: -webkit-calc(100% - 100px); 
+    height: calc(100% - 100px); 
 }
 
 .msg_h{
-	height: -webkit-calc(100% - 200px)!important; 
-    height: calc(100% - 200px)!important; 
+	height: -webkit-calc(100% - 215px)!important; 
+    height: calc(100% - 215px)!important; 
 }
 .time_label{
 	color: #8e8e8e;
@@ -539,4 +540,13 @@ body {
 	margin-top: 11px;
 	line-height: 2.3;
 	border-top: 1px solid #dcd9d9;
+}
+#bodyContentLeft {
+    padding-right: 0;
+}
+#bodyContentRight {
+    padding-right: 0!important;
+}
+.mb-1r {
+    margin-bottom: 1rem;
 }
