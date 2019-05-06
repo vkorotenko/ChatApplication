@@ -203,7 +203,20 @@ namespace ChatApplication.Controllers
         [Route("addfiles/{topicid}/{messageid}")]
         public async Task<IActionResult> AddFiles(IFormFileCollection uploads, [FromRoute]long topicId, [FromRoute]long messageid)
         {
-
+            var allowedExtension = new string[]{
+                ".png",
+                ".jpeg",
+                ".jpg",
+                ".gif",                
+                ".txt",
+                ".bmp",
+                ".zip",
+                ".rar",
+                ".doc",
+                ".docx",
+                ".xlsx",
+                ".txt"
+                };
             var files = new List<UploadFile>();
             var gattachment = new AttachmentModel();
             try
@@ -222,7 +235,17 @@ namespace ChatApplication.Controllers
                         {
                             Directory.CreateDirectory(path);
                         }
-                        path = Path.Combine(path, uploadedFile.FileName);
+
+                        var fname = DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss") + $"_{uploadedFile.FileName}";
+                        fname = fname.ToLower();
+                        var fileExt = System.IO.Path.GetExtension(fname);
+                        if (!allowedExtension.Contains(fileExt))
+                        {
+                            var errmsg =  "Неподдерживаемый тип файла, разрешены только следующие расширения: " + string.Join(" ,", allowedExtension);
+                            await _ctx.Messages.Delete(messageid);
+                            return StatusCode(415,errmsg);                            
+                        }
+                        path = Path.Combine(path, fname);
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
                             await uploadedFile.CopyToAsync(fileStream);
@@ -233,7 +256,7 @@ namespace ChatApplication.Controllers
                             AuthorId = user.Id,
                             Created = DateTime.Now,
                             MessageId = messageid,
-                            Name = uploadedFile.FileName
+                            Name = fname
                         };
                         var upfile = await _ctx.Files.Create(dbf);
                         var result = Mapper.Map<UploadFile>(upfile);
@@ -421,11 +444,11 @@ namespace ChatApplication.Controllers
                         authId = topic.AuthorId;
                     }
 
-                    
+
                     if (topic.Unread > 0)
                         topic.HasMessages = true;
                 }
-                
+
                 appUser.Topics = matchTopics;
                 var unreadMessage = await _ctx.Users.GetUnreadMessages(user.Id);
                 appUser.NewMessages = (int)unreadMessage;

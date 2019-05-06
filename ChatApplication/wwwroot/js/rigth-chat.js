@@ -236,6 +236,10 @@ function uploadFileRc(topicid, messageid) {
     req.fail(function (data, status) {
         console.log(status);
         RigthChatApp.showLoader = false;
+        if (data.status == 415) {
+            alert(data.responseText);            
+            RigthChatApp.posts.pop();
+        }
         if (data.status == 401) {
             var te = data.getResponseHeader('Token-Expired');
             if (te) {

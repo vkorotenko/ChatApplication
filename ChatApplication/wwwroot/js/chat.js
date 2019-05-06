@@ -258,6 +258,11 @@ function uploadFile(topicid, messageid) {
     req.fail(function (data, status) {
         console.log(status);
         ChatApp.showLoader = false;
+        if (data.status == 415) {
+
+            alert(data.responseText);
+            ChatApp.posts.pop();
+        }
         if (data.status == 401) {
             var te = data.getResponseHeader('Token-Expired');
             if (te) {
