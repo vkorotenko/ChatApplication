@@ -5,6 +5,7 @@ var RigthChatApp = new Vue({
     el: '#rigth-chat-app',
     data: {
         unreadMessages: 0,
+        actualtopic: null,
         username: "",
         user: {
             username: "",
@@ -26,12 +27,13 @@ var RigthChatApp = new Vue({
     },
     methods: {
         showThread: function (id, el, event) {
+            RigthChatApp.actualtopic = findTopic(RigthChatApp.topics, id);
             RigthChatApp.showMessagePanel = true;
             RigthChatApp.topicId = id;
             selectItemRc(id);
             getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
             clearNewMessagesRc(id);
-            RigthChatApp.getUserData();                        
+            RigthChatApp.getUserData();
         },
         sendMessage: function () {
             if (RigthChatApp.messageArea != "" || isFileSelectedRc())
@@ -56,27 +58,35 @@ var RigthChatApp = new Vue({
             var query = event.target.value;
             searchTopicsRc(query);
         },
-        backToTopics: function() {
-            RigthChatApp.showMessagePanel = false;             
+        backToTopics: function () {
+            RigthChatApp.showMessagePanel = false;
         }
     }
 });
 Vue.filter('formatTime', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
-        return d.toLocaleTimeString('ru-ru');
+        var opt = { hour: '2-digit', minute: '2-digit' }
+        return d.toLocaleTimeString('ru-RU', opt);
     }
 });
 Vue.filter('formatDateTime', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
-        return d.toDateString('ru-ru');
+        var opt = { year: 'numeric', mounth: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+        return d.toLocaleDateString('ru-RU',opt);
     }
 });
 
 GetUserDataRc();
+function findTopic(array, id) {
+    for (i = 0; i < array.length; i++) {
+        if (array[i].id == id) return array[i];
+    }
+    return null;
+}
 function GetUserDataRc() {
-    var sessionToken = sessionStorage.getItem(tokenKey);    
+    var sessionToken = sessionStorage.getItem(tokenKey);
     $.ajax({
         type: 'GET',
         url: '/api/v1/user',
@@ -87,9 +97,9 @@ function GetUserDataRc() {
             RigthChatApp.topics = applyTopicsSelectedRc(data.topics);
             RigthChatApp.unreadMessages = data.messages;
             RigthChatApp.user.username = data.username;
-            RigthChatApp.username = data.username;                
+            RigthChatApp.username = data.username;
         }
-    });    
+    });
 }
 function RefreshToken(token) {
     var bd = { token: token };
@@ -126,9 +136,9 @@ function searchTopicsRc(query) {
             RigthChatApp.topics = applyTopicsSelectedRc(data.topics);
             RigthChatApp.unreadMessages = data.messages;
             RigthChatApp.user.username = data.username;
-            RigthChatApp.username = data.username;            
+            RigthChatApp.username = data.username;
         }
-    });    
+    });
 }
 function selectItemRc(id) {
     for (i = 0; i < RigthChatApp.topics.length; i++) {
@@ -157,9 +167,9 @@ function getMessagesForTopicRc(id, authorId) {
             RigthChatApp.posts = data;
 
 
-            setTimeout(function() {
+            setTimeout(function () {
                 $('.msg_h').scrollTop(99999);
-            }, 300);            
+            }, 300);
         }
     });
 
@@ -196,15 +206,15 @@ function sendMessageToTopicRc(body, topicId) {
             data.isAuthor = true;
             setTimeout(function () {
                 $('.msg_h').scrollTop(99999);
-            }, 300);   
+            }, 300);
             if (isFileSelectedRc()) {
                 uploadFileRc(ChatApp.topicId, data.id);
             }
             var arr = RigthChatApp.topics;
-            RigthChatApp.topics = sortTopics(arr, topicId);        
+            RigthChatApp.topics = sortTopics(arr, topicId);
             RigthChatApp.posts.push(data);
         }
-    });    
+    });
 }
 // есть ли файл в форме отправки
 function isFileSelectedRc() {
@@ -234,7 +244,7 @@ function uploadFileRc(topicid, messageid) {
             assignAttacmentToMessageRc(messageid, data);
             setTimeout(function () {
                 $('.msg_h').scrollTop(99999);
-            }, 300);   
+            }, 300);
         },
         error: function (data) {
             RigthChatApp.showLoader = false;

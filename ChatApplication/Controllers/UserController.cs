@@ -389,7 +389,7 @@ namespace ChatApplication.Controllers
                 var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
                 var appUser = Mapper.Map<ApplicationUser>(user);
                 var topics = await _ctx.Topics.GetByUserId(user.Id);
-                var matchTopics = new List<DbTopic>();
+                List<DbTopic> matchTopics;
 
                 // поиск по пустой строке, все результаты
                 if (string.IsNullOrWhiteSpace(query))
@@ -408,6 +408,7 @@ namespace ChatApplication.Controllers
                 var url = string.Empty;
                 foreach (var topic in matchTopics)
                 {
+                    topic.FullName = user.FullName;
                     if (string.IsNullOrWhiteSpace(url))
                     {
                         url = await GetAvatarImage(topic.AuthorId);

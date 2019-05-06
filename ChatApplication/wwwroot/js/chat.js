@@ -62,16 +62,16 @@ var ChatApp = new Vue({
 
 Vue.filter('formatTime', function (value) {
     if (value) {
-        var d = new Date(Date.parse(value));        
-        return d.toLocaleTimeString('ru-ru');
+        var d = new Date(Date.parse(value));
+        var opt = { hour: '2-digit', minute: '2-digit' }
+        return d.toLocaleTimeString('ru-RU', opt);
     }
 });
-
-
 Vue.filter('formatDateTime', function (value) {
     if (value) {
-        var d = new Date(Date.parse(value));        
-        return d.toDateString('ru-ru');
+        var d = new Date(Date.parse(value));
+        var opt = { year: 'numeric', mounth: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+        return d.toLocaleDateString('ru-RU', opt);
     }
 });
 

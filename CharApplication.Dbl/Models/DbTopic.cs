@@ -68,5 +68,9 @@ namespace ChatApplication.Dbl.Models
         /// Время последнего обновления топика.
         /// </summary>
         public DateTime Updated { get; set; }
+        /// <summary>
+        /// Полное имя автора
+        /// </summary>
+        public string FullName { get; set; }
     }
 }

@@ -214,6 +214,16 @@
                 </ul>
 
             </div>
+            <div v-if="showMessagePanel">
+                <div class="row">
+                    <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col" />
+                    <div class="col">
+                        {{actualtopic.fullName}} {{actualtopic.created | formatDateTime}}
+                        <br />
+                        {{actualtopic.title}}
+                    </div>
+                </div>                                     
+            </div>
             <div class="messager__list msg_h" v-if="showMessagePanel">
                 <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
                     <div v-if="posts.length == 0">

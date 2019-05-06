@@ -503,8 +503,8 @@ body {
 }
 
 .msg_h{
-	height: -webkit-calc(100% - 215px)!important; 
-    height: calc(100% - 215px)!important; 
+	height: -webkit-calc(100% - 275px)!important; 
+    height: calc(100% - 275px)!important; 
 }
 .time_label{
 	color: #8e8e8e;
@@ -531,3 +531,9 @@ body {
     .nav-toggle-pressed:after {
         content: '\2715';
     }
+.w40 {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    padding: 0;
+}
