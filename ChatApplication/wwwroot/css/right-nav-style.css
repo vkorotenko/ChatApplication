@@ -537,7 +537,11 @@ body {
     border-radius: 20px;
     padding: 0;
 }
-#oh16k {
-    stroke: #f1c400;
-    fill: rgba(255, 255, 255, 1);
+.messager__list.msg_h div{
+    overflow-x: hidden;
+}
+.attachment_url {
+    text-decoration: underline;
+    color: #000000;
+    font-weight: bold;
 }

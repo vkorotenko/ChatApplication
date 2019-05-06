@@ -1,6 +1,5 @@
 ﻿var tokenKey = "accessToken";
 var sessionToken = sessionStorage.getItem(tokenKey);
-var chatRefreshTockenTimer = setInterval(function () { RefreshToken(sessionToken); }, 55000);
 var RigthChatApp = new Vue({
     el: '#rigth-chat-app',
     data: {
@@ -98,22 +97,6 @@ function GetUserDataRc() {
             RigthChatApp.unreadMessages = data.messages;
             RigthChatApp.user.username = data.username;
             RigthChatApp.username = data.username;
-        }
-    });
-}
-function RefreshToken(token) {
-    var bd = { token: token };
-    $.ajax({
-        type: 'POST',
-        url: '/api/v1/account/refresh',
-        data: JSON.stringify(bd),
-        contentType: "application/json",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + token);
-        },
-        success: function (data) {
-            sessionStorage.setItem(tokenKey, data.access_token);
-            sessionToken = data.access_token;
         }
     });
 }
