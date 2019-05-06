@@ -232,20 +232,21 @@
                     <div v-for="msg in posts"
                          v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
                          class="message">
-                        <div class="message__img">
+
+                        <div class="message__img" v-if="!msg.isAuthor">
                             <img :src="msg.avatarUrl" alt="" class="thumbnail">
                         </div>
                         <div class="message__wrap">
                             {{ msg.body }}
-                            <br />
+                            <br/>
                             <div class="time_label">{{ msg.created | formatTime }}</div>
                             <template v-if="msg.attachment && msg.attachment.name != null">
-                                <br />
-                                <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name" />
+                                <br/>
+                                <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name"/>
                                 <b>
                                     <a :href="msg.attachment.url" v-if="!msg.attachment.isImage">
-                                        <img class="img-responsive" v-if="!msg.attachment.isImage" src="/upload/document.png" :alt="msg.attachment.name" />
-                                        <br />
+                                        <img class="img-responsive" v-if="!msg.attachment.isImage" src="/upload/document.png" :alt="msg.attachment.name"/>
+                                        <br/>
                                         {{msg.attachment.name}}
                                     </a>
                                 </b>
@@ -278,7 +279,9 @@
         </nav>
     </div>
 </div>
-<label for="right-chat-toggle" class="nav-toggle" onclick></label>
+<label for="right-chat-toggle" class="nav-toggle" onclick>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16k" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z"></path></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16k"></use></g></g></svg>
+</label>
 <!-- right-chat-toggle-->
 <input type="checkbox" id="right-chat-toggle" hidden>
 
@@ -296,37 +299,28 @@
     var totalMessagesSpan = $('#totalUnreadMessages');
     var processRefresh = false;
     var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
-
+    var showRigthChatPanel = false;
     
     $(document).ready(function() {
         	
         $('#close-span').click(function() {
-            var tooggler = document.getElementById('right-chat-toggle');
-            if (tooggler.checked) {
-                tooggler.checked = false;
-                showRigthChat(tooggler.checked != 'checked');
-            } else {
-                tooggler.checked = true;
-                showRigthChat(tooggler.checked == 'checked');
-            }		        		        
+            
+            showRigthChatPanel = !showRigthChatPanel;
+            showRigthChat(showRigthChatPanel);       	        		        
         });		    
         	
         $('label.nav-toggle').click(function() {
-            var tooggler = document.getElementById('right-chat-toggle');
-            if (tooggler.checked) {
-                tooggler.checked = false;
-                showRigthChat(tooggler.checked != 'checked');
-            } else {
-                tooggler.checked = true;
-                showRigthChat(tooggler.checked == 'checked');            
-            }		        		        
+
+            showRigthChatPanel = !showRigthChatPanel;
+            showRigthChat(showRigthChatPanel);            
         });		    
     });
 
     
 
     function showRigthChat(ifShow) {
-	        
+
+        showRigthChatPanel = ifShow;
         $('#bodyContentLeft').removeClass('col-lg-12');
         $('#bodyContentRight').removeClass('hide-block');
         $('#bodyContentLeft').removeClass('col-lg-9');
@@ -334,16 +328,12 @@
 	        
         if (ifShow) {
             $('#bodyContentLeft').addClass('col-lg-9');
-            $('#bodyContentRight').addClass('col-lg-3');
-
-	            
+            $('#bodyContentRight').addClass('col-lg-3');	            
             document.getElementById('right-chat-toggle').checked = 'checked';
-            //$('label.nav-toggle').addClass('nav-toggle-pressed');
         } else {
             $('#bodyContentLeft').addClass('col-lg-12');
             $('#bodyContentRight').addClass('hide-block');	        
             document.getElementById('right-chat-toggle').checked = false;
-            //$('label.nav-toggle').removeClass('nav-toggle-pressed');
         }
     };
 

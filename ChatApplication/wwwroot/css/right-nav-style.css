@@ -51,7 +51,7 @@
     */
     background-color: #f1c400;
     /* цвет текста */
-    color: black;
+    color: white;
     /* вид курсора */
     cursor: pointer;
     /* размер шрифта */
@@ -71,7 +71,7 @@
 */
 
 .nav-toggle:after {
-    content: '\2630';
+    /*content: '\2630';*/
     text-decoration: none;
 }
 
@@ -536,4 +536,8 @@ body {
     height: 40px;
     border-radius: 20px;
     padding: 0;
+}
+#oh16k {
+    stroke: #f1c400;
+    fill: rgba(255, 255, 255, 1);
 }
