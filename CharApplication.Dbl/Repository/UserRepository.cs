@@ -65,7 +65,7 @@ namespace ChatApplication.Dbl.Repository
         /// </summary>
         /// <param name="username">Имя пользователя в системе</param>
         /// <returns></returns>
-        public async Task<DbUser> GetUserBuName(string username)
+        public async Task<DbUser> GetUserByName(string username)
         {
             var sql = @"SELECT u.id, u.username, u.email, u.generate_password as password, up.firstname, up.middlename, up.lastname,   concat( up.avatar_base_url , up.avatar_path) as url  
                         FROM admin_zap.user as u 
@@ -77,43 +77,9 @@ namespace ChatApplication.Dbl.Repository
             return user;
         }
 
-        /// <summary>
-        /// Получение количества непрочтенных писем
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<long> GetUnreadMessages(int userId)
-        {
-            var sql = @"SELECT count(isread) as count
-                          FROM dbmessages
-                         WHERE topicid IN (SELECT id
-                                           FROM dbtopics
-                                          WHERE authorid=@userId) AND NOT isread";
+       
 
-
-            var results = await _dbConn.QueryAsync<long>(sql, new { userId });
-            var result = results.FirstOrDefault();
-            return result;
-        }
-
-        /// <summary>
-        /// Получение общего количества писем для пользователя
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<long> GetTotalMessages(int userId)
-        {
-            var sql = @"SELECT count(isread) as count
-                          FROM dbmessages
-                         WHERE topicid IN (SELECT id
-                                           FROM dbtopics
-                                          WHERE authorid=@userId)";
-
-
-            var results = await _dbConn.QueryAsync<long>(sql, new { userId });
-            var result = results.FirstOrDefault();
-            return result;
-        }
+       
 
         public async Task Delete(int id)
         {

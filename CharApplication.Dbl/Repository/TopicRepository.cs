@@ -119,5 +119,20 @@ SELECT LAST_INSERT_ID()";
             var res = await _dbConn.QueryAsync<DbTopic>(sql, new { id });
             return res.ToList();
         }
+
+        /// <summary>
+        /// Получение топиков по идентификатору административного пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<DbTopic>> GetByAdminId(int id)
+        {
+            var sql = @"SELECT id,title,announcementid, vendor, vendorcode,authorid,created, updated, 
+                        (SELECT COUNT(dbm.id) FROM dbmessages as dbm WHERE dbt.id = dbm.topicid AND dbm.isread = 0) as Unread
+                          FROM dbtopics as dbt                          
+                          ORDER BY updated DESC";
+            var res = await _dbConn.QueryAsync<DbTopic>(sql, new { id });
+            return res.ToList();
+        }
     }
 }

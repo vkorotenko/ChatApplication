@@ -1,0 +1,1742 @@
+﻿
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Yii2 Starter Kit</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="/template/styles/css/main-old.css" />
+    <link rel="stylesheet" href="/template/styles/css/style.css" />
+    <link rel="stylesheet" href="/css/right-nav-style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/template/styles/css/responsive.css" />
+    <script src="/template/scripts/libs.js"></script>
+    <script src="/template/scripts/common.js"></script>
+
+    <script src="/template/scripts/jquery.inputmask.bundle.js"></script>
+    <script src="/template/scripts/ahunter_suggest.js"></script>
+    <script src="/template/scripts/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link href="/assets/1f449621/style.css?v=1552990949" rel="stylesheet">
+    <meta name="csrf-param" content="_csrf">
+    <meta name="csrf-token" content="N8SvPQC_VPSLlpsRPjBeBx8NUikCPPIYUBNTaCYECQVG9sxtec5tk__E-lt8UxhsfmhlXzJYsFEhYwUeUGd_VA==">
+    <!--[if lt IE 9]>
+    <script>
+        document.createElement('header');
+        document.createElement('nav');
+        document.createElement('main');
+        document.createElement('section');
+        document.createElement('article');
+        document.createElement('aside');
+        document.createElement('footer');
+    </script>
+    <![endif]-->
+</head>
+<body>
+
+
+    <header class="header">
+        <div class="panel">
+            <div class="case">
+                <div class="panel__wrap row i-mid">
+                    <div class="panel__logo"><a href="/"><img src="/upload/logo.png" alt=""></a></div>
+                    <div class="panel__nav hidden-md hidden-sm hidden-xs">
+
+
+                        <ul>
+                            <li><a href="/article/">Объявления</a></li>
+                            <li><a href="">Комиссионный склад</a></li>
+                            <li><a href="/user/article">Виртуальный склад</a></li>
+                            <li><a href="/account/orders">Заказы</a></li>
+                            <li><a href="">Избранное</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel__lk row i-mid">
+                        <div class="panel__cart lk-link hidden-xs">
+                            <div class="lk-link__icon"><a href=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="22" viewBox="0 0 24 22"><defs><path id="f7q1a" d="M1028 17l1 2h17c.69 0 1.47.28 1.47.97 0 .23 0 .34-.22.57L1043.1 29c-.34.69-1.2 1-2.11 1h-8l-1.36 2.1v.11c0 .12.25-.21.36-.21h13v2h-14c-1.26 0-1.88-.3-1.88-1.56 0-.34.11-.8.22-1.15l1.61-2.75L1027 19h-3v-2zm4 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm10 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" /><clipPath id="f7q1b"><use fill="#fff" xlink:href="#f7q1a" /></clipPath></defs><g><g transform="translate(-1024 -17)"><use fill="#fff" fill-opacity="0" stroke="#000" stroke-miterlimit="50" stroke-width="4" clip-path="url(&quot;#f7q1b&quot;)" xlink:href="#f7q1a" /></g></g></svg><span>4</span></a></div>
+                        </div>
+                        <div class="panel__alerts lk-link lk-link_has-hidden hidden-xs">
+                            <div class="lk-link__icon"><a href="buyer-alerts.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="23" viewBox="0 0 22 23"><defs><path id="z2yda" d="M1079 37h4c0 1.37-.63 2-2 2s-2-.63-2-2zm13-2v1h-22v-1.3l3-1.7v-8c0-3.86 3.38-6.13 7-7v-1c0-1 0-1 1-1s1 0 1 1v1c3.62.87 7 3.14 7 7v8zm-5-10c0-3.12-2.88-5-6-5s-6 1.88-6 5v9h12z" /></defs><g><g transform="translate(-1070 -16)"><use xlink:href="#z2yda" /></g></g></svg><span>12</span></a></div>
+                            <div class="lk-link__wrap">
+                                <div class="lk-link__wrap-title">уведомления</div>
+                                <div class="lk-link__wrap-load"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" viewBox="0 0 14 14"><g><g transform="translate(-1123 -110)"><image width="14" height="14" transform="translate(1123 110)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABe0lEQVQ4T5WSvUvDUBTFz0vSJrHEpEhtanFzER2cHATt4NbFSXH03/A/EVzERQQHBymIDm4ibiLoIE5CjCUxSdPafJAnL9XaSuPH3d5793fe5dxDKKUUA+U4DoIgQBiG6W0+n4coitA0bbANhIF+TOEHMQLbRFEdhyAIKcCKCURRBN/3US6X0zdWJEoo3X0MsPPUxtGCghk1BzKk3TswAcuyUCqVUpjcugmdP/OALo/9moz1Cg+JH0F+wM1mE9VqFaR+6dLGAwdMC3hdEqHlRv33JeR5HpIkAcGJQ2HxuKiPYXmCA/czh06ng1arBYIDlyLgYG4WMCn+QgGI4xiGYYDg0KXocjA2CtCl/4CN3qjHqzLWKhmuDHjVH3Xr2qV79xwwxeOtJmc6+sm6rguWGXLnJXT23AO4HK5WZCwWs8dlu+yvox1Tevoc4ubFw/bceD8x3zfJINu20wDwPN+LHGtibpmmCUVRMiOn63oKpZH7S8glSYKqqkNDvAONtMA/jJk1eQAAAABJRU5ErkJggg==" /></g></g></svg></div>
+                                <div class="lk-link__wrap-list">
+                                    <div class="lk-link__wrap-item">
+                                        <div class="lk-link__wrap-text">Клиент заказал вашу деталь №3425483 и хочет заказать доставку на дом и оплатить наличными</div>
+                                    </div>
+                                    <div class="lk-link__wrap-item">
+                                        <div class="lk-link__wrap-text">Клиент заказал вашу деталь №3425483 и хочет заказать доставку на дом и оплатить наличными</div>
+                                    </div>
+                                    <div class="lk-link__wrap-item">
+                                        <div class="lk-link__wrap-text">Клиент заказал вашу деталь №3425483 и хочет заказать доставку на дом и оплатить наличными</div>
+                                    </div>
+                                    <div class="lk-link__wrap-item">
+                                        <div class="lk-link__wrap-text">Клиент заказал вашу деталь №3425483 и хочет заказать доставку на дом и оплатить наличными</div>
+                                    </div>
+                                </div>
+                                <a href="" class="lk-link__wrap-all">смотреть все уведомления</a>
+                            </div>
+                        </div>
+                        <div class="panel__messages lk-link lk-link_has-hidden hidden-xs" id="new-messages-informer">
+                            <div class="lk-link__icon"><a href="buyer-messages.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16a" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z" /></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16a" /></g></g></svg><span style="display: none" id="totalUnreadMessages"></span> </a></div>
+                            <div class="lk-link__wrap">
+                                <div class="lk-link__wrap-title">сообщения</div>                                
+                                <div class="lk-link__wrap-list">
+                                    <div class="lk-link__wrap-item" v-for="item in items">
+                                        <div class="lk-link__wrap-name">{{ item.fullName}}</div>
+                                        <div class="lk-link__wrap-text lk-link__wrap-text_small">{{ item.title}}</div>
+                                    </div>                                    
+                                </div>
+                                <a href="/user/chat" class="lk-link__wrap-all">смотреть все сообщения</a>
+                            </div>
+                        </div>
+
+                        <div class="panel__persona persona hidden-md hidden-sm hidden-xs">
+                            <div class="persona__toggle"><img src="/storage/web/source//1/cCWSkAuV00sjh4QZ8JlphkA21tYFQWBT.jpg" alt=""><span>Иван Иванов</span></div>
+                            <div class="persona__drop">
+                                <div class="persona__drop-head row">
+                                    <div class="persona__img">
+                                        <img src="/storage/web/source//1/cCWSkAuV00sjh4QZ8JlphkA21tYFQWBT.jpg" alt="">
+                                    </div>
+                                    <div class="persona__text">
+                                        <div class="persona__title">Иван Иванов</div>
+                                        <a href="/user/default/profile" class="persona__btn btn btn_shadow btn_bg-yellow btn_color-black btn_extra-small"><span>Смотреть профиль</span></a>
+                                    </div>
+                                </div>
+                                <div class="persona__drop-body">
+                                    <br>
+                                    <a href="/user/default/profile" class="persona__btn btn btn_shadow btn_bg-yellow btn_color-black btn_extra-small"><span>Покупатель</span></a>
+                                    <a href="/user/default/profile" class="persona__btn btn btn_shadow  btn_color-black btn_extra-small"><span>Продавец</span></a>
+                                    <div class="persona__list">
+                                        <ul>
+                                            <li><a href="/user/"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="16" viewBox="0 0 17 16"><defs><path id="75lva" d="M1077.21 171.75a.43.43 0 0 1-.45.38h-.1c-.68 0-1.32.42-1.59 1.05-.28.67-.1 1.45.44 1.94.17.15.19.41.05.59-.37.46-.8.88-1.26 1.24a.43.43 0 0 1-.59-.05c-.46-.5-1.28-.7-1.92-.43-.66.27-1.09.93-1.06 1.65 0 .23-.16.42-.38.45a7.7 7.7 0 0 1-1.75 0 .43.43 0 0 1-.38-.46c.04-.73-.38-1.4-1.05-1.69a1.78 1.78 0 0 0-1.94.44.43.43 0 0 1-.59.05 7.72 7.72 0 0 1-1.23-1.25.43.43 0 0 1 .05-.58c.53-.5.7-1.26.44-1.93a1.7 1.7 0 0 0-1.6-1.06c-.22 0-.49-.16-.51-.38a7.79 7.79 0 0 1 0-1.77c.03-.22.2-.39.45-.38a1.8 1.8 0 0 0 1.69-1.05c.28-.67.1-1.45-.43-1.94a.43.43 0 0 1-.05-.6c.37-.45.79-.87 1.26-1.23a.43.43 0 0 1 .58.05c.46.5 1.29.7 1.92.43a1.73 1.73 0 0 0 1.07-1.65c-.01-.23.15-.42.38-.45a7.74 7.74 0 0 1 1.75 0c.22.03.39.23.38.46-.04.73.38 1.4 1.05 1.69.64.27 1.47.07 1.93-.44a.43.43 0 0 1 .6-.05c.44.37.86.78 1.22 1.25.14.17.12.43-.05.58-.53.49-.7 1.26-.43 1.92.26.65.9 1.07 1.6 1.07.23 0 .48.16.5.38.07.59.07 1.18 0 1.77zm-5.1-.89a2.6 2.6 0 1 0-5.2 0 2.6 2.6 0 0 0 5.2 0z" /></defs><g><g transform="translate(-1061 -163)"><use fill="#afb7bf" xlink:href="#75lva" /></g></g></svg><span>Настройки</span></a></li>
+                                            <li><a href="/user/sign-in/logout" data-method="post" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" viewBox="0 0 14 14"><defs><path id="dqcpa" d="M1063 205h7v2h-5v10h5v2h-7zm3 8v-2h7l-1.78-2.38 1.56-1.24 2.93 3.9 1.29.92-4.32 4.8-1.68-1.2 2.52-2.8z" /></defs><g><g transform="translate(-1063 -205)"><use fill="#afb7bf" xlink:href="#dqcpa" /></g></g></svg><span>Выйти</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel__mobile-btn hidden-lg">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="panel__mobile-nav hidden-lg">
+                        <ul>
+                            <li><a href="">Комиссионный склад</a></li>
+                            <li><a href="">Виртуальный склад</a></li>
+                            <li><a href="/account/orders">Заказы</a></li>
+                            <li><a href="">Избранное</a></li>
+                            <li class="mobile-profile">
+                                <a href="#"><img src="/upload/avatar.png" alt=""><span>Екатерина Смирнова</span></a>
+                                <ul>
+                                    <li><a href=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="16" viewBox="0 0 17 16"><defs><path id="75lva" d="M1077.21 171.75a.43.43 0 0 1-.45.38h-.1c-.68 0-1.32.42-1.59 1.05-.28.67-.1 1.45.44 1.94.17.15.19.41.05.59-.37.46-.8.88-1.26 1.24a.43.43 0 0 1-.59-.05c-.46-.5-1.28-.7-1.92-.43-.66.27-1.09.93-1.06 1.65 0 .23-.16.42-.38.45a7.7 7.7 0 0 1-1.75 0 .43.43 0 0 1-.38-.46c.04-.73-.38-1.4-1.05-1.69a1.78 1.78 0 0 0-1.94.44.43.43 0 0 1-.59.05 7.72 7.72 0 0 1-1.23-1.25.43.43 0 0 1 .05-.58c.53-.5.7-1.26.44-1.93a1.7 1.7 0 0 0-1.6-1.06c-.22 0-.49-.16-.51-.38a7.79 7.79 0 0 1 0-1.77c.03-.22.2-.39.45-.38a1.8 1.8 0 0 0 1.69-1.05c.28-.67.1-1.45-.43-1.94a.43.43 0 0 1-.05-.6c.37-.45.79-.87 1.26-1.23a.43.43 0 0 1 .58.05c.46.5 1.29.7 1.92.43a1.73 1.73 0 0 0 1.07-1.65c-.01-.23.15-.42.38-.45a7.74 7.74 0 0 1 1.75 0c.22.03.39.23.38.46-.04.73.38 1.4 1.05 1.69.64.27 1.47.07 1.93-.44a.43.43 0 0 1 .6-.05c.44.37.86.78 1.22 1.25.14.17.12.43-.05.58-.53.49-.7 1.26-.43 1.92.26.65.9 1.07 1.6 1.07.23 0 .48.16.5.38.07.59.07 1.18 0 1.77zm-5.1-.89a2.6 2.6 0 1 0-5.2 0 2.6 2.6 0 0 0 5.2 0z"></path></defs><g><g transform="translate(-1061 -163)"><use fill="#afb7bf" xlink:href="#75lva"></use></g></g></svg><span>Настройки</span></a></li>
+                                    <li><a href=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" viewBox="0 0 14 14"><defs><path id="dqcpa" d="M1063 205h7v2h-5v10h5v2h-7zm3 8v-2h7l-1.78-2.38 1.56-1.24 2.93 3.9 1.29.92-4.32 4.8-1.68-1.2 2.52-2.8z"></path></defs><g><g transform="translate(-1063 -205)"><use fill="#afb7bf" xlink:href="#dqcpa"></use></g></g></svg><span>Выйти</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="panel__mobile-alerts row i-mid between hidden-lg hidden-md hidden-sm">
+                            <div class="panel__cart lk-link">
+                                <div class="lk-link__icon"><a href=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="22" viewBox="0 0 24 22"><defs><path id="f7q1aasdasd" d="M1028 17l1 2h17c.69 0 1.47.28 1.47.97 0 .23 0 .34-.22.57L1043.1 29c-.34.69-1.2 1-2.11 1h-8l-1.36 2.1v.11c0 .12.25-.21.36-.21h13v2h-14c-1.26 0-1.88-.3-1.88-1.56 0-.34.11-.8.22-1.15l1.61-2.75L1027 19h-3v-2zm4 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm10 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" /><clipPath id="f7q1bs"><use fill="#fff" xlink:href="#f7q1aasdasd" /></clipPath></defs><g><g transform="translate(-1024 -17)"><use fill="#fff" fill-opacity="0" stroke="#000" stroke-miterlimit="50" stroke-width="4" clip-path="url(&quot;#f7q1bs&quot;)" xlink:href="#f7q1aasdasd" /></g></g></svg><span>4</span></a></div>
+                            </div>
+                            <div class="panel__alerts lk-link lk-link_has-hidden">
+                                <div class="lk-link__icon"><a href="buyer-alerts.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="23" viewBox="0 0 22 23"><defs><path id="z2yda" d="M1079 37h4c0 1.37-.63 2-2 2s-2-.63-2-2zm13-2v1h-22v-1.3l3-1.7v-8c0-3.86 3.38-6.13 7-7v-1c0-1 0-1 1-1s1 0 1 1v1c3.62.87 7 3.14 7 7v8zm-5-10c0-3.12-2.88-5-6-5s-6 1.88-6 5v9h12z" /></defs><g><g transform="translate(-1070 -16)"><use xlink:href="#z2yda" /></g></g></svg><span>12</span></a></div>
+                                <div class="lk-link__wrap">
+                                    <div class="lk-link__wrap-title">уведомления</div>
+                                    <div class="lk-link__wrap-load"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" viewBox="0 0 14 14"><g><g transform="translate(-1123 -110)"><image width="14" height="14" transform="translate(1123 110)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABe0lEQVQ4T5WSvUvDUBTFz0vSJrHEpEhtanFzER2cHATt4NbFSXH03/A/EVzERQQHBymIDm4ibiLoIE5CjCUxSdPafJAnL9XaSuPH3d5793fe5dxDKKUUA+U4DoIgQBiG6W0+n4coitA0bbANhIF+TOEHMQLbRFEdhyAIKcCKCURRBN/3US6X0zdWJEoo3X0MsPPUxtGCghk1BzKk3TswAcuyUCqVUpjcugmdP/OALo/9moz1Cg+JH0F+wM1mE9VqFaR+6dLGAwdMC3hdEqHlRv33JeR5HpIkAcGJQ2HxuKiPYXmCA/czh06ng1arBYIDlyLgYG4WMCn+QgGI4xiGYYDg0KXocjA2CtCl/4CN3qjHqzLWKhmuDHjVH3Xr2qV79xwwxeOtJmc6+sm6rguWGXLnJXT23AO4HK5WZCwWs8dlu+yvox1Tevoc4ubFw/bceD8x3zfJINu20wDwPN+LHGtibpmmCUVRMiOn63oKpZH7S8glSYKqqkNDvAONtMA/jJk1eQAAAABJRU5ErkJggg==" /></g></g></svg></div>
+                                    <div class="lk-link__wrap-list">
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-text">Клиент заказал вашу деталь №3425483 и хочет заказать доставку на дом и оплатить наличными</div>
+                                        </div>
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-text">Клиент заказал вашу деталь №3425483 и хочет заказать доставку на дом и оплатить наличными</div>
+                                        </div>
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-text">Клиент заказал вашу деталь №3425483 и хочет заказать доставку на дом и оплатить наличными</div>
+                                        </div>
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-text">Клиент заказал вашу деталь №3425483 и хочет заказать доставку на дом и оплатить наличными</div>
+                                        </div>
+                                    </div>
+                                    <a href="" class="lk-link__wrap-all">смотреть все уведомления</a>
+                                </div>
+                            </div>
+                            <div class="panel__messages lk-link lk-link_has-hidden">
+                                <div class="lk-link__icon"><a href="buyer-messages.html"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16a" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z" /></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16a" /></g></g></svg><span>9</span></a></div>
+                                <div class="lk-link__wrap">
+                                    <div class="lk-link__wrap-title">сообщения</div>
+                                    <div class="lk-link__wrap-load"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" viewBox="0 0 14 14"><g><g transform="translate(-1123 -110)"><image width="14" height="14" transform="translate(1123 110)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABe0lEQVQ4T5WSvUvDUBTFz0vSJrHEpEhtanFzER2cHATt4NbFSXH03/A/EVzERQQHBymIDm4ibiLoIE5CjCUxSdPafJAnL9XaSuPH3d5793fe5dxDKKUUA+U4DoIgQBiG6W0+n4coitA0bbANhIF+TOEHMQLbRFEdhyAIKcCKCURRBN/3US6X0zdWJEoo3X0MsPPUxtGCghk1BzKk3TswAcuyUCqVUpjcugmdP/OALo/9moz1Cg+JH0F+wM1mE9VqFaR+6dLGAwdMC3hdEqHlRv33JeR5HpIkAcGJQ2HxuKiPYXmCA/czh06ng1arBYIDlyLgYG4WMCn+QgGI4xiGYYDg0KXocjA2CtCl/4CN3qjHqzLWKhmuDHjVH3Xr2qV79xwwxeOtJmc6+sm6rguWGXLnJXT23AO4HK5WZCwWs8dlu+yvox1Tevoc4ubFw/bceD8x3zfJINu20wDwPN+LHGtibpmmCUVRMiOn63oKpZH7S8glSYKqqkNDvAONtMA/jJk1eQAAAABJRU5ErkJggg==" /></g></g></svg></div>
+                                    <div class="lk-link__wrap-list">
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-name">Антон Викторчук</div>
+                                            <div class="lk-link__wrap-text lk-link__wrap-text_small">Fragile home appliences, all packed</div>
+                                        </div>
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-name">Антон Викторчук</div>
+                                            <div class="lk-link__wrap-text lk-link__wrap-text_small">Fragile home appliences, all packed</div>
+                                        </div>
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-name">Антон Викторчук</div>
+                                            <div class="lk-link__wrap-text lk-link__wrap-text_small">Fragile home appliences, all packed</div>
+                                        </div>
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-name">Антон Викторчук</div>
+                                            <div class="lk-link__wrap-text lk-link__wrap-text_small">Fragile home appliences, all packed</div>
+                                        </div>
+                                        <div class="lk-link__wrap-item">
+                                            <div class="lk-link__wrap-name">Антон Викторчук</div>
+                                            <div class="lk-link__wrap-text lk-link__wrap-text_small">Fragile home appliences, all packed</div>
+                                        </div>
+                                    </div>
+                                    <a href="" class="lk-link__wrap-all">смотреть все сообщения</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-panel">
+            <div class="case">
+                <div class="search-panel__wrap row i-mid between">
+                    <div class="search search_full ">
+                        <div class="search__icon"><svg id="SVGDoc" width="23" height="23" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 23 23"><defs><path d="M171.92848,110.56483c-0.22333,0.21613 -0.51713,0.33486 -0.82715,0.33486c-0.32744,0 -0.633,-0.13077 -0.86011,-0.36812l-5.43489,-5.6864c-1.54332,1.09088 -3.34834,1.66559 -5.24254,1.66559c-5.0453,0 -9.15032,-4.12953 -9.15032,-9.2051c0,-5.07581 4.10502,-9.20534 9.15032,-9.20534c5.04556,0 9.15041,4.12953 9.15041,9.20534c0,2.17235 -0.75986,4.25923 -2.14671,5.91779l5.39394,5.64361c0.45628,0.47743 0.44126,1.2387 -0.03296,1.69778zM152.80051,97.30566c0,3.75164 3.03394,6.80387 6.76329,6.80387c3.72934,0 6.76337,-3.05223 6.76337,-6.80387c0,-3.75187 -3.03403,-6.80411 -6.76337,-6.80411c-3.72934,0 -6.76329,3.05223 -6.76329,6.80411z" id="Path-0" /></defs><desc>Generated with Avocode.</desc><g transform="matrix(1,0,0,1,-150,-88)"><g><title>Forma 1</title><use xlink:href="#Path-0" fill="#7b7d80" fill-opacity="1" /></g></g></svg></div>
+                        <input type="text" class="search__input" placeholder="Поиск детали...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="row">
+        <div class="col-md-9" id="bodyContentLeft">
+            <label for="right-chat-toggle" class="nav-toggle" onclick>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16a" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z"></path></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16a"></use></g></g></svg>
+            </label>
+
+
+
+
+
+            <!-- Example of your ads placing -->
+
+            <style>
+                .loader {
+                    height: 4px;
+                    width: 100%;
+                    position: relative;
+                    overflow: hidden;
+                    background-color: #ddd;
+                }
+
+                    .loader:before {
+                        display: block;
+                        position: absolute;
+                        content: "";
+                        left: -200px;
+                        width: 200px;
+                        height: 4px;
+                        background-color: #f1c400;
+                        animation: loading 2s linear infinite;
+                    }
+
+                @keyframes loading {
+                    from {
+                        left: -200px;
+                        width: 30%;
+                    }
+
+                    50% {
+                        width: 30%;
+                    }
+
+                    70% {
+                        width: 70%;
+                    }
+
+                    80% {
+                        left: 50%;
+                    }
+
+                    95% {
+                        left: 120%;
+                    }
+
+                    to {
+                        left: 100%;
+                    }
+                }
+
+                .developer-console {
+                    margin-bottom: 0.5rem;
+                    background-color: white;
+                    padding: 0.5rem;
+                    width: 100%
+                }
+
+                    .developer-console input {
+                        border: 1px solid #ccc;
+                    }
+            </style>
+            <main class="main">
+                <div class="page page_bg">
+                    <div class="case">
+                        <div class="page__wrap page__wrap_pt-more row row- i-strech">
+                            <div class="page__aside col col-lg-3 col-md-12">
+                                <div class="block block_aside">
+                                    <div class="profile">
+                                        <div class="profile__avatar">
+                                            <div class="profile__avatar-remove"><svg id="SVGDoc" width="14" height="17" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 14 17" class="icon"><defs><path d="M376.99988,222.99981v1.99997h-1.00001v11.00004c0,0.71168 -0.28796,0.99993 -1.00001,0.99993h-9.99996c-0.71197,0 -1.00001,-0.28825 -1.00001,-0.99993v-11.00004h-1.00001v-1.99997c0,-0.7118 0.28805,-1.00005 1.00001,-1.00005h2.00003v-1.00005c0,-0.32437 0.67549,-0.99993 1.00001,-0.99993c0,0 4.81441,0 5.99999,0c0.32453,0 1.00001,0.67556 1.00001,0.99993v1.00005h1.99994c0.71179,0 1.00001,0.28825 1.00001,1.00005zM365.99991,234.9999h8.00002v-10.00011h-8.00002zM373.99993,234.9999c0,0.07343 0.07321,0 0,0zM365.99991,234.9999c-0.0733,0 0,0.07343 0,0zM367.99994,226.99964h0.99993v6.00016h-0.99993zM370.99989,226.99964h1.00001v6.00016h-1.00001z" id="Path-0" /></defs><desc>Generated with Avocode.</desc><g transform="matrix(1,0,0,1,-363,-220)"><g><title>Фигура 3 копия 3</title><use xlink:href="#Path-0" fill="#000000" fill-opacity="1" /></g></g></svg></div>
+                                            <div class="profile__avatar-img"><img src="/upload/avatar-main.png" alt=""></div>
+                                        </div>
+                                        <div class="profile__name">Александр Мелов</div>
+                                        <div class="profile__position">Продавец</div>
+                                        <div class="profile__status">
+                                            <div class="profile__status-title">Профиль заполнен на 25%</div>
+                                            <div class="profile__status-bar"><div style="width: 25%"></div></div>
+                                        </div>
+                                        <div class="profile__nav">
+                                            <ul>
+                                                <li><a href="/user"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="19" height="18" viewBox="0 0 19 18"><defs><path id="bz78a" d="M170 694h-11v-2h11zm0 4h-11v-2h11zm4 8h-19v-18h19zm-2-2v-14h-15v14zm-6-2h-7v-2h7z" /></defs><g><g transform="translate(-155 -688)"><use xlink:href="#bz78a" /></g></g></svg><span>Настройки профиля</span></a></li>
+                                                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="21" viewBox="0 0 20 21"><defs><path id="hfv5a" d="M162 858h4c0 1.37-.63 2-2 2s-2-.63-2-2zm12-2v1h-20v-1.3l3-1.7v-6c0-3.86 2.38-6.13 6-7v-1c0-1 0-1 1-1s1 0 1 1v1c3.62.87 6 3.14 6 7v6zm-5-8c0-3.12-1.88-5-5-5s-5 1.88-5 5v7h10z" /></defs><g><g transform="translate(-154 -839)"><use xlink:href="#hfv5a" /></g></g></svg><span>Журнал оповещений</span></a></li>
+                                                <li class="selected"><a href="/user/chat"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="16" viewBox="0 0 20 16"><defs><path id="oayta" d="M175 788v16h-20v-16zm-3 2h-14l7 6.06zm-15 2v9l5-5zm2 10h12l-4-5-2 1-2-1zm14-1v-9l-5 4z" /></defs><g><g transform="translate(-155 -788)"><use xlink:href="#oayta" /></g></g></svg><span>Сообщения</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="apps apps_aside hidden-md hidden-sm hidden-xs">
+                                    <div class="apps__wrap">
+                                        <div class="apps__title"><span>приложение </span><img src="/upload/logo.png" alt=""></div>
+                                        <div class="apps__desc">сервис быстрой и выгодной продажи и покупки автозапчастей</div>
+                                        <div class="apps__btns row">
+
+                                            <a href="" class="apps__btn btn btn_bg-yellow"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="25" viewBox="0 0 21 25"><defs><path id="kbgwa" d="M199.47 999.11h.07c.94 0 1.83.34 2.62.65.58.22 1.09.42 1.48.42.35 0 .85-.2 1.44-.42.84-.32 1.9-.73 3-.73l.41.02c.94.04 3.26.37 4.78 2.52a.2.2 0 0 1-.06.29l-.02.01c-.44.27-2.64 1.73-2.61 4.48a5.23 5.23 0 0 0 3.25 4.77l.02.01c.1.04.14.15.1.25v.02c-.18.56-.7 2.02-1.77 3.52-1.01 1.44-2.16 3.07-4.03 3.1-.88.02-1.47-.23-2.04-.47a4.99 4.99 0 0 0-2.14-.5c-.99 0-1.62.26-2.24.51a5.14 5.14 0 0 1-1.98.5c-1.66 0-2.88-1.52-4.07-3.2-2.4-3.36-3.78-8.92-1.61-12.57a6.45 6.45 0 0 1 5.4-3.18zm9.24-5.8a5.51 5.51 0 0 1-1.36 4.06 5.01 5.01 0 0 1-3.92 1.81.2.2 0 0 1-.2-.17 5.24 5.24 0 0 1 1.4-3.96 5.93 5.93 0 0 1 3.86-1.93c.11 0 .21.08.22.19z" /></defs><g><g transform="translate(-193 -993)"><use fill="#8572d2" xlink:href="#kbgwa" /><use xlink:href="#kbgwa" /></g></g></svg><span>Скачать в <strong>App Store</strong></span></a>
+                                            <a href="" class="apps__btn btn btn_bg-yellow"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="23" viewBox="0 0 21 23"><defs><path id="noyoa" d="M390.59 1006.15c0 .28-.15.52-.4.66l-4.54 2.49-3.18-2.93 3.48-3.2 4.24 2.32c.25.14.4.39.4.66zm-8.7-.3l-11.53-10.6 10.21 4.97 4.66 2.56zm0 1.05l3.04 2.79-4.34 2.38-10.06 5.27zm-.57-.53l-11.25 10.54v-21.23z" /></defs><g><g transform="translate(-370 -995)"><use fill="#8a73ca" xlink:href="#noyoa" /><use xlink:href="#noyoa" /></g></g></svg><span>Скачать в <strong>Google Play</strong></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="page__content col col-lg-9 col-md-12" id="chatApp">
+                                <div class="page__main-title main-title page__main-title main-title_md">Сообщения</div>
+                                <div v-if="showDeveloperConsole" class="developer-console">
+                                    <h2>Консоль отладки</h2>
+                                    <br />
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            Текущее:
+                                            <input type="text" readonly class="form-control userName" :value="username" id="currentUser">
+                                            Имя: <input type="text" class="form-control" v-model="user.username">
+                                            Пароль: <input type="text" class="form-control" v-model="user.password">
+                                        </div>
+                                        <div class="btn-group" role="group" aria-label="First group">
+                                            <input type="button" class="btn btn-outline-secondary" :value="'Автообновление почты: ' + mailRefresh" @click="changeRefresh" />
+                                            <input type="button" class="btn btn-outline-secondary" value="Войти" @click="newLogin" />
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="messager row i-strech">
+                                    <div class="messager__nav">
+                                        <div class="messager__search-wrap">
+                                            <div class="messager__search autocomplete">
+                                                <div class="messager__search-icon"><svg id="SVGDoc" width="18" height="17" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 23 23"><defs><path d="M171.92848,110.56483c-0.22333,0.21613 -0.51713,0.33486 -0.82715,0.33486c-0.32744,0 -0.633,-0.13077 -0.86011,-0.36812l-5.43489,-5.6864c-1.54332,1.09088 -3.34834,1.66559 -5.24254,1.66559c-5.0453,0 -9.15032,-4.12953 -9.15032,-9.2051c0,-5.07581 4.10502,-9.20534 9.15032,-9.20534c5.04556,0 9.15041,4.12953 9.15041,9.20534c0,2.17235 -0.75986,4.25923 -2.14671,5.91779l5.39394,5.64361c0.45628,0.47743 0.44126,1.2387 -0.03296,1.69778zM152.80051,97.30566c0,3.75164 3.03394,6.80387 6.76329,6.80387c3.72934,0 6.76337,-3.05223 6.76337,-6.80387c0,-3.75187 -3.03403,-6.80411 -6.76337,-6.80411c-3.72934,0 -6.76329,3.05223 -6.76329,6.80411z" id="Path-0"></path></defs><desc>Generated with Avocode.</desc><g transform="matrix(1,0,0,1,-150,-88)"><g><title>Forma 1</title><use xlink:href="#Path-0" fill="#7b7d80" fill-opacity="1"></use></g></g></svg></div>
+                                                <input type="text" id="chatSearchInput" class="messager__search-input" placeholder="Поиск..." @input="search">
+                                            </div>
+                                            <div class="loader" v-if="showSearchLoader"></div>
+                                        </div>
+                                        <div class="messager__list">
+                                            <a v-for="topic in topics"
+                                               :href="'#message-' + topic.id"
+                                               class="messager__item row i-mid"
+                                               v-bind:class="{ messager__item_selected: topic.selected }"
+                                               @click="showThread(topic.id, this, $event)">
+                                                <div class="messager__img">
+                                                    <img :src="topic.avatarUrl" alt="">
+                                                </div>
+                                                <div class="messager__persona">
+                                                    <div class="messager__name">{{topic.title}}</div>
+                                                    <div class="messager__text">{{topic.vendor}} {{topic.vendorCode}} </div>
+                                                </div>
+                                                <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="messager__area">
+                                        <div class="messager__message">
+                                            <div class="messager__body">
+                                                <div v-if="posts.length == 0">
+                                                    В данном чате пока нет сообщений.
+                                                </div>
+                                                <div v-for="msg in posts"
+                                                     v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
+                                                     class="message">
+                                                    <div class="message__img">
+                                                        <img :src="msg.avatarUrl" alt="">
+                                                    </div>
+                                                    <div class="message__wrap">
+                                                        {{ msg.body }}
+                                                        <template v-if="msg.attachment && msg.attachment.name != null">
+                                                            <br />
+                                                            <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name" />
+                                                            <b>
+                                                                <a :href="msg.attachment.url" class="attachment_url">
+                                                                    <img class="img-responsive" v-if="!msg.attachment.isImage" src="/upload/document.png" :alt="msg.attachment.name" />
+                                                                    <br />
+                                                                    {{msg.attachment.name}}
+                                                                </a>
+                                                            </b>
+                                                        </template>
+                                                    </div>
+                                                    <div class="message__date">{{ msg.created | formatTime }}</div>
+                                                </div>
+
+                                            </div>
+                                            <div class="messager__foot">
+                                                <div class="loader" v-if="showLoader"></div>
+                                                <div class="messager__textarea">
+                                                    <textarea placeholder="Напишите сообщение..." v-model="messageArea"></textarea>
+                                                </div>
+                                                <div class="messager__control row">
+                                                    <div class="messager__file file file_small">
+                                                        <form>
+                                                            <label for="file-1">
+                                                                <svg id="clip" width="16" height="14" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 23 21"><defs><path d="M175.5096,860.07065l-0.10454,-0.10207c-2.30241,-2.21256 -5.99004,-2.1892 -8.26318,0.06829l-10.52525,10.44786c-0.79299,0.78892 -1.64675,2.22011 -1.64675,3.50215c0,1.20297 0.47318,2.33584 1.33132,3.18694c0.85848,0.85218 2.00046,1.32229 3.21548,1.32229h0.00069c1.21493,-0.00144 2.357,-0.47083 3.21479,-1.32373l9.08569,-9.01703c0.62407,-0.61963 0.96602,-1.47792 0.93616,-2.35669c-0.02918,-0.80581 -0.36092,-1.5631 -0.93616,-2.13242c-0.60442,-0.59951 -1.40694,-0.92945 -2.26172,-0.92945c-0.85539,0 -1.65851,0.32958 -2.26164,0.92945l-6.95804,6.90618c-0.17535,0.17216 -0.28487,0.41045 -0.28487,0.67391c0,0.52151 0.42598,0.94598 0.95238,0.94598c0.2629,0 0.50065,-0.10675 0.67266,-0.27783l0.00069,0.00144l6.96507,-6.91373c0.24899,-0.24656 0.59232,-0.36768 0.93478,-0.36193c0.32907,0.00503 0.65472,0.12651 0.89478,0.36409c0.23131,0.22967 0.36572,0.53589 0.37723,0.85972c0.01287,0.36049 -0.12145,0.69978 -0.37851,0.95425l-9.08544,9.01775c-0.49928,0.49492 -1.16241,0.76807 -1.86785,0.76879h-0.00069c-0.70553,0 -1.36934,-0.27387 -1.86862,-0.76879c-0.4979,-0.4942 -0.77299,-1.15121 -0.77299,-1.8492c0,-0.58693 0.49928,-1.57784 1.08945,-2.16512l10.52525,-10.4475c1.54126,-1.53183 4.04451,-1.54261 5.59994,-0.03774l0.10111,0.10064c1.49174,1.548 1.47071,4.01144 -0.0624,5.53429l-8.71164,8.64575c-0.17467,0.17216 -0.28324,0.40937 -0.28324,0.67283c0,0.52151 0.42598,0.9449 0.95281,0.9449c0.26281,0 0.49996,-0.10567 0.67223,-0.27603l0.00069,0.00072l8.71636,-8.65007c2.2861,-2.27079 2.297,-5.95516 0.03399,-8.23889z" id="Path-03333"></path></defs><desc></desc><g transform="matrix(1,0,0,1,-155,-858)"><g><title>Forma 1</title><use xlink:href="#Path-03333" fill="#5d6064" fill-opacity="1"></use></g></g></svg>
+                                                                <span v-if="!fileAdded">Добавить файл</span>
+                                                                <span v-if="fileAdded">{{selectFileName}}</span>
+                                                            </label>
+                                                            <input type="file" id="file-1" name="uploads" @change="fileSelected">
+                                                        </form>
+                                                    </div>
+                                                    <button class="messager__btn btn btn_bg-yellow" @click="sendMessage"><span>Отправить</span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+
+        </div>
+        <div class="col-md-3" style="padding-right: 5px; padding-left: 5px;height: 580px;" id="bodyContentRight">
+
+            <nav class="nav" id="rigth-chat-app" style="z-index: 99998">
+
+                <div class="nav-header">
+
+                    <h2 class="logo">
+                        Сообщения
+                        <span style="float: right; cursor: pointer" id="close-span">  &#x2715;</span>
+                    </h2>
+                </div>
+                <div @click="backToTopics" class="back_container mb-1r" v-if="showMessagePanel">
+                    <!-- Кнопка назад -->
+                    <span>&#8249;</span><span>Назад к темам</span>
+                </div>
+                <input type="text" placeholder="Поиск..." class="form-control mb-1r" @input="search" v-if="!showMessagePanel" />
+                <div class=" messager__list " v-show="!showMessagePanel">
+
+                    <ul class="post_list" v-if="!showMessagePanel">
+                        <li v-for="topic in topics">
+                            <a :href="'#message-' + topic.id"
+                               class="messager__item row i-mid"
+                               v-bind:class="{ selected: topic.selected }"
+                               @click="showThread(topic.id, this, $event)">
+                                <div class="messager__img">
+                                    <img class="thumbnail" :src="topic.avatarUrl" alt="">
+                                </div>
+                                <div class="messager__persona">
+                                    <div class="messager__name">{{topic.title}}</div>
+                                    <div class="messager__text">{{topic.vendor}} {{topic.vendorCode}} </div>
+                                </div>
+                                <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
+                            </a>
+                        </li>
+                        <li v-if="topics.length == 0">
+                            <div class="messager__persona">
+                                <div class="messager__name">Нет результатов</div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+                <div v-if="showMessagePanel">
+                    <div class="row">
+                        <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col" />
+                        <div class="col">
+                            {{actualtopic.fullName}} {{actualtopic.created | formatDateTime}}
+                            <br />
+                            {{actualtopic.title}}
+                        </div>
+                    </div>
+                </div>
+                <div class="messager__list msg_h" v-if="showMessagePanel">
+                    <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
+                        <div v-if="posts.length == 0">
+                            В данном чате пока нет сообщений.
+                        </div>
+                        <div v-for="msg in posts"
+                             v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
+                             class="message">
+
+                            <div class="message__img" v-if="!msg.isAuthor">
+                                <img :src="msg.avatarUrl" alt="" class="thumbnail">
+                            </div>
+                            <div class="message__wrap">
+                                {{ msg.body }}
+                                <br />
+                                <div class="time_label">{{ msg.created | formatTime }}</div>
+                                <template v-if="msg.attachment && msg.attachment.name != null">
+                                    <br />
+                                    <img class="img-responsive" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name" />
+                                    <b>
+                                        <a :href="msg.attachment.url" class="attachment_url">
+                                            <img class="img-responsive" v-if="!msg.attachment.isImage" src="/upload/document.png" :alt="msg.attachment.name" />
+                                            <br />
+                                            {{msg.attachment.name}}
+                                        </a>
+                                    </b>
+                                </template>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- send message bar-->
+                <div class="messager__foot" v-if="showMessagePanel">
+                    <div class="loader" v-if="showLoader"></div>
+                    <div class="messager__textarea">
+                        <textarea placeholder="Напишите сообщение..." v-model="messageArea"></textarea>
+                    </div>
+                    <div class="messager__control row">
+                        <div class="messager__file file file_small">
+                            <form>
+                                <label for="file-rch">
+                                    <svg id="clip" width="16" height="14" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 23 21"><defs><path d="M175.5096,860.07065l-0.10454,-0.10207c-2.30241,-2.21256 -5.99004,-2.1892 -8.26318,0.06829l-10.52525,10.44786c-0.79299,0.78892 -1.64675,2.22011 -1.64675,3.50215c0,1.20297 0.47318,2.33584 1.33132,3.18694c0.85848,0.85218 2.00046,1.32229 3.21548,1.32229h0.00069c1.21493,-0.00144 2.357,-0.47083 3.21479,-1.32373l9.08569,-9.01703c0.62407,-0.61963 0.96602,-1.47792 0.93616,-2.35669c-0.02918,-0.80581 -0.36092,-1.5631 -0.93616,-2.13242c-0.60442,-0.59951 -1.40694,-0.92945 -2.26172,-0.92945c-0.85539,0 -1.65851,0.32958 -2.26164,0.92945l-6.95804,6.90618c-0.17535,0.17216 -0.28487,0.41045 -0.28487,0.67391c0,0.52151 0.42598,0.94598 0.95238,0.94598c0.2629,0 0.50065,-0.10675 0.67266,-0.27783l0.00069,0.00144l6.96507,-6.91373c0.24899,-0.24656 0.59232,-0.36768 0.93478,-0.36193c0.32907,0.00503 0.65472,0.12651 0.89478,0.36409c0.23131,0.22967 0.36572,0.53589 0.37723,0.85972c0.01287,0.36049 -0.12145,0.69978 -0.37851,0.95425l-9.08544,9.01775c-0.49928,0.49492 -1.16241,0.76807 -1.86785,0.76879h-0.00069c-0.70553,0 -1.36934,-0.27387 -1.86862,-0.76879c-0.4979,-0.4942 -0.77299,-1.15121 -0.77299,-1.8492c0,-0.58693 0.49928,-1.57784 1.08945,-2.16512l10.52525,-10.4475c1.54126,-1.53183 4.04451,-1.54261 5.59994,-0.03774l0.10111,0.10064c1.49174,1.548 1.47071,4.01144 -0.0624,5.53429l-8.71164,8.64575c-0.17467,0.17216 -0.28324,0.40937 -0.28324,0.67283c0,0.52151 0.42598,0.9449 0.95281,0.9449c0.26281,0 0.49996,-0.10567 0.67223,-0.27603l0.00069,0.00072l8.71636,-8.65007c2.2861,-2.27079 2.297,-5.95516 0.03399,-8.23889z" id="Path-03333"></path></defs><desc></desc><g transform="matrix(1,0,0,1,-155,-858)"><g><title>Forma 1</title><use xlink:href="#Path-03333" fill="#5d6064" fill-opacity="1"></use></g></g></svg>
+                                    <span v-if="!fileAdded">Добавить файл</span>
+                                    <span v-if="fileAdded">{{selectFileName}}</span>
+                                </label>
+                                <input type="file" id="file-rch" name="uploads" @change="fileSelected">
+                            </form>
+                        </div>
+                        <button class="messager__btn btn btn_bg-yellow" @click="sendMessage"><span>Отправить</span></button>
+                    </div>
+                </div>
+            </nav>
+
+
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="page-content clearfix">
+            <div class="footer-left pull-left">
+                <p>© 2017  НеликвидаНет</p>
+                <p>Все права защищены. Правила использования информации</p>
+            </div>
+
+        </div>
+    </footer>
+    <div class="popup popup_auth block block_auth" id="popup-auth">
+
+
+        <div class="popup__form">
+            <div class="popup__title">войти</div>
+            <div class="popup__form-wrap row i-bottom">
+
+
+
+                <br>
+                <div class="popup__case row i-strech">
+
+
+
+
+
+                    <form id="form-signup" class="regist-form" action="/user/sign-in/signup" method="post" data-pjax>
+                        <input type="hidden" name="_csrf" value="N8SvPQC_VPSLlpsRPjBeBx8NUikCPPIYUBNTaCYECQVG9sxtec5tk__E-lt8UxhsfmhlXzJYsFEhYwUeUGd_VA==">
+
+                        <div class="form-group field-signupform-api">
+
+                            <input type="hidden" id="signupform-api" class="form-control" name="SignupForm[api]" value="1">
+
+                            <div class="help-block"></div>
+                        </div>	 <div class="messages">Для входа в личный кабинет введите Ваш номер телефона</div>
+                        <br>
+                        <div class="popup__input  input_default  col col-lg-12">
+                            <label class="input__title">Телефон </label>
+                            <div class="form-group field-signupform-username required">
+
+                                <input type="text" id="signupform-username" class="input__wrap call" name="SignupForm[username]" maxlength="255" required data-initial="+7" aria-required="true">
+
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                        <div id="hid-block" style="display:none;">
+                            <div class="row">
+                                <div class="popup__input input input_default col col-lg-6 col-xs-12">
+                                    <label class="input__title sms_pass" id="smsinput">Введите код из смс</label>
+                                    <div class="form-group field-signupform-password">
+
+                                        <input type="password" id="signupform-password" class="input__wrap" name="SignupForm[password]" maxlength="255">
+
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                                <div class="col col-lg-5 col-xs-12">
+                                    <br>
+                                    <button type="button" id="submitsms" class="popup__btn-submit btn btn_bg-yellow btn_shadow btn_small">Отправить смс код</button>
+
+                                    <button type="button" id="resetpass" class="popup__btn-submit btn btn_bg-yellow btn_shadow btn_small" style="display:none;">Напомнить пароль</button>
+                                </div>
+                            </div>
+                            <div class="popup__checkbox checkbox checkbox_block col col-lg-12">
+                                <input type="checkbox" class="checkbox__wrap" value='1' name="rule">
+                                <label class="checkbox__title" id="form_rule"> Я согласен с <a data-fancybox data-src="#popup-policy" href="javascript:;">Правилами пользовательского соглашения</a></label>
+                            </div>
+
+                            <input type="hidden" id="is_login" name="is_login" value="0">
+                            <input type="hidden" id="api" name="api" value="1">
+                            <div class="col col-lg-12">
+                                <button type="button" id="signup-button" class="popup__btn-submit btn btn_bg-yellow btn_shadow btn_small">Войти на сайт</button>
+                            </div>
+                        </div>
+                    </form>
+                    <script>
+
+
+$(document).ready(
+
+$("#signupform-username").bind("change paste keyup", function() {
+//$("#signupform-username").bind("input", function(){
+//alert($(this).val());
+
+
+
+var phone = $(this).val();
+
+//$('.messages').html('значение номера изменено на '+phone);
+
+var count_phone = phone.length;
+
+
+if(count_phone == 18){
+
+$.ajax({
+  type: 'POST',
+  url: '/user/sign-in/signup',
+  data: 'SignupForm[api]=1&phonevalid='+phone,
+	success: function(data) {
+    obj = JSON.parse(data);
+  //  $('.results').html(data);
+
+  		 if(obj.response == 'phone_in_base'){
+
+			  $('#hid-block').show();
+			  $('.messages').html('Пользователь с таким номером уже зарегистрирован.<br> Для входа на сайт введите свой пароль.');
+			  $('#smsinput').html('Введите свой пароль');
+
+			  $('#submitsms').hide();
+
+			   $('#is_login').val('1');
+			    $('#resetpass').show();
+			  $('#form_rule').hide();
+
+			 	 $('#signup-button').html('Войти на сайт');
+
+			 	$('#input-5').attr('type', 'password');
+
+
+
+			 		 $('#input-5').focus();
+
+
+
+			 }else if(obj.response == 'phone_not_base'){
+
+
+			 	$('#hid-block').show();
+
+  $('.messages').html('Ваш номер не найден в базе.<br> Для входа на сайт Вам необходимо пройти СМС подтверждение, для получения кода нажмите "Отправить смс код"');
+
+			 	$('#smsinput').html('Введите код из смс');
+
+			 	$('#submitsms').show();
+
+			 	   $('#resetpass').hide();
+
+			 	   $('#form_rule').show();
+
+
+			 	 $('#is_login').val('0');
+
+			 	$('#signup-button').html('Зарегистрироваться');
+
+			 	$('#input-5').attr('type', 'number');
+
+			 	setTimeout(function() { $('#input-5').focus() }, 10);
+
+			 }
+
+  }
+});
+
+}
+
+}),
+
+
+   $('#resetpass').click(function() {
+        var form = $('#form-signup');
+        if(form.find('.has-error').length) {
+            return false;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/sign-in/signup',
+            data: form.serialize()+'&resetpass=1',
+          success: function(data) {
+	  $('.messages').html('Пароль был отправлен на Ваш телефон в виде смс');
+
+            }
+        });
+
+        return false;
+    }),
+
+    $('#signup-button').click(function() {
+
+
+    		if($('#is_login').val() == 0){
+
+    	if($('#checkbox-1').prop('checked')){
+
+
+			}else{
+
+	$('.messages').html('Для регистрации Вы должны быть согласны c документом "Правила пользовательского соглашения", если согласны поставьте галочку.');
+			 return false;
+			}
+
+			}
+
+
+	//if (error_rule == 1){
+
+        var form = $('#form-signup');
+        if(form.find('.has-error').length) {
+            return false;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/sign-in/signup',
+            data: form.serialize(),
+          success: function(data) {
+    	  obj = JSON.parse(data);
+
+		//	alert(obj.response);
+
+			 if(obj.response == 'user_newreg'){
+
+			  $('.messages').html('Поздравляем! Вы успешно зарегистрировались, постоянный пароль был выслан Вам в смс, запишите его или запомните пароль для следующего входа. Сейчас мы Вас направим в Ваш кабинет.');
+
+			var URL = '/user';
+
+			  var delay = 1000;
+setTimeout(function(){ window.location = URL; }, delay);
+
+			 }else if(obj.response == 'error_code'){
+
+  $('.messages').html('Вы ввели неправильный код подтверждения, введите правильный или переотошлите смс');
+
+			 }else if (obj.response == 'redirect'){
+
+						var URL = '/user';
+
+			  var delay = 1000;
+setTimeout(function(){ window.location = URL; }, delay);
+
+
+			 }else if (obj.response == 'errorpass'){
+
+  $('.messages').html('Вы не верно ввели пароль');
+			 }
+
+
+            }
+        });
+
+
+
+	/*	}else{
+
+		  $('.messages').html('Для регистрации Вы должны быть согласны c документом "правила пользовательского соглашения" для регистрации, если согласны поставьте галочку.');
+
+		}*/
+
+        return false;
+    }),
+
+     $('#submitsms').click(function() {
+        var form = $('#form-signup');
+        if(form.find('.has-error').length) {
+            return false;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/sign-in/signup',
+            data: form.serialize() + '&sms=1',
+          success: function(data) {
+    	  obj = JSON.parse(data);
+
+		//	 alert(obj.response);
+
+			 if(obj.response == 'fild_phone'){
+
+			  $('.messages').html('Заполните поле номера телефона');
+
+			 }else if (obj.response == 'user_registed'){
+
+			 			         $('.messages').html('Пользователь с таким номером уже зарегистрирован, если это Вы, то войдите.');
+
+		         $('.sms_pass').html('Введите Ваш пароль');
+
+		         $('#submitsms').html('Восстановить пароль');
+
+		         $('.checkbox_block').hide();
+
+		         $("#submitsms").attr("id", "submitreset");
+
+		         $('.messages').html('Пользователь с таким номером уже зарегистрирован, если это Вы, то войдите.');
+			 }
+
+			else if (obj.response == 'sms_send'){
+
+		  $('.messages').html('Код подтверждения был выслан в SMS на Ваш телефон, введите полученный код ниже.');
+
+			 }
+
+            }
+        });
+
+        return false;
+    }),
+);
+
+                    </script>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="popup popup_large block block_popup" id="popup-offer">
+        <div class="popup__title">договор оферта</div>
+        <div class="popup__text text maxh200">
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, quaerat.</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, quaerat.</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, quaerat.</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, quaerat.</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
+        </div>
+    </div>
+    <div class="popup popup_large block block_popup" id="popup-policy">
+        <div class="popup__title">политика конфиденциальности</div>
+        <div class="popup__text text maxh200">
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, quaerat.</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, quaerat.</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, quaerat.</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, quaerat.</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
+        </div>
+    </div>
+    <!--	  <nav id="w0" class="panel__wrap row i-mid navbar"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w0-collapse"><span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span></button></div><div id="w0-collapse" class="collapse navbar-collapse">    <ul id="w1" class="panel__persona persona hidden-md hidden-sm hidden-xs nav"><li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Иван Иванов <span class="caret"></span></a><ul id="w2" class="dropdown-menu"><li><a href="/user/default/index" tabindex="-1">Настройки</a></li>
+    <li><a href="/user/sign-in/logout" data-method="post" tabindex="-1">Выход</a></li></ul></li>
+    <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Язык <span class="caret"></span></a><ul id="w3" class="dropdown-menu"><li><a href="/site/set-locale?locale=en-US" tabindex="-1">English (US)</a></li>
+    <li class="active"><a href="/site/set-locale?locale=ru-RU" tabindex="-1">Русский (РФ)</a></li>
+    <li><a href="/site/set-locale?locale=uk-UA" tabindex="-1">Українська (Україна)</a></li>
+    <li><a href="/site/set-locale?locale=es" tabindex="-1">Español</a></li>
+    <li><a href="/site/set-locale?locale=vi" tabindex="-1">Tiếng Việt</a></li>
+    <li><a href="/site/set-locale?locale=zh-CN" tabindex="-1">简体中文</a></li>
+    <li><a href="/site/set-locale?locale=pl-PL" tabindex="-1">Polski (PL)</a></li></ul></li></ul>
+        </div></div></nav>   -->
+
+    <script type="text/javascript">
+
+  jQuery(function($){
+	$(".scroll-block").on("click","a", function (event) {
+		//отменяем стандартную обработку нажатия по ссылке
+		event.preventDefault();
+
+		//забираем идентификатор бока с атрибута href
+		var id  = $(this).attr('href'),
+
+		//узнаем высоту от начала страницы до блока на который ссылается якорь
+			top = $(id).offset().top;
+
+		//анимируем переход на расстояние - top за 1500 мс
+		$('body,html').animate({scrollTop: top}, 1500);
+	});
+
+/*	$(document).ready(function() {
+	$(".call").on("keyup", function() {
+  	var value = $(this).val();
+  	$(this).val($(this).data("initial") + value.substring(3));
+  });
+});*/
+
+
+
+
+
+
+  $(".call").inputmask({"mask": "+7 (999) 999-99-99"}); //specifying options
+
+
+     // $(".call").focus();
+     // $(".call").get(0).setSelectionRange(0,0);
+
+
+      });
+
+
+    </script>
+    <!-- Автоматическая проверка наличия сообщений и разблокировка глобального счетчика. При работе на странице чата так-же вызов цикла подгрузки сообщений-->
+    <script>
+        // данная переменная должна формироваться на сервере и содержать числовой идентификатор пользователя в системе (id)
+        var loggedinUserId = 52;
+        var totalMessagesSpan = $('#totalUnreadMessages');
+        var processRefresh = true;
+        var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
+        var showRigthChatPanel = false;
+        var chatRefreshTockenTimer = setInterval(function () { RefreshToken(sessionToken); }, 55000);
+
+        $(document).ready(function() {
+
+        	$('#close-span').click(function() {
+
+            	showRigthChatPanel = !showRigthChatPanel;
+            	showRigthChat(showRigthChatPanel);
+	        });
+
+	        $('label.nav-toggle').click(function() {
+
+	            showRigthChatPanel = !showRigthChatPanel;
+	            showRigthChat(showRigthChatPanel);
+	        });
+        });
+
+
+
+	    function showRigthChat(ifShow) {
+
+	        showRigthChatPanel = ifShow;
+	        $('#bodyContentLeft').removeClass('col-lg-12');
+	        $('#bodyContentRight').removeClass('hide-block');
+	        $('#bodyContentLeft').removeClass('col-lg-9');
+	        $('#bodyContentRight').removeClass('col-lg-3');
+
+	        if (ifShow) {
+	            $('#bodyContentLeft').addClass('col-lg-9');
+	            $('#bodyContentRight').addClass('col-lg-3');
+	            document.getElementById('right-chat-toggle').checked = 'checked';
+	        } else {
+	            $('#bodyContentLeft').addClass('col-lg-12');
+	            $('#bodyContentRight').addClass('hide-block');
+	            document.getElementById('right-chat-toggle').checked = false;
+	        }
+	    };
+
+
+
+        function checkMessagesForUser() {
+            if (!processRefresh) return;
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/user/totalunread/' + loggedinUserId,
+                success: function (data) {
+                    var count = parseInt(data);
+
+                    if (count > 0) {
+                    	totalMessagesSpan.text(count);
+                        totalMessagesSpan.show();
+                        if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
+                        if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
+                    } else {
+                        totalMessagesSpan.hide();
+                    }
+                }
+            });
+        }
+        function RefreshToken(token) {
+		    var bd = { token: token };
+		    $.ajax({
+		        type: 'POST',
+		        url: '/api/v1/account/refresh',
+		        data: JSON.stringify(bd),
+		        contentType: "application/json",
+		        beforeSend: function (xhr) {
+		            xhr.setRequestHeader("Authorization", "Bearer " + token);
+		        },
+		        success: function (data) {
+		            sessionStorage.setItem(tokenKey, data.access_token);
+		            sessionToken = data.access_token;
+		        }
+		    });
+		}
+    </script>
+
+
+    <script>
+sessionStorage.setItem('accessToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiNzkyMTA4NDMwODAiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwibmJmIjoxNTU3MjAzMjM0LCJleHAiOjE1NTcyMDM1MzQsImlzcyI6IlZLT1JPVEVOS08iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUxODg0LyJ9.vPlIn5vcBQJNpCI-Pg1NEpQjCGS67PD16U541wfZUoQ');
+    </script>
+    <!-- Скрипт чата включается после всех подготовок-->
+    <script src="/js/chat.js"></script>
+
+
+    <!-- right-chat-toggle-->
+    <input type="checkbox" id="right-chat-toggle" hidden>
+
+    <script src="/js/rigth-chat.js"></script>
+    <script>showRigthChat(true);</script>
+</body>
+</html>
+<div id="yii-debug-toolbar" data-url="/debug/default/toolbar?tag=5cd1092278d95" style="display:none" class="yii-debug-toolbar-bottom"></div>
+<style>
+    #yii-debug-toolbar-logo {
+        position: fixed;
+        right: 31px;
+        bottom: 4px
+    }
+
+    @media print {
+        .yii-debug-toolbar {
+            display: none !important
+        }
+    }
+
+    .yii-debug-toolbar {
+        font: 11px Verdana, Arial, sans-serif;
+        text-align: left;
+        width: 96px;
+        transition: width .3s ease;
+        z-index: 1000000
+    }
+
+        .yii-debug-toolbar.yii-debug-toolbar_active:not(.yii-debug-toolbar_animating) .yii-debug-toolbar__bar {
+            overflow: visible
+        }
+
+        .yii-debug-toolbar:not(.yii-debug-toolbar_active) .yii-debug-toolbar__bar, .yii-debug-toolbar.yii-debug-toolbar_animating .yii-debug-toolbar__bar {
+            height: 40px
+        }
+
+    .yii-debug-toolbar_active {
+        width: 100%
+    }
+
+        .yii-debug-toolbar_active .yii-debug-toolbar__toggle-icon {
+            -webkit-transform: rotate(0);
+            transform: rotate(0)
+        }
+
+    .yii-debug-toolbar_position_top {
+        margin: 0 0 20px 0;
+        width: 100%
+    }
+
+    .yii-debug-toolbar_position_bottom {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        margin: 0
+    }
+
+    .yii-debug-toolbar__bar {
+        position: relative;
+        padding: 0;
+        font: 11px Verdana, Arial, sans-serif;
+        text-align: left;
+        overflow: hidden;
+        box-sizing: content-box;
+        background: #fff;
+        background: -moz-linear-gradient(top, #fff 0%, #f7f7f7 100%);
+        background: -webkit-linear-gradient(top, #fff 0%, #f7f7f7 100%);
+        background: linear-gradient(to bottom, #fff 0%, #f7f7f7 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0);
+        border: 1px solid rgba(0,0,0,0.11);
+        direction: ltr
+    }
+
+        .yii-debug-toolbar__bar::after {
+            content: '';
+            display: table;
+            clear: both
+        }
+
+    .yii-debug-toolbar__view {
+        height: 0;
+        overflow: hidden;
+        background: white
+    }
+
+        .yii-debug-toolbar__view iframe {
+            margin: 0;
+            padding: 10px 0 0;
+            height: 100%;
+            width: 100%;
+            border: 0
+        }
+
+    .yii-debug-toolbar_iframe_active .yii-debug-toolbar__view {
+        height: 100%
+    }
+
+    .yii-debug-toolbar_iframe_active .yii-debug-toolbar__toggle-icon {
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg)
+    }
+
+    .yii-debug-toolbar_iframe_active .yii-debug-toolbar__external {
+        display: block
+    }
+
+    .yii-debug-toolbar_iframe_animating .yii-debug-toolbar__view {
+        transition: height .3s ease
+    }
+
+    .yii-debug-toolbar__block {
+        float: left;
+        margin: 0;
+        border-right: 1px solid rgba(0,0,0,0.11);
+        padding: 4px 8px;
+        line-height: 32px;
+        white-space: nowrap
+    }
+
+        .yii-debug-toolbar__block a {
+            display: inline-block;
+            text-decoration: none;
+            color: black
+        }
+
+        .yii-debug-toolbar__block img {
+            vertical-align: middle
+        }
+
+    .yii-debug-toolbar__block_active, .yii-debug-toolbar__ajax:hover {
+        background: #f7f7f7;
+        background: -moz-linear-gradient(top, #f7f7f7 0%, #e0e0e0 100%);
+        background: -webkit-linear-gradient(top, #f7f7f7 0%, #e0e0e0 100%);
+        background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#e0e0e0', GradientType=0)
+    }
+
+    .yii-debug-toolbar__label {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 14px;
+        white-space: nowrap;
+        vertical-align: middle;
+        max-width: 100px;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        color: #ffffff;
+        text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+        background-color: #999999;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px
+    }
+
+        .yii-debug-toolbar__label:empty {
+            display: none
+        }
+
+    a.yii-debug-toolbar__label:hover, a.yii-debug-toolbar__label:focus {
+        color: #ffffff;
+        text-decoration: none;
+        cursor: pointer
+    }
+
+    .yii-debug-toolbar__label_important, .yii-debug-toolbar__label_error {
+        background-color: #b94a48
+    }
+
+        .yii-debug-toolbar__label_important[href] {
+            background-color: #953b39
+        }
+
+    .yii-debug-toolbar__label_warning, .yii-debug-toolbar__badge_warning {
+        background-color: #f89406
+    }
+
+        .yii-debug-toolbar__label_warning[href] {
+            background-color: #c67605
+        }
+
+    .yii-debug-toolbar__label_success {
+        background-color: #468847
+    }
+
+        .yii-debug-toolbar__label_success[href] {
+            background-color: #356635
+        }
+
+    .yii-debug-toolbar__label_info {
+        background-color: #3a87ad
+    }
+
+        .yii-debug-toolbar__label_info[href] {
+            background-color: #2d6987
+        }
+
+    .yii-debug-toolbar__label_inverse, .yii-debug-toolbar__badge_inverse {
+        background-color: #333333
+    }
+
+        .yii-debug-toolbar__label_inverse[href], .yii-debug-toolbar__badge_inverse[href] {
+            background-color: #1a1a1a
+        }
+
+    .yii-debug-toolbar__title {
+        background: #f7f7f7;
+        background: -moz-linear-gradient(top, #f7f7f7 0%, #e0e0e0 100%);
+        background: -webkit-linear-gradient(top, #f7f7f7 0%, #e0e0e0 100%);
+        background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#e0e0e0', GradientType=0)
+    }
+
+    .yii-debug-toolbar__block_last {
+        width: 80px;
+        height: 40px;
+        float: left
+    }
+
+    .yii-debug-toolbar__toggle, .yii-debug-toolbar__external {
+        cursor: pointer;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        font-size: 25px;
+        font-weight: 100;
+        line-height: 28px;
+        color: #ffffff;
+        text-align: center;
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+        transition: opacity .3s ease
+    }
+
+        .yii-debug-toolbar__toggle:hover, .yii-debug-toolbar__toggle:focus, .yii-debug-toolbar__external:hover, .yii-debug-toolbar__external:focus {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.9;
+            filter: alpha(opacity=90)
+        }
+
+    .yii-debug-toolbar__toggle-icon, .yii-debug-toolbar__external-icon {
+        display: inline-block;
+        background-position: 50% 50%;
+        background-repeat: no-repeat
+    }
+
+    .yii-debug-toolbar__toggle {
+        right: 10px;
+        bottom: 4px
+    }
+
+    .yii-debug-toolbar__toggle-icon {
+        padding: 7px 0;
+        width: 10px;
+        height: 16px;
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNSIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDUwIDUwIj48cGF0aCBmaWxsPSIjNDQ0IiBkPSJNMTUuNTYzIDQwLjgzNmEuOTk3Ljk5NyAwIDAgMCAxLjQxNCAwbDE1LTE1YTEgMSAwIDAgMCAwLTEuNDE0bC0xNS0xNWExIDEgMCAwIDAtMS40MTQgMS40MTRMMjkuODU2IDI1LjEzIDE1LjU2MyAzOS40MmExIDEgMCAwIDAgMCAxLjQxNHoiLz48L3N2Zz4=");
+        transition: -webkit-transform .3s ease-out;
+        transition: transform .3s ease-out;
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg)
+    }
+
+    .yii-debug-toolbar__external {
+        display: none;
+        right: 50px;
+        bottom: 4px
+    }
+
+    .yii-debug-toolbar__external-icon {
+        padding: 8px 0;
+        width: 14px;
+        height: 14px;
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNSIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDUwIDUwIj48cGF0aCBmaWxsPSIjNDQ0IiBkPSJNMzkuNjQyIDkuNzIyYTEuMDEgMS4wMSAwIDAgMC0uMzgyLS4wNzdIMjguMTAzYTEgMSAwIDAgMCAwIDJoOC43NDNMMjEuNyAyNi43OWExIDEgMCAwIDAgMS40MTQgMS40MTVMMzguMjYgMTMuMDZ2OC43NDNhMSAxIDAgMCAwIDIgMFYxMC42NDZhMS4wMDUgMS4wMDUgMCAwIDAtLjYxOC0uOTI0eiIvPjxwYXRoIGQ9Ik0zOS4yNiAyNy45ODVhMSAxIDAgMCAwLTEgMXYxMC42NmgtMjh2LTI4aDEwLjY4M2ExIDEgMCAwIDAgMC0ySDkuMjZhMSAxIDAgMCAwLTEgMXYzMGExIDEgMCAwIDAgMSAxaDMwYTEgMSAwIDAgMCAxLTF2LTExLjY2YTEgMSAwIDAgMC0xLTF6Ii8+PC9zdmc+")
+    }
+
+    .yii-debug-toolbar__switch-icon {
+        margin-left: 10px;
+        padding: 5px 10px;
+        width: 18px;
+        height: 18px;
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDUwIDUwIiB2ZXJzaW9uPSIxLjEiPjxwYXRoIGQ9Im00MS4xIDIzYy0wLjYgMC0xIDAuNC0xIDF2MTAuN2wtMjUuNi0wLjFjMCAwIDAtMiAwLTIuOCAwLTAuOC0wLjctMS0xLTAuNmwtMy41IDMuNWMtMC42IDAuNi0wLjYgMS4zIDAgMmwzLjQgMy40YzAuNCAwLjQgMS4xIDAuMiAxLTAuNmwwLTIuOWMwIDAgMjAuOCAwLjEgMjYuNiAwIDAuNiAwIDEtMC40IDEtMXYtMTEuN2MwLTAuNi0wLjQtMS0xLTF6TTkgMjYuOSA5IDI2LjkgOSAyNi45IDkgMjYuOSIvPjxwYXRoIGQ9Im05IDI2LjljMC42IDAgMS0wLjQgMS0xdi0xMC43bDI1LjYgMC4xYzAgMCAwIDIgMCAyLjggMCAwLjggMC43IDEgMSAwLjZsMy41LTMuNWMwLjYtMC42IDAuNi0xLjMgMC0ybC0zLjQtMy40Yy0wLjQtMC40LTEuMS0wLjItMSAwLjZsMCAyLjljMCAwLTIwLjgtMC4xLTI2LjYgMC0wLjYgMC0xIDAuNC0xIDF2MTEuN2MwIDAuNiAwLjQgMSAxIDF6Ii8+PC9zdmc+")
+    }
+
+    .yii-debug-toolbar__ajax {
+        position: relative
+    }
+
+        .yii-debug-toolbar__ajax:hover .yii-debug-toolbar__ajax_info, .yii-debug-toolbar__ajax:focus .yii-debug-toolbar__ajax_info {
+            visibility: visible
+        }
+
+        .yii-debug-toolbar__ajax a {
+            color: #337ab7
+        }
+
+        .yii-debug-toolbar__ajax table {
+            width: 100%;
+            table-layout: auto;
+            border-spacing: 0;
+            border-collapse: collapse
+        }
+
+            .yii-debug-toolbar__ajax table td {
+                padding: 4px;
+                font-size: 12px;
+                line-height: normal;
+                vertical-align: top;
+                border-top: 1px solid #ddd
+            }
+
+            .yii-debug-toolbar__ajax table th {
+                padding: 4px;
+                font-size: 11px;
+                line-height: normal;
+                vertical-align: bottom;
+                border-bottom: 2px solid #ddd
+            }
+
+    .yii-debug-toolbar__ajax_info {
+        visibility: hidden;
+        transition: visibility .2s linear;
+        background-color: white;
+        box-shadow: inset 0 -10px 10px -10px #e1e1e1;
+        position: absolute;
+        bottom: 40px;
+        left: -1px;
+        padding: 10px;
+        max-width: 480px;
+        max-height: 480px;
+        word-wrap: break-word;
+        overflow: hidden;
+        overflow-y: auto;
+        box-sizing: border-box;
+        border: 1px solid rgba(0,0,0,0.11);
+        z-index: 1000001
+    }
+
+    .yii-debug-toolbar__ajax_request_status {
+        color: white;
+        padding: 2px 5px
+    }
+
+    .yii-debug-toolbar__ajax_request_url {
+        max-width: 170px;
+        overflow: hidden;
+        text-overflow: ellipsis
+    }
+    /*# sourceMappingURL=toolbar.css.map */
+</style>
+<script>
+(function () {
+    'use strict';
+
+    var findToolbar = function () {
+            return document.querySelector('#yii-debug-toolbar');
+        },
+        ajax = function (url, settings) {
+            var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+            settings = settings || {};
+            xhr.open(settings.method || 'GET', url, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.setRequestHeader('Accept', 'text/html');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200 && settings.success) {
+                        settings.success(xhr);
+                    } else if (xhr.status !== 200 && settings.error) {
+                        settings.error(xhr);
+                    }
+                }
+            };
+            xhr.send(settings.data || '');
+        },
+        url,
+        div,
+        toolbarEl = findToolbar(),
+        toolbarAnimatingClass = 'yii-debug-toolbar_animating',
+        barSelector = '.yii-debug-toolbar__bar',
+        viewSelector = '.yii-debug-toolbar__view',
+        blockSelector = '.yii-debug-toolbar__block',
+        toggleSelector = '.yii-debug-toolbar__toggle',
+        externalSelector = '.yii-debug-toolbar__external',
+
+        CACHE_KEY = 'yii-debug-toolbar',
+        ACTIVE_STATE = 'active',
+
+        animationTime = 300,
+
+        activeClass = 'yii-debug-toolbar_active',
+        iframeActiveClass = 'yii-debug-toolbar_iframe_active',
+        iframeAnimatingClass = 'yii-debug-toolbar_iframe_animating',
+        titleClass = 'yii-debug-toolbar__title',
+        blockClass = 'yii-debug-toolbar__block',
+        blockActiveClass = 'yii-debug-toolbar__block_active',
+        requestStack = [];
+
+    if (toolbarEl) {
+        url = toolbarEl.getAttribute('data-url');
+
+        ajax(url, {
+            success: function (xhr) {
+                div = document.createElement('div');
+                div.innerHTML = xhr.responseText;
+
+                toolbarEl.parentNode && toolbarEl.parentNode.replaceChild(div, toolbarEl);
+
+                showToolbar(findToolbar());
+            },
+            error: function (xhr) {
+                toolbarEl.innerText = xhr.responseText;
+            }
+        });
+    }
+
+    function showToolbar(toolbarEl) {
+        var barEl = toolbarEl.querySelector(barSelector),
+            viewEl = toolbarEl.querySelector(viewSelector),
+            toggleEl = toolbarEl.querySelector(toggleSelector),
+            externalEl = toolbarEl.querySelector(externalSelector),
+            blockEls = barEl.querySelectorAll(blockSelector),
+            iframeEl = viewEl.querySelector('iframe'),
+            iframeHeight = function () {
+                return (window.innerHeight * 0.7) + 'px';
+            },
+            isIframeActive = function () {
+                return toolbarEl.classList.contains(iframeActiveClass);
+            },
+            showIframe = function (href) {
+                toolbarEl.classList.add(iframeAnimatingClass);
+                toolbarEl.classList.add(iframeActiveClass);
+
+                iframeEl.src = externalEl.href = href;
+                viewEl.style.height = iframeHeight();
+                setTimeout(function () {
+                    toolbarEl.classList.remove(iframeAnimatingClass);
+                }, animationTime);
+            },
+            hideIframe = function () {
+                toolbarEl.classList.add(iframeAnimatingClass);
+                toolbarEl.classList.remove(iframeActiveClass);
+                removeActiveBlocksCls();
+
+                externalEl.href = '#';
+                viewEl.style.height = '';
+                setTimeout(function () {
+                    toolbarEl.classList.remove(iframeAnimatingClass);
+                }, animationTime);
+            },
+            removeActiveBlocksCls = function () {
+                [].forEach.call(blockEls, function (el) {
+                    el.classList.remove(blockActiveClass);
+                });
+            },
+            toggleToolbarClass = function (className) {
+                toolbarEl.classList.add(toolbarAnimatingClass);
+                if (toolbarEl.classList.contains(className)) {
+                    toolbarEl.classList.remove(className);
+                } else {
+                    toolbarEl.classList.add(className);
+                }
+                setTimeout(function () {
+                    toolbarEl.classList.remove(toolbarAnimatingClass);
+                }, animationTime);
+            },
+            toggleStorageState = function (key, value) {
+                if (window.localStorage) {
+                    var item = localStorage.getItem(key);
+
+                    if (item) {
+                        localStorage.removeItem(key);
+                    } else {
+                        localStorage.setItem(key, value);
+                    }
+                }
+            },
+            restoreStorageState = function (key) {
+                if (window.localStorage) {
+                    return localStorage.getItem(key);
+                }
+            },
+            togglePosition = function () {
+                if (isIframeActive()) {
+                    hideIframe();
+                } else {
+                    toggleToolbarClass(activeClass);
+                    toggleStorageState(CACHE_KEY, ACTIVE_STATE);
+                }
+            };
+
+        if (restoreStorageState(CACHE_KEY) === ACTIVE_STATE) {
+            var transition = toolbarEl.style.transition;
+            toolbarEl.style.transition = 'none';
+            toolbarEl.classList.add(activeClass);
+            setTimeout(function () {
+                toolbarEl.style.transition = transition;
+            }, animationTime);
+        }
+
+        toolbarEl.style.display = 'block';
+
+        window.onresize = function () {
+            if (toolbarEl.classList.contains(iframeActiveClass)) {
+                viewEl.style.height = iframeHeight();
+            }
+        };
+
+        barEl.onclick = function (e) {
+            var target = e.target,
+                block = findAncestor(target, blockClass);
+
+            if (block && !block.classList.contains(titleClass)
+                && e.which !== 2 && !e.ctrlKey // not mouse wheel and not ctrl+click
+            ) {
+                while (target !== this) {
+                    if (target.href) {
+                        removeActiveBlocksCls();
+                        block.classList.add(blockActiveClass);
+                        showIframe(target.href);
+                    }
+                    target = target.parentNode;
+                }
+
+                e.preventDefault();
+            }
+        };
+
+        toggleEl.onclick = togglePosition;
+    }
+
+    function findAncestor(el, cls) {
+        while ((el = el.parentElement) && !el.classList.contains(cls)) ;
+        return el;
+    }
+
+    function renderAjaxRequests() {
+        var requestCounter = document.getElementsByClassName('yii-debug-toolbar__ajax_counter');
+        if (!requestCounter.length) {
+            return;
+        }
+        var ajaxToolbarPanel = document.querySelector('.yii-debug-toolbar__ajax');
+        var tbodies = document.getElementsByClassName('yii-debug-toolbar__ajax_requests');
+        var state = 'ok';
+        if (tbodies.length) {
+            var tbody = tbodies[0];
+            var rows = document.createDocumentFragment();
+            if (requestStack.length) {
+                var firstItem = requestStack.length > 20 ? requestStack.length - 20 : 0;
+                for (var i = firstItem; i < requestStack.length; i++) {
+                    var request = requestStack[i];
+                    var row = document.createElement('tr');
+                    rows.appendChild(row);
+
+                    var methodCell = document.createElement('td');
+                    methodCell.innerHTML = request.method;
+                    row.appendChild(methodCell);
+
+                    var statusCodeCell = document.createElement('td');
+                    var statusCode = document.createElement('span');
+                    if (request.statusCode < 300) {
+                        statusCode.setAttribute('class', 'yii-debug-toolbar__ajax_request_status yii-debug-toolbar__label_success');
+                    } else if (request.statusCode < 400) {
+                        statusCode.setAttribute('class', 'yii-debug-toolbar__ajax_request_status yii-debug-toolbar__label_warning');
+                    } else {
+                        statusCode.setAttribute('class', 'yii-debug-toolbar__ajax_request_status yii-debug-toolbar__label_error');
+                    }
+                    statusCode.textContent = request.statusCode || '-';
+                    statusCodeCell.appendChild(statusCode);
+                    row.appendChild(statusCodeCell);
+
+                    var pathCell = document.createElement('td');
+                    pathCell.className = 'yii-debug-toolbar__ajax_request_url';
+                    pathCell.innerHTML = request.url;
+                    pathCell.setAttribute('title', request.url);
+                    row.appendChild(pathCell);
+
+                    var durationCell = document.createElement('td');
+                    durationCell.className = 'yii-debug-toolbar__ajax_request_duration';
+                    if (request.duration) {
+                        durationCell.innerText = request.duration + " ms";
+                    } else {
+                        durationCell.innerText = '-';
+                    }
+                    row.appendChild(durationCell);
+                    row.appendChild(document.createTextNode(' '));
+
+                    var profilerCell = document.createElement('td');
+                    if (request.profilerUrl) {
+                        var profilerLink = document.createElement('a');
+                        profilerLink.setAttribute('href', request.profilerUrl);
+                        profilerLink.innerText = request.profile;
+                        profilerCell.appendChild(profilerLink);
+                    } else {
+                        profilerCell.innerText = 'n/a';
+                    }
+                    row.appendChild(profilerCell);
+
+                    if (request.error) {
+                        if (state !== "loading" && i > requestStack.length - 4) {
+                            state = 'error';
+                        }
+                    } else if (request.loading) {
+                        state = 'loading'
+                    }
+                    row.className = 'yii-debug-toolbar__ajax_request';
+                }
+                while (tbody.firstChild) {
+                    tbody.removeChild(tbody.firstChild);
+                }
+                tbody.appendChild(rows);
+            }
+            ajaxToolbarPanel.style.display = 'block';
+        }
+        requestCounter[0].innerText = requestStack.length;
+        var className = 'yii-debug-toolbar__label yii-debug-toolbar__ajax_counter';
+        if (state === 'ok') {
+            className += ' yii-debug-toolbar__label_success';
+        } else if (state === 'error') {
+            className += ' yii-debug-toolbar__label_error';
+        }
+        requestCounter[0].className = className;
+    }
+
+    var proxied = XMLHttpRequest.prototype.open;
+
+    XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
+        var self = this;
+
+        // fix https://github.com/yiisoft/yii2-debug/issues/326
+        /* prevent logging AJAX calls to static and inline files, like templates */
+        if (url && url.substr(0, 1) === '/' && !url.match(new RegExp('{{ excluded_ajax_paths }}'))) {
+            var stackElement = {
+                loading: true,
+                error: false,
+                url: url,
+                method: method,
+                start: new Date()
+            };
+            requestStack.push(stackElement);
+            this.addEventListener('readystatechange', function () {
+                if (self.readyState === 4) {
+                    stackElement.duration = self.getResponseHeader('X-Debug-Duration') || new Date() - stackElement.start;
+                    stackElement.loading = false;
+                    stackElement.statusCode = self.status;
+                    stackElement.error = self.status < 200 || self.status >= 400;
+                    stackElement.profile = self.getResponseHeader('X-Debug-Tag');
+                    stackElement.profilerUrl = self.getResponseHeader('X-Debug-Link');
+                    renderAjaxRequests();
+                }
+            }, false);
+            renderAjaxRequests();
+        }
+        proxied.apply(this, Array.prototype.slice.call(arguments));
+    };
+
+    // catch fetch AJAX requests
+    if (window.fetch) {
+        var originalFetch = window.fetch;
+
+        window.fetch = function (input, init) {
+            var method;
+            var url;
+            if (typeof input === 'string') {
+                method = (init && init.method) || 'GET';
+                url = input;
+            } else if (window.URL && input instanceof URL) { // fix https://github.com/yiisoft/yii2-debug/issues/296
+                method = (init && init.method) || 'GET';
+                url = input.href;
+            } else if (window.Request && input instanceof Request) {
+                method = input.method;
+                url = input.url;
+            }
+            var promise = originalFetch(input, init);
+
+            /* prevent logging AJAX calls to static and inline files, like templates */
+            if (url && url.substr(0, 1) === '/' && !url.match(new RegExp('{{ excluded_ajax_paths }}'))) {
+                var stackElement = {
+                    loading: true,
+                    error: false,
+                    url: url,
+                    method: method,
+                    start: new Date()
+                };
+                requestStack.push(stackElement);
+                promise.then(function (response) {
+                    stackElement.duration = response.headers.get('X-Debug-Duration') || new Date() - stackElement.start;
+                    stackElement.loading = false;
+                    stackElement.statusCode = response.status;
+                    stackElement.error = response.status < 200 || response.status >= 400;
+                    stackElement.profile = response.headers.get('X-Debug-Tag');
+                    stackElement.profilerUrl = response.headers.get('X-Debug-Link');
+                    renderAjaxRequests();
+
+                    return response;
+                }).catch(function (error) {
+                    stackElement.loading = false;
+                    stackElement.error = true;
+                    renderAjaxRequests();
+
+                    throw error;
+                });
+                renderAjaxRequests();
+            }
+
+            return promise;
+        };
+    }
+
+})();
+</script>
+<script src="/assets/d38a6638/jquery.js?v=1516469217"></script>
+<script src="/assets/aa7dffa/yii.js?v=1551337386"></script>
+<!--[if lt IE 9]>
+<script src="/assets/f99a0577/dist/html5shiv.min.js?v=1552989966"></script>
+<![endif]-->
+<script src="/assets/1f449621/app.js?v=1552990949"></script>
+<script src="/assets/aa7dffa/yii.activeForm.js?v=1551337386"></script>
+<script src="/assets/e34a2732/js/bootstrap.js?v=1550073338"></script>
+<script>
+jQuery(function ($) {
+jQuery('#form-signup').yiiActiveForm([], []);
+});</script></body>
+</html>

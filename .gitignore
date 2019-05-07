@@ -265,3 +265,4 @@ __pycache__/
 ChatApplication/Logs/logger.txt
 ChatApplication/wwwroot/upload/topic/*
 /ChatApplication/wwwroot/storage/web/source/1/Y2M6m3Jo23Ua6ydX6NtvbPvvhUFrr64c.jpg
+/ChatApplication/wwwroot/template/*

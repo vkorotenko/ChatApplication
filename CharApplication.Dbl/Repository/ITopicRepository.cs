@@ -59,5 +59,11 @@ namespace ChatApplication.Dbl.Repository
         /// <param name="id">Идентификатор пользователя</param>
         /// <returns></returns>
         Task<List<DbTopic>> GetByUserId(int id);
+        /// <summary>
+        /// Получение топиков по идентификатору административного пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<List<DbTopic>> GetByAdminId(int userId);
     }
 }

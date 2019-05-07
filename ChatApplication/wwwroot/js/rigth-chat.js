@@ -62,6 +62,28 @@ var RigthChatApp = new Vue({
         }
     }
 });
+var NewMessagesInformer = new Vue({
+    el: '#new-messages-informer',
+    data: {
+        items: [],
+        unread: 0
+    },
+    methods: {
+        getData: function () {
+            var sessionToken = sessionStorage.getItem(tokenKey);
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/user/getlatestmessages',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
+                },
+                success: function (data) {
+                    NewMessagesInformer.items = data;
+                }
+            });
+        }
+    }
+});
 Vue.filter('formatTime', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
@@ -73,7 +95,7 @@ Vue.filter('formatDateTime', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
         var opt = { year: 'numeric', mounth: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit' }
-        return d.toLocaleDateString('ru-RU',opt);
+        return d.toLocaleDateString('ru-RU', opt);
     }
 });
 
@@ -191,7 +213,8 @@ function sendMessageToTopicRc(body, topicId) {
                 $('.msg_h').scrollTop(99999);
             }, 300);
             if (isFileSelectedRc()) {
-                uploadFileRc(ChatApp.topicId, data.id);
+                console.log('Topicid ' + topicId);
+                uploadFileRc(topicId, data.id);
             }
             var arr = RigthChatApp.topics;
             RigthChatApp.topics = sortTopics(arr, topicId);
@@ -237,7 +260,7 @@ function uploadFileRc(topicid, messageid) {
         console.log(status);
         RigthChatApp.showLoader = false;
         if (data.status == 415) {
-            alert(data.responseText);            
+            alert(data.responseText);
             RigthChatApp.posts.pop();
         }
         if (data.status == 401) {

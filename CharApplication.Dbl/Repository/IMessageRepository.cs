@@ -57,8 +57,45 @@ namespace ChatApplication.Dbl.Repository
         /// <summary>
         /// помечает все сообщения топика как прочтенные
         /// </summary>
-        /// <param name="topicid"></param>
+        /// <param name="topicid">Топик для очистки</param>
+        /// <param name="id">идентификатор пользователя</param>
         /// <returns></returns>
-        Task MarkMessagesInTopikAsRead(long topicid);
+        Task MarkMessagesInTopikAsRead(long topicid, int id);
+        
+        /// <summary>
+        /// Получаем непрочитанные сообщения для пользователя.
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <returns></returns>
+        Task<List<DbMessage>> GetNewMessagesForUser(int userId);
+
+
+        /// <summary>
+        /// Получение количества непрочтенных писем
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<long> GetUnreadMessages(int userId);
+        /// <summary>
+        /// Получение количества непрочтенных писем для администратора или менеджера
+        /// </summary>
+        /// <param name="id">идентификатор</param>
+        /// <returns></returns>
+        Task<long> GetUnreadMessagesForAdmin(int id);
+        /// <summary>
+        /// Получение общего количества писем для пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<long> GetTotalMessages(int userId);
+
+        /// <summary>
+        /// Получаем список новых сообщений для администратора.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<List<DbMessage>> GetNewMessagesForAdmin(int id);
+
+        
     }
 }

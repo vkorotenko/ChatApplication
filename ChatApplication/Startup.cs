@@ -135,6 +135,11 @@ namespace ChatApplication
                 cfg.CreateMap<DbFile, UploadFile>()
                     .ForMember(dest => dest.Upload, opt => opt.MapFrom(src => src.Created));
                 cfg.CreateMap<DbFile, AttachmentModel>();
+                
+                cfg.CreateMap<DbMessage, LatestMessageModel>()
+                    .ForMember(dest => dest.Created, opt => opt.MapFrom(src => src.Created))
+                    .ForMember(dest=> dest.Url, opt=> opt.MapFrom(src => $"/user/chat/?id={src.TopicId}") )
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Body)); 
             });
         }
 

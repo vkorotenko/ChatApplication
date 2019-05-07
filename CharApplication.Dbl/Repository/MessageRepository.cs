@@ -119,14 +119,100 @@ namespace ChatApplication.Dbl.Repository
         /// Помечает все сообщения топика как прочтенные
         /// </summary>
         /// <param name="topicid"></param>
+        /// <param name="id">номер пользователя</param>
         /// <returns></returns>
-        public async Task MarkMessagesInTopikAsRead(long topicid)
+        public async Task MarkMessagesInTopikAsRead(long topicid, int id)
         {
             var sql = @"UPDATE dbmessages
                             SET
                             isread = 1
-                            WHERE topicid = @topicid";
-            await _dbConn.QueryAsync<DbMessage>(sql, new { topicid });
+                            WHERE topicid = @topicid and authorid != @id";
+            await _dbConn.QueryAsync<DbMessage>(sql, new { topicid, id });
+        }
+
+        /// <summary>
+        /// Получаем непрочитанные сообщения для пользователя.
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя</param>
+        /// <returns></returns>
+        public async Task<List<DbMessage>> GetNewMessagesForUser(int id)
+        {
+            var sql = @"SELECT *
+                          FROM dbmessages
+                         WHERE topicid IN (SELECT id
+                                           FROM dbtopics
+                                          WHERE authorid =@id) AND authorid != @id AND NOT isread";
+            return (await _dbConn.QueryAsync<DbMessage>(sql, new { id })).ToList();
+        }
+
+        /// <summary>
+        /// Получение количества непрочтенных писем
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<long> GetUnreadMessages(int userId)
+        {
+            var sql = @"SELECT count(isread) as count
+                          FROM dbmessages
+                         WHERE topicid IN (SELECT id
+                                           FROM dbtopics
+                                          WHERE authorid=@userId) AND NOT isread AND authorid != @userId";
+
+
+            var results = await _dbConn.QueryAsync<long>(sql, new { userId });
+            var result = results.FirstOrDefault();
+            return result;
+        }
+
+        /// <summary>
+        /// Получение количества непрочтенных писем для администратора или менеджера
+        /// </summary>
+        /// <param name="id">идентификатор</param>
+        /// <returns></returns>
+        public async Task<long> GetUnreadMessagesForAdmin(int id)
+        {
+            var sql = @"SELECT count(isread) FROM dbmessages
+                 WHERE topicid IN (SELECT id
+                                           FROM dbtopics
+                                          ) AND authorid != @id AND NOT isread";
+
+            var results = await _dbConn.QueryAsync<long>(sql, new { id });
+            var result = results.FirstOrDefault();
+            return result;
+        }
+
+        /// <summary>
+        /// Получение общего количества писем для пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<long> GetTotalMessages(int userId)
+        {
+            var sql = @"SELECT count(isread) as count
+                          FROM dbmessages
+                         WHERE topicid IN (SELECT id
+                                           FROM dbtopics
+                                          WHERE authorid=@userId)";
+
+
+            var results = await _dbConn.QueryAsync<long>(sql, new { userId });
+            var result = results.FirstOrDefault();
+            return result;
+        }
+
+        /// <summary>
+        /// Получаем список новых сообщений для администратора.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<List<DbMessage>> GetNewMessagesForAdmin(int id)
+        {
+            var sql = @"SELECT * FROM dbmessages
+                 WHERE topicid IN (SELECT id
+                                           FROM dbtopics
+                                          ) AND authorid != @id AND NOT isread";
+
+            return (await _dbConn.QueryAsync<DbMessage>(sql, new { id })).ToList();
         }
     }
 }

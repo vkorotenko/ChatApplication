@@ -25,18 +25,6 @@ namespace ChatApplication.Dbl.Repository
         /// </summary>
         /// <param name="username">Имя пользователя в системе</param>
         /// <returns></returns>
-        Task<DbUser> GetUserBuName(string username);
-        /// <summary>
-        /// Получение количества непрочтенных писем
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<long> GetUnreadMessages(int userId);
-        /// <summary>
-        /// Получение общего количества писем для пользователя
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<long> GetTotalMessages(int userId);
+        Task<DbUser> GetUserByName(string username);        
     }
 }

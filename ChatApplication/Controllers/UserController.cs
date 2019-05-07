@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ChatApplication.Code;
 
 namespace ChatApplication.Controllers
 {
@@ -147,16 +148,20 @@ namespace ChatApplication.Controllers
 
         private async Task<string> GetAvatarImage(int id)
         {
+            var def = "/img/ava.gif";
             try
             {
                 var user = await _ctx.Users.Get(id);
                 var url = user.Url;
+                if (string.IsNullOrWhiteSpace(url))
+                    url = def;
                 return url;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 _logger.LogError($"Failed retrive awatar image user id: {id}");
-                return "/upload/faceses/round/2.png";
+                return def;
             }
         }
         /// <summary>
@@ -172,7 +177,7 @@ namespace ChatApplication.Controllers
         {
             try
             {
-                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
                 var msg = new DbMessage
                 {
                     AuthorId = user.Id,
@@ -223,7 +228,7 @@ namespace ChatApplication.Controllers
             {
 
                 var basePath = _config.GetValue<string>("Upload:Path");
-                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
                 foreach (var uploadedFile in uploads)
                 {
                     // Базовый путь
@@ -299,7 +304,16 @@ namespace ChatApplication.Controllers
             long count = 0;
             try
             {
-                count = await _ctx.Users.GetUnreadMessages(userid);
+                var roles = await _ctx.Roles.GetRolesForUser(userid);
+                if (await IsAdminOrManager(userid))
+                {
+                    count = await _ctx.Messages.GetUnreadMessagesForAdmin(userid);
+                }
+                else
+                {
+                    count = await _ctx.Messages.GetUnreadMessages(userid);
+                }
+                
             }
             catch (Exception e)
             {
@@ -308,6 +322,13 @@ namespace ChatApplication.Controllers
             return Content(count.ToString());
         }
 
+        private async Task<bool> IsAdminOrManager(int id)
+        {
+            var roles = await _ctx.Roles.GetRolesForUser(id);
+            if (roles.FirstOrDefault(x => x.Name == UserRoles.Administrator || x.Name == UserRoles.Manager) !=
+                null) return true;
+            else return false;
+        }
         /// <summary>
         /// Устанавливаем флаг прочтения в топике.
         /// </summary>
@@ -320,7 +341,8 @@ namespace ChatApplication.Controllers
         {
             try
             {
-                await _ctx.Messages.MarkMessagesInTopikAsRead(topicid);
+                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
+                await _ctx.Messages.MarkMessagesInTopikAsRead(topicid, user.Id);
                 return Ok();
             }
             catch (Exception ex)
@@ -331,6 +353,7 @@ namespace ChatApplication.Controllers
         }
         /// <summary>
         /// Получение списка обьявлений, доступных для авторизованного пользователя.
+        /// Служебный метод для получения списка обьявлений.
         /// </summary>
         /// <returns></returns>
         [Authorize]
@@ -340,7 +363,7 @@ namespace ChatApplication.Controllers
         {
             try
             {
-                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
                 var articles = await _ctx.Articles.GetAllFromUser(user.Id);
                 return Json(articles);
             }
@@ -409,20 +432,22 @@ namespace ChatApplication.Controllers
             try
             {
                 query = query.ToLower();
-                var user = await _ctx.Users.GetUserBuName(User.Identity.Name);
+                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
                 var appUser = Mapper.Map<ApplicationUser>(user);
-                var topics = await _ctx.Topics.GetByUserId(user.Id);
                 List<DbTopic> matchTopics;
+                if (await IsAdminOrManager(user.Id))
+                {
+                    matchTopics = await _ctx.Topics.GetByAdminId(user.Id);
+                }
+                else
+                {
+                    matchTopics = await _ctx.Topics.GetByUserId(user.Id);
+                }
 
                 // поиск по пустой строке, все результаты
-                if (string.IsNullOrWhiteSpace(query))
-                {
-                    matchTopics = topics;
-                }
-                else // поиск по значению
-                {
+                if (!string.IsNullOrWhiteSpace(query)){                
 
-                    matchTopics = topics.Where(x => x.Title.ToLower().Contains(query)
+                    matchTopics = matchTopics.Where(x => x.Title.ToLower().Contains(query)
                                       || x.Vendor.ToLower().Contains(query)
                                       || x.VendorCode.ToLower().Contains(query)).ToList();
                 }
@@ -450,7 +475,7 @@ namespace ChatApplication.Controllers
                 }
 
                 appUser.Topics = matchTopics;
-                var unreadMessage = await _ctx.Users.GetUnreadMessages(user.Id);
+                var unreadMessage = await _ctx.Messages.GetUnreadMessages(user.Id);
                 appUser.NewMessages = (int)unreadMessage;
                 return Json(appUser);
             }
@@ -459,6 +484,50 @@ namespace ChatApplication.Controllers
                 _logger.LogError($"Search error. {e.Message}");
                 return BadRequest();
             }
+        }
+        /// <summary>
+        /// Получаем последние 4 непрочтенных сообщения для пользователя.
+        /// Либо возвращаем пустой список если их нет.
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet]
+        [Route("getlatestmessages")]
+        public async Task<IActionResult> GetLatestMessages()
+        {
+
+            try
+            {
+                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
+                
+                List<DbMessage> msg;
+                if (await IsAdminOrManager(user.Id))
+                {
+                    msg = await _ctx.Messages.GetNewMessagesForAdmin(user.Id);
+                }
+                else
+                {
+                    msg = await _ctx.Messages.GetNewMessagesForUser(user.Id);
+                }                
+
+                var models = Mapper.Map<IEnumerable<LatestMessageModel>>(msg);
+                models = models
+                    .OrderByDescending(x => x.Created)
+                    .Take(4).ToList();
+
+                foreach (var model in models)
+                {
+                   var u = await _ctx.Users.Get(model.AuthorId);
+                    model.FullName = u.FullName;
+                }
+
+                return Json(models);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return Json(new LatestMessageModel[0]);
+            }            
         }
     }
 }
