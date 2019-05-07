@@ -119,6 +119,11 @@ function GetUserDataRc() {
             RigthChatApp.unreadMessages = data.messages;
             RigthChatApp.user.username = data.username;
             RigthChatApp.username = data.username;
+            if (RigthChatApp.actualtopic) {
+                var id = RigthChatApp.actualtopic.id;
+                console.log('RC getMessagesForTopicRc: ' + id);
+                getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
+            }
         }
     });
 }
@@ -170,8 +175,6 @@ function getMessagesForTopicRc(id, authorId) {
             }
 
             RigthChatApp.posts = data;
-
-
             setTimeout(function () {
                 $('.msg_h').scrollTop(99999);
             }, 300);

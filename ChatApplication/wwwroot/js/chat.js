@@ -25,6 +25,7 @@ var ChatApp = new Vue({
     },    
     methods: {
         showThread: function (id, el, event) {
+            ChatApp.actualtopic = findTopic(ChatApp.topics, id);
             ChatApp.topicId = id;
             selectItem(id);
             getMessagesForTopic(id, ChatApp.topicAuthor);
@@ -102,6 +103,12 @@ function GetUserData(id) {
             ChatApp.unreadMessages = data.messages;
             ChatApp.user.username = data.username;
             ChatApp.username = data.username;
+
+            if (ChatApp.actualtopic) {
+                var id = ChatApp.actualtopic.id;
+                console.log('Chat getMessagesForTopic: ' + id);
+                getMessagesForTopic(id, ChatApp.topicAuthor);
+            }
             if (id) {
                 ChatApp.showThread(id);
             }
@@ -168,6 +175,10 @@ function getMessagesForTopic(id, authorId) {
             }
 
             ChatApp.posts = data;
+
+            setTimeout(function () {
+                $('.messager__body').scrollTop(99999);
+            }, 300);
         }
     });
 
