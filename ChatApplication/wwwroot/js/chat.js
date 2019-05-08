@@ -306,7 +306,7 @@ function clearNewMessages(id) {
             xhr.setRequestHeader("Authorization", "Bearer " + token);
         },
         success: function (data) {
-            // GetUserData();
+            //GetUserData();            
         }
     });
 }
@@ -344,6 +344,7 @@ function createTopic(id) {
         },
         success: function () {
             console.log('Created topic from article id: ' + id);
+            //ChatApp.showThread(id);
         }
     });
 }

@@ -684,35 +684,34 @@
                 </div>
                 <input type="text" placeholder="Поиск..." class="form-control mb-1r" @input="search" v-if="!showMessagePanel" />
                 <div class=" messager__list " v-show="!showMessagePanel">
-
-                    <ul class="post_list" v-if="!showMessagePanel">
-                        <li v-for="topic in topics">
-                            <a :href="'#message-' + topic.id"
-                               class="messager__item row i-mid"
+                    <template class="post_list">                        
+                            <a v-for="topic in topics"
+                                :href="'#message-' + topic.id"
+                               class="messager__item row i-mid mp-0"
                                v-bind:class="{ selected: topic.selected }"
-                               @click="showThread(topic.id, this, $event)">
-                                <div class="messager__img">
-                                    <img class="thumbnail" :src="topic.avatarUrl" alt="">
-                                </div>
-                                <div class="messager__persona">
-                                    <div class="messager__name">{{topic.title}}</div>
-                                    <div class="messager__text">{{topic.vendor}} {{topic.vendorCode}} </div>
-                                </div>
-                                <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
-                            </a>
-                        </li>
-                        <li v-if="topics.length == 0">
+                               @click="showThread(topic.id, this, $event)">                                
+                                    <div class="col-md-2 mp-0">
+                                        <img class="thumbnail w40" :src="topic.avatarUrl" alt="" >
+                                    </div>
+                                    <div class="col-md-10 mp-0">
+                                        <div class="messager__persona">
+                                            <div class="messager__name">{{topic.title}}</div>
+                                            <div class="messager__text">{{topic.vendor}} {{topic.vendorCode}} </div>
+                                            <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
+                                        </div>
+                                    </div>                                
+                            </a>                        
+                        <a v-if="topics.length == 0">
                             <div class="messager__persona">
                                 <div class="messager__name">Нет результатов</div>
                             </div>
-                        </li>
-                    </ul>
-
+                        </a>
+                    </template>
                 </div>
                 <div v-if="showMessagePanel">
                     <div class="row">
-                        <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col" />
-                        <div class="col">
+                        <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col-md-2 " />
+                        <div class="col-md-10">
                             {{actualtopic.fullName}} {{actualtopic.created | formatDateTime}}
                             <br />
                             {{actualtopic.title}}
@@ -726,12 +725,12 @@
                         </div>
                         <div v-for="msg in posts"
                              v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
-                             class="message">
+                             class="message row">
 
-                            <div class="message__img" v-if="!msg.isAuthor">
+                            <div class="message__img col-md-2 mp-0" v-if="!msg.isAuthor">
                                 <img :src="msg.avatarUrl" alt="" class="thumbnail">
                             </div>
-                            <div class="message__wrap">
+                            <div class="message__wrap col-md-10 msg-clear">
                                 {{ msg.body }}
                                 <br />
                                 <div class="time_label">{{ msg.created | formatTime }}</div>

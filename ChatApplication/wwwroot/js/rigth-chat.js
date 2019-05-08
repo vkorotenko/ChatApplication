@@ -62,6 +62,7 @@ var RigthChatApp = new Vue({
         }
     }
 });
+RigthChatApp.getUserData();
 var NewMessagesInformer = new Vue({
     el: '#new-messages-informer',
     data: {

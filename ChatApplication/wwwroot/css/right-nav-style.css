@@ -251,39 +251,6 @@ body {
 }
 
 
-/* определяем интервалы появления пунктов меню */
-
-/*.nav > ul > li:nth-child(2) {
-    -webkit-transition: opacity .5s .2s, -webkit-transform .5s .2s;
-    transition: opacity .5s .2s, transform .5s .2s;
-}
-
-.nav > ul > li:nth-child(3) {
-    -webkit-transition: opacity .5s .3s, -webkit-transform .5s .3s;
-    transition: opacity .5s .3s, transform .5s .3s;
-}
-
-.nav > ul > li:nth-child(4) {
-    -webkit-transition: opacity .5s .4s, -webkit-transform .5s .4s;
-    transition: opacity .5s .4s, transform .5s .4s;
-}
-
-.nav > ul > li:nth-child(5) {
-    -webkit-transition: opacity .5s .5s, -webkit-transform .5s .5s;
-    transition: opacity .5s .5s, transform .5s .5s;
-}
-
-.nav > ul > li:nth-child(6) {
-    -webkit-transition: opacity .5s .6s, -webkit-transform .5s .6s;
-    transition: opacity .5s .6s, transform .5s .6s;
-}
-
-.nav > ul > li:nth-child(7) {
-    -webkit-transition: opacity .5s .7s, -webkit-transform .5s .7s;
-    transition: opacity .5s .7s, transform .5s .7s;
-}*/
-
-
 /**
  * оформление ссылок пунктов меню
  */
@@ -490,12 +457,20 @@ body {
     background-color: #f1c400 !important;
     color: #ffffff;
 }
-.message__wrap{
-	width: calc(100% - ((24px + 13px) * 2));	
+.nav .message_to > .message__wrap {
+    width: calc(100% - 50px);
 }
-.nav .messager__textarea > textarea{
-	margin-top: 1em;
-	border: solid 1px #ccc;
+.nav .message_from > .message__wrap {
+    width: 100%;
+}
+
+
+
+
+
+.nav .messager__textarea > textarea {
+    margin-top: 1em;
+    border: solid 1px #ccc;
 }
 .nav > .messager__list{
 	height: -webkit-calc(100% - 100px); 
@@ -544,4 +519,12 @@ body {
     text-decoration: underline;
     color: #000000;
     font-weight: bold;
+}
+.mp-0 {
+    margin: 0;
+    padding: 0;
+}
+.msg-clear {
+    margin: 0px 5px 0 5px;
+    padding: 2px 5px;
 }
