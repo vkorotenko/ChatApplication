@@ -7,10 +7,11 @@
 
 .nav {
     /*  ширна произвольная, не стесняйтесь экспериментировать */
-    width: 100%;
-    /*max-width: 300px;*/
+    width: 320px;
+    min-width: 320px;
     /* фиксируем и выставляем высоту панели на максимум */
     height: 100%;
+    position: fixed;
     top: 0;
     bottom: 0;
     margin: 0;
@@ -18,13 +19,13 @@
     right: -320px;
     /* внутренние отступы */
     padding: 9px 9px;
-    padding-right: 0;
+    /*padding-right: 0;*/
     /* плавный переход смещения панели */
     -webkit-transition: right 0.3s;
     -moz-transition: right 0.3s;
     transition: right 0.3s;
     /* определяем цвет фона панели */
-    background: white;
+    background: #f1c400;
     /* поверх других элементов */
     z-index: 99999;
     border-left: solid 1px #ccc;
@@ -38,49 +39,37 @@
  */
 
 .nav-toggle {
-    /* абсолютно позиционируем */
     position: absolute;
-    /* относительно правого края панели */
     right: 0px;
-    /* отступ от верхнего края панели */
     top: 0px;
-    /* внутренние отступы */
     padding: 0.5em;
-    /* определяем цвет фона переключателя
-     * чаще вчего в соответствии с цветом фона панели
-    */
     background-color: #f1c400;
-    /* цвет текста */
     color: white;
-    /* вид курсора */
     cursor: pointer;
-    /* размер шрифта */
     font-size: 1.2em;
     line-height: 1;
-    /* всегда поверх других элементов страницы */
     z-index: 2001;
-    /* анимируем цвет текста при наведении */
     -webkit-transition: color .25s ease-in-out;
     -moz-transition: color .25s ease-in-out;
     transition: color .25s ease-in-out;
 }
 
 
-/* определяем текст кнопки 
+    /* определяем текст кнопки 
  * символ Unicode (TRIGRAM FOR HEAVEN)
 */
 
-.nav-toggle:after {
-    /*content: '\2630';*/
-    text-decoration: none;
-}
+    .nav-toggle:after {
+        /*content: '\2630';*/
+        text-decoration: none;
+    }
 
 
-/* цвет текста при наведении */
+    /* цвет текста при наведении */
 
-.nav-toggle:hover {
-    color: #999;
-}
+    .nav-toggle:hover {
+        color: #999;
+    }
 
 
 /**
@@ -95,20 +84,20 @@
 }
 
 
-/**
+    /**
  * изменение положения переключателя 
  * при просмотре на мобильных устройствах
  * когда навигация раскрыта, распологаем внутри панели
 */
 
-    [id='right-chat-toggle']:checked ~ .nav-toggle {
+    [id='right-chat-toggle']:checked ~ .nav > .nav-toggle {
         left: auto;
         right: 2px;
-        /*top: 1em;*/
+        top: 1em;
     }
 
 
-/**
+    /**
  * Когда флажок установлен, открывается панель
  * используем псевдокласс:checked
  */
@@ -122,7 +111,7 @@
     }
 
 
-/* 
+    /* 
  * смещение контента страницы
  * на размер ширины панели,
  * фишка необязательная, на любителя
@@ -135,15 +124,15 @@
     }
 
 
-/*
+    /*
  * изменение символа переключателя,
  * привычный крестик (MULTIPLICATION X), 
  * вы можете испльзовать любой другой значок
 */
 
-[id='right-chat-toggle']:checked ~  .nav-toggle:after {
-    content: '\2715';
-}
+    [id='right-chat-toggle']:checked ~ .nav > .nav-toggle:after {
+        content: '\2715';
+    }
 
 
 /**
@@ -157,7 +146,7 @@ body {
 
 @-webkit-keyframes bugfix {
     to {
-      padding: 0;
+        padding: 0;
     }
 }
 
@@ -170,24 +159,28 @@ body {
 @media screen and (min-width: 320px) {
     html,
     body {
-      margin: 0;
-      overflow-x: hidden;
+        margin: 0;
+        overflow-x: hidden;
     }
 }
 
 @media screen and (max-width: 320px) {
     html,
     body {
-      margin: 0;
-      overflow-x: hidden;
+        margin: 0;
+        overflow-x: hidden;
     }
+
     .nav {
-      width: 100%;
-      box-shadow: none
+        width: 100%;
+        box-shadow: none
     }
 }
 
 
+/**
+ * Формируем стиль заголовка (логотип) панели 
+*/
 
 .nav h2 {
     text-transform: uppercase;
@@ -197,11 +190,12 @@ body {
     font-size: 1.3em;
     background: none;
 }
-.nav h2 a {
-    color: #dadada;
-    text-decoration: none;
-    text-transform: uppercase;
-}
+
+    .nav h2 a {
+        color: #dadada;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
 
 
 /*плавное появление заголовка (логотипа) при раскрытии панели */
@@ -228,11 +222,11 @@ body {
     list-style: none;
 }
 
-.nav > ul > li {
-    line-height: 1;
-    opacity: 0;
-    width: 100%;
-    /*-webkit-transform: translateX(50%);
+    .nav > ul > li {
+        line-height: 1;
+        opacity: 0;
+        width: 100%;
+        /*-webkit-transform: translateX(50%);
     -moz-transform: translateX(50%);
     -ms-transform: translateX(50%);
     transform: translateX(50%);
@@ -240,7 +234,7 @@ body {
     -moz-transition: opacity .5s .1s, -moz-transform .5s .1s;
     -ms-transition: opacity .5s .1s, -ms-transform .5s .1s;
     transition: opacity .5s .1s, transform .5s .1s;*/
-}
+    }
 
 [id='right-chat-toggle']:checked ~ .nav > ul > li {
     opacity: 1;
@@ -249,6 +243,39 @@ body {
     -ms-transform: translateX(0);
     transform: translateX(0);
 }
+
+
+/* определяем интервалы появления пунктов меню */
+
+/*.nav > ul > li:nth-child(2) {
+    -webkit-transition: opacity .5s .2s, -webkit-transform .5s .2s;
+    transition: opacity .5s .2s, transform .5s .2s;
+}
+
+.nav > ul > li:nth-child(3) {
+    -webkit-transition: opacity .5s .3s, -webkit-transform .5s .3s;
+    transition: opacity .5s .3s, transform .5s .3s;
+}
+
+.nav > ul > li:nth-child(4) {
+    -webkit-transition: opacity .5s .4s, -webkit-transform .5s .4s;
+    transition: opacity .5s .4s, transform .5s .4s;
+}
+
+.nav > ul > li:nth-child(5) {
+    -webkit-transition: opacity .5s .5s, -webkit-transform .5s .5s;
+    transition: opacity .5s .5s, transform .5s .5s;
+}
+
+.nav > ul > li:nth-child(6) {
+    -webkit-transition: opacity .5s .6s, -webkit-transform .5s .6s;
+    transition: opacity .5s .6s, transform .5s .6s;
+}
+
+.nav > ul > li:nth-child(7) {
+    -webkit-transition: opacity .5s .7s, -webkit-transform .5s .7s;
+    transition: opacity .5s .7s, transform .5s .7s;
+}*/
 
 
 /**
@@ -272,93 +299,99 @@ body {
 }
 
 
-/**
+    /**
  * состояние ссылок меню при наведении
  */
 
-.nav > ul > li > a:hover,
-.nav > ul > li > a:focus {
-    color: #999999;
-    /*padding-left: 15px;*/
-}
+    .nav > ul > li > a:hover,
+    .nav > ul > li > a:focus {
+        color: #999999;
+        /*padding-left: 15px;*/
+    }
 
 
-/**
+    /**
  * линия подчеркивания ссылок меню
  */
 
-.nav > ul > li > a:before {
-    content: '';
-    display: block;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    width: 100%;
-    -webkit-transition: width 0s ease;
-    transition: width 0s ease;
-}
+    .nav > ul > li > a:before {
+        content: '';
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        width: 100%;
+        -webkit-transition: width 0s ease;
+        transition: width 0s ease;
+    }
 
-.nav > ul > li > a:after {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 1px;
-    width: 100%;
-    background: #999999;
-    -webkit-transition: width .5s ease;
-    transition: width .5s ease;
-}
+    .nav > ul > li > a:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 1px;
+        width: 100%;
+        background: #999999;
+        -webkit-transition: width .5s ease;
+        transition: width .5s ease;
+    }
 
 
-/**
+    /**
  * анимируем линию подчеркивания 
  * ссылок при наведении
  */
 
-.nav > ul > li > a:hover:before {
-    width: 0%;
-    background: black;
-    -webkit-transition: width .5s ease;
-    transition: width .5s ease;
-}
+    .nav > ul > li > a:hover:before {
+        width: 0%;
+        background: black;
+        -webkit-transition: width .5s ease;
+        transition: width .5s ease;
+    }
 
-.nav > ul > li > a:hover:after {
-    width: 0%;
-    background: transparent;
-    -webkit-transition: width 0s ease;
-    transition: width 0s ease;
-}
+    .nav > ul > li > a:hover:after {
+        width: 0%;
+        background: transparent;
+        -webkit-transition: width 0s ease;
+        transition: width 0s ease;
+    }
 
 .post_list li {
     width: 100%;
     background-color: white;
 }
+
 .post_list .messager__item {
-    padding: 0 0px 0px 0px;  
+    padding: 0 0px 0px 9px;
 }
+
 .post_list .messager__img {
     padding-top: 18px;
 }
+
 .back_container {
     background-color: white;
     border: 1px solid #ccc;
     padding: 6px 12px;
     line-height: 20px;
-    cursor: pointer;
 }
-.back_container span:nth-child(1) {
-    font-weight: bold;
-    padding-right: 0.5rem;
-}
+
+    .back_container span:nth-child(1) {
+        font-weight: bold;
+        padding-right: 0.5rem;
+    }
+
 #rigth-chat-app input {
     border-radius: 0;
 }
+
 .message__img img {
     border-radius: 20px;
 }
+
 .nav-header {
     padding: 15px 0;
   /*  background-color: #f1c400;*/
@@ -474,12 +507,13 @@ body {
 }
 .nav > .messager__list{
 	height: -webkit-calc(100% - 100px); 
-    height: calc(100% - 100px); 
+    height: calc(100% - 100px);
+    background-color: white;
 }
 
 .msg_h{
-	height: -webkit-calc(100% - 275px)!important; 
-    height: calc(100% - 275px)!important; 
+	height: -webkit-calc(100% - 325px)!important; 
+    height: calc(100% - 325px)!important; 
 }
 .time_label{
 	color: #8e8e8e;
