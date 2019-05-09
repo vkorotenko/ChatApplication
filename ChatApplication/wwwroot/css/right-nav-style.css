@@ -517,10 +517,9 @@ body {
 }
 .time_label{
 	color: #8e8e8e;
-	font-size: 13px;
-	margin-top: 11px;
-	line-height: 2.3;
-	border-top: 1px solid #dcd9d9;
+	font-size: 13px;	
+	line-height: 1.2;
+    float: right;
 }
 #bodyContentLeft {
     padding-right: 0;
@@ -546,13 +545,13 @@ body {
     border-radius: 20px;
     padding: 0;
 }
-.messager__list.msg_h div{
-    overflow-x: hidden;
-}
 .attachment_url {
     text-decoration: underline;
     color: #000000;
     font-weight: bold;
+    text-wrap: none;
+    overflow: hidden;
+    display: block;
 }
 .mp-0 {
     margin: 0;
@@ -561,4 +560,53 @@ body {
 .msg-clear {
     margin: 0px 5px 0 5px;
     padding: 2px 5px;
+}
+.rc_spacer {
+    width: 40px;
+}
+
+.message_from .message__wrap_rc {
+    background-color: #f4f4f4;
+}
+.message_to .message__wrap_rc {
+    background-color: #f7f2dc;
+}
+.message_to .message__wrap_rc:before {
+    position: absolute;
+    left: -6px;
+    top: 8px;
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 4.5px 6px 4.5px 0;
+    border-color: transparent #f7f2dc transparent transparent; }
+
+.message_from .message__wrap_rc:before {
+    position: absolute;
+    right: -6px;
+    top: 8px;
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 4.5px 0 4.5px 6px;
+    border-color: transparent transparent transparent #f4f4f4; }
+
+
+.message__wrap_rc {
+    position: relative;
+    width: 100%;
+    margin-left: 13px;
+    margin-right: 13px;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 20px;
+    padding: 10px 15px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;        
+}
+.mlt-5 {
+    margin-left: 5px;
+    margin-top: 5px;
 }
