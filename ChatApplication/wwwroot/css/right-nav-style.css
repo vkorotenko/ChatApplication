@@ -377,6 +377,7 @@ body {
     border: 1px solid #ccc;
     padding: 6px 12px;
     line-height: 20px;
+    cursor: pointer;
 }
 
     .back_container span:nth-child(1) {
@@ -558,11 +559,12 @@ body {
     padding: 0;
 }
 .msg-clear {
-    margin: 0px 5px 0 5px;
-    padding: 2px 5px;
+    margin: 0px 0px 0 0px;
+    padding: 0px 0px;
 }
 .rc_spacer {
     width: 40px;
+    height: 1px;
 }
 
 .message_from .message__wrap_rc {
@@ -609,4 +611,9 @@ body {
 .mlt-5 {
     margin-left: 5px;
     margin-top: 5px;
+}
+.w20 {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
 }
