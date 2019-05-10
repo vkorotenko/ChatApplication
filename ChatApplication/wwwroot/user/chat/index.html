@@ -929,94 +929,17 @@ setTimeout(function(){ window.location = URL; }, delay);
         var loggedinUserId = 52;
         var totalMessagesSpan = $('#totalUnreadMessages');
         var processRefresh = true;
-        var globalRefreshMessageTimer = setInterval(checkMessagesForUser, 1000);
+        setInterval(checkMessagesForUser, 1000);
         var showRigthChatPanel = false;
-        var chatRefreshTockenTimer = setInterval(function () { RefreshToken(sessionToken); }, 55000);
-
-        $(document).ready(function() {
-
-        	$('#close-span').click(function() {
-
-            	showRigthChatPanel = !showRigthChatPanel;
-            	showRigthChat(showRigthChatPanel);
-	        });
-
-	        $('label.nav-toggle').click(function() {
-
-	            showRigthChatPanel = !showRigthChatPanel;
-	            showRigthChat(showRigthChatPanel);
-	        });
-        });
-
-
-
-	    function showRigthChat(ifShow) {
-
-	        showRigthChatPanel = ifShow;
-	        $('#bodyContentLeft').removeClass('col-lg-12');
-	        $('#bodyContentRight').removeClass('hide-block');
-	        $('#bodyContentLeft').removeClass('col-lg-9');
-	        $('#bodyContentRight').removeClass('col-lg-3');
-
-	        if (ifShow) {
-	            $('#bodyContentLeft').addClass('col-lg-9');
-	            $('#bodyContentRight').addClass('col-lg-3');
-	            document.getElementById('right-chat-toggle').checked = 'checked';
-	        } else {
-	            $('#bodyContentLeft').addClass('col-lg-12');
-	            $('#bodyContentRight').addClass('hide-block');
-	            document.getElementById('right-chat-toggle').checked = false;
-	        }
-	    };
-
-
-
-        function checkMessagesForUser() {
-            if (!processRefresh) return;
-            $.ajax({
-                type: 'GET',
-                url: '/api/v1/user/totalunread/' + loggedinUserId,
-                success: function (data) {
-                    var count = parseInt(data);
-
-                    if (count > 0) {
-                    	totalMessagesSpan.text(count);
-                        totalMessagesSpan.show();
-                        if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
-                        if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
-                    } else {
-                        totalMessagesSpan.hide();
-                    }
-                }
-            });
-        }
-        function RefreshToken(token) {
-		    var bd = { token: token };
-		    $.ajax({
-		        type: 'POST',
-		        url: '/api/v1/account/refresh',
-		        data: JSON.stringify(bd),
-		        contentType: "application/json",
-		        beforeSend: function (xhr) {
-		            xhr.setRequestHeader("Authorization", "Bearer " + token);
-		        },
-		        success: function (data) {
-		            sessionStorage.setItem(tokenKey, data.access_token);
-		            sessionToken = data.access_token;
-		        }
-		    });
-		}
+        setInterval(function () { RefreshToken(sessionToken); }, 55000);        
     </script>
 
 
     <script>
 sessionStorage.setItem('accessToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiNzkyMTA4NDMwODAiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwibmJmIjoxNTU3MjAzMjM0LCJleHAiOjE1NTcyMDM1MzQsImlzcyI6IlZLT1JPVEVOS08iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUxODg0LyJ9.vPlIn5vcBQJNpCI-Pg1NEpQjCGS67PD16U541wfZUoQ');
     </script>
-    <!-- Скрипт чата включается после всех подготовок-->
-    <script src="/js/chat.js"></script>
 
-
-    <!-- right-chat-toggle-->
+<!-- right-chat-toggle-->
     <input type="checkbox" id="right-chat-toggle" hidden>
 
     <script src="/js/rigth-chat.js"></script>

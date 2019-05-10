@@ -53,7 +53,23 @@
     -moz-transition: color .25s ease-in-out;
     transition: color .25s ease-in-out;
 }
-
+    .nav-toggle > span {
+        z-index: 1;
+        font-size: 11px;
+        font-weight: 700;
+        width: 17px;
+        height: 17px;
+        line-height: 17px;
+        text-align: center;
+        position: absolute;
+        color: #fff;
+        background-color: #ea001b;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+        letter-spacing: -0.27px;
+        right: 2px;
+        top: 0px;
+    }
 
     /* определяем текст кнопки 
  * символ Unicode (TRIGRAM FOR HEAVEN)
@@ -519,8 +535,14 @@ body {
 .time_label{
 	color: #8e8e8e;
 	font-size: 13px;	
-	line-height: 1.2;
-    float: right;
+	line-height: 1.2;    
+}
+.tl_left {
+    margin-left: 12px; 
+}
+.tl_right {
+    text-align: right;
+    margin-right: 18px;
 }
 #bodyContentLeft {
     padding-right: 0;
@@ -569,6 +591,7 @@ body {
 
 .message_from .message__wrap_rc {
     background-color: #f4f4f4;
+    text-align: right;
 }
 .message_to .message__wrap_rc {
     background-color: #f7f2dc;
@@ -598,15 +621,16 @@ body {
 
 .message__wrap_rc {
     position: relative;
-    width: 100%;
+    /*width: 100%;*/
     margin-left: 13px;
     margin-right: 13px;
     font-size: 16px;
-    font-weight: 300;
-    line-height: 20px;
+    /*font-weight: 300;*/
+    /*line-height: 20px;*/
     padding: 10px 15px;
     -webkit-border-radius: 3px;
-    border-radius: 3px;        
+    border-radius: 3px;
+    display: inline-block;
 }
 .mlt-5 {
     margin-left: 5px;
@@ -616,4 +640,7 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 10px;
+}
+.tar {
+    text-align: right;
 }
