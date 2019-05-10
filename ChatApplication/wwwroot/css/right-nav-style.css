@@ -574,7 +574,8 @@ body {
     font-weight: bold;
     text-wrap: none;
     overflow: hidden;
-    display: block;
+    display: block;    
+    max-width: 180px;
 }
 .mp-0 {
     margin: 0;

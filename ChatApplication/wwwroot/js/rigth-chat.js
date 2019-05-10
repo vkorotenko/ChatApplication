@@ -1,4 +1,5 @@
 ﻿var tokenKey = "accessToken";
+var openPanelKey = 'openPanelKey';
 var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
 
@@ -132,6 +133,7 @@ function GetUserDataRc() {
                 var id = RigthChatApp.actualtopic.id;
                 console.log('RC getMessagesForTopicRc: ' + id);
                 getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
+                clearNewMessagesRc(id);
             }
         }
     });
@@ -304,7 +306,13 @@ function clearNewMessagesRc(id) {
             xhr.setRequestHeader("Authorization", "Bearer " + token);
         },
         success: function (data) {
-            // GetUserData();
+            var topics = RigthChatApp.topics;
+            for (i = 0; i < topics.length; i++) {
+                if (topics[i].id == id) {
+                    topics[i].hasMessages = false;
+                    topics[i].unread = null;
+                }
+            }
         }
     });
 }
@@ -329,13 +337,13 @@ $(document).ready(function () {
 
     $('#close-span').click(function () {
 
-        showRigthChatPanel = !showRigthChatPanel;
-        console.log(showRigthChatPanel);
+        showRigthChatPanel = !showRigthChatPanel;        
+        localStorage.setItem(openPanelKey, showRigthChatPanel);
         showRigthChat(showRigthChatPanel);
     });
     $('#right-chat-toggle').change(function () {
         showRigthChatPanel = document.getElementById('right-chat-toggle').checked;
-        console.log(showRigthChatPanel);
+        localStorage.setItem(openPanelKey, showRigthChatPanel);
     });
 });
 
@@ -344,6 +352,10 @@ $(document).ready(function () {
 function showRigthChat(ifShow) {
 
     showRigthChatPanel = ifShow;
+    var st = localStorage.getItem(openPanelKey);
+    if (st != null) {
+        ifShow = JSON.parse(st);
+    }
     if (ifShow) {
         document.getElementById('right-chat-toggle').checked = 'checked';
     } else {

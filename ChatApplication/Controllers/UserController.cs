@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChatApplication.Code;
 
@@ -178,6 +179,10 @@ namespace ChatApplication.Controllers
             try
             {
                 var user = await _ctx.Users.GetUserByName(User.Identity.Name);
+
+                message.Body = Regex.Replace(message.Body, "<.*?>", string.Empty);
+                message.Body = message.Body.Replace("\r\n", "\n");
+                message.Body = message.Body.Replace("\n", "<br/>");
                 var msg = new DbMessage
                 {
                     AuthorId = user.Id,

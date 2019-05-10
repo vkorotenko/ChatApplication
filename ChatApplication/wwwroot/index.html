@@ -1147,11 +1147,11 @@
                     </div>
                     <div v-bind:class="{ 'col-md-10': !msg.isAuthor, 'col-md-12': msg.isAuthor, tar: msg.isAuthor }" 
                         class=" msg-clear ">
-                        <div class="message__wrap_rc">                            
-                                {{ msg.body }}                            
+                        <div class="message__wrap_rc">
+                            <span v-html="msg.body"></span>                            
                             <template v-if="msg.attachment && msg.attachment.name != null">
                                 <br />
-                                <img class="img-responsive" style="width: 250px!important" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name"/>
+                                <img class="img-responsive" style="width: 250px!important" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name" />
                                 <b>
                                     <a :href="msg.attachment.url" class="attachment_url">
                                         <span v-if="!msg.attachment.isImage">
