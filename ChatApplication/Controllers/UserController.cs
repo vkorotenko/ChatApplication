@@ -213,20 +213,7 @@ namespace ChatApplication.Controllers
         [Route("addfiles/{topicid}/{messageid}")]
         public async Task<IActionResult> AddFiles(IFormFileCollection uploads, [FromRoute]long topicId, [FromRoute]long messageid)
         {
-            var allowedExtension = new string[]{
-                ".png",
-                ".jpeg",
-                ".jpg",
-                ".gif",                
-                ".txt",
-                ".bmp",
-                ".zip",
-                ".rar",
-                ".doc",
-                ".docx",
-                ".xlsx",
-                ".txt"
-                };
+            var allowedExtension = AllowedExtensionFromConfig();
             var files = new List<UploadFile>();
             var gattachment = new AttachmentModel();
             try
@@ -296,6 +283,37 @@ namespace ChatApplication.Controllers
             }
             return Json(gattachment);
         }
+
+        private string[] AllowedExtensionFromConfig()
+        {
+            var allowedExtension = new string[]
+            {
+                ".png",
+                ".jpeg",
+                ".jpg",
+                ".gif",
+                ".txt",
+                ".bmp",
+                ".zip",
+                ".rar",
+                ".doc",
+                ".docx",
+                ".xlsx",
+                ".txt"
+            };
+            try
+            {
+                var exfiles = _config.GetValue<string>("AllowedExtension");
+                var exarr = exfiles.Split(new string[] {","}, StringSplitOptions.RemoveEmptyEntries);
+                allowedExtension = exarr;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return allowedExtension;
+        }
+
         /// <summary>
         /// Получение общего количества непрочитанных пользователей для пользователя.
         /// </summary>
