@@ -39,9 +39,9 @@
  */
 
 .nav-toggle {
-    position: absolute;
-    right: 0px;
-    top: 0px;
+    position: fixed;
+    right: 17px;
+    top: 144px;
     padding: 0.5em;
     background-color: #f1c400;
     color: white;
