@@ -1163,8 +1163,11 @@
                             </template>
                         </div>
                         <br/>
-                        <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor}" 
-                            class="time_label">{{ msg.created | formatTime }}</div>
+                        <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor}" :data-created="msg.created"
+                             @mouseover="showDate" @mouseleave="showTime"
+                             class="time_label" >
+                            {{ msg.created | formatTime }}
+                        </div>
                     </div>
 
                 </div>

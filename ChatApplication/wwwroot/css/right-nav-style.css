@@ -7,8 +7,8 @@
 
 .nav {
     /*  ширна произвольная, не стесняйтесь экспериментировать */
-    width: 320px;
-    min-width: 320px;
+    width: 375px;
+    min-width: 375px;
     /* фиксируем и выставляем высоту панели на максимум */
     height: 100%;
     position: fixed;
@@ -16,14 +16,14 @@
     bottom: 0;
     margin: 0;
     /* сдвигаем (прячем) панель относительно правого края страницы */
-    right: -320px;
+    right: -375px;
     /* внутренние отступы */
     padding: 9px 9px;
     /*padding-right: 0;*/
     /* плавный переход смещения панели */
-    -webkit-transition: right 0.3s;
-    -moz-transition: right 0.3s;
-    transition: right 0.3s;
+    -webkit-transition: right 0.8s;
+    -moz-transition: right 0.8s;
+    transition: right 0.8s;
     /* определяем цвет фона панели */
     background: #f1c400;
     /* поверх других элементов */
@@ -49,9 +49,9 @@
     font-size: 1.2em;
     line-height: 1;
     z-index: 2001;
-    -webkit-transition: color .25s ease-in-out;
-    -moz-transition: color .25s ease-in-out;
-    transition: color .25s ease-in-out;
+    -webkit-transition: color .8s ease-in-out;
+    -moz-transition: color .8s ease-in-out;
+    transition: color .8s ease-in-out;
 }
     .nav-toggle > span {
         z-index: 1;
@@ -375,6 +375,35 @@ body {
         transition: width 0s ease;
     }
 
+
+/* фон затемнения на основной контент 
+ * при этом элементы блокируютя
+ * спорная такая фича, если оно вам надо
+ * просто раскомментируйте
+*/
+
+
+.mask-content {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    visibility: hidden;
+    opacity: 0;
+}
+
+[id='right-chat-toggle']:checked ~ .mask-content {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity .5s, visibility .5s;
+    transition: opacity .5s, visibility .5s;
+}
+
+
 .post_list li {
     width: 100%;
     background-color: white;
@@ -574,8 +603,8 @@ body {
     font-weight: bold;
     text-wrap: none;
     overflow: hidden;
-    display: block;    
-    max-width: 180px;
+    display: block;
+    max-width: 260px;
 }
 .mp-0 {
     margin: 0;
@@ -591,11 +620,11 @@ body {
 }
 
 .message_from .message__wrap_rc {
-    background-color: #f4f4f4;
+    background-color: #9ACD32;
     text-align: right;
 }
 .message_to .message__wrap_rc {
-    background-color: #f7f2dc;
+    background-color: #d9dce1;
 }
 .message_to .message__wrap_rc:before {
     position: absolute;

@@ -3,6 +3,7 @@ var openPanelKey = 'openPanelKey';
 var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
 
+
 setInterval(checkMessagesForUser, 1000);
 setInterval(function () { RefreshToken(sessionToken); }, 55000);
 
@@ -68,6 +69,12 @@ var RigthChatApp = new Vue({
         },
         appendNewLine: function() {
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
+        },
+        showTime: function (el) {            
+            el.srcElement.innerHTML = Vue.filter('formatTime')(el.srcElement.dataset.created);
+        },
+        showDate: function (el) {
+            el.srcElement.innerHTML = Vue.filter('formatDateTime')(el.srcElement.dataset.created);
         }
     }
 });
@@ -104,7 +111,7 @@ Vue.filter('formatTime', function (value) {
 Vue.filter('formatDateTime', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
-        var opt = { year: 'numeric', mounth: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+        var opt = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
         return d.toLocaleDateString('ru-RU', opt);
     }
 });
@@ -338,6 +345,12 @@ $(document).ready(function () {
     $('#close-span').click(function () {
 
         showRigthChatPanel = !showRigthChatPanel;        
+        localStorage.setItem(openPanelKey, showRigthChatPanel);
+        showRigthChat(showRigthChatPanel);
+    });
+    $('.mask-content').click(function () {
+
+        showRigthChatPanel = !showRigthChatPanel;
         localStorage.setItem(openPanelKey, showRigthChatPanel);
         showRigthChat(showRigthChatPanel);
     });
