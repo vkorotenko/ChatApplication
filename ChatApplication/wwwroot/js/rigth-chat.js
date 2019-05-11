@@ -71,10 +71,19 @@ var RigthChatApp = new Vue({
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
         },
         showTime: function (el) {            
-            el.srcElement.innerHTML = Vue.filter('formatTime')(el.srcElement.dataset.created);
+            var ts = $(el.srcElement).find('.time_label').first();
+            if (ts != null) {                
+                var val = Vue.filter('formatTime')(ts.data('created'));
+                $(el.srcElement).find('.time_label').text(val);
+            }                            
         },
         showDate: function (el) {
-            el.srcElement.innerHTML = Vue.filter('formatDateTime')(el.srcElement.dataset.created);
+            var ts = $(el.srcElement).find('.time_label').first();
+            if (ts != null) {
+                
+                var val = Vue.filter('formatDateTime')(ts.data('created'));
+                $(el.srcElement).find('.time_label').text(val);
+            }              
         }
     }
 });
