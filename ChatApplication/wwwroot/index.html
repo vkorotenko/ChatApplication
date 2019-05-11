@@ -1142,13 +1142,15 @@
                      v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
                      class="row">
 
-                    <div class="mp-0 col-md-1" v-if="!msg.isAuthor">                        
-                        <img :src="msg.avatarUrl" alt="" class="w20 mlt-5" v-if="!msg.isAuthor">
+                    <div class="mp-0 col-md-2" v-if="!msg.isAuthor">
+                        <img :src="msg.avatarUrl" alt="" class="w40 mlt-5" v-if="!msg.isAuthor">
                     </div>
-                    <div v-bind:class="{ 'col-md-10': !msg.isAuthor, 'col-md-12': msg.isAuthor, tar: msg.isAuthor }" 
-                        class=" msg-clear ">
+                    <div v-bind:class="{ 'col-md-9': !msg.isAuthor, 'col-md-12': msg.isAuthor, tar: msg.isAuthor }"
+                         class=" msg-clear ">
                         <div class="message__wrap_rc">
-                            <span v-html="msg.body"></span>                            
+
+                            <span v-html="msg.body"></span>
+
                             <template v-if="msg.attachment && msg.attachment.name != null">
                                 <br />
                                 <img class="img-responsive" style="width: 250px!important" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name" />
@@ -1162,12 +1164,10 @@
                                 </b>
                             </template>
                         </div>
-                        <br/>
+                        <br />
                         <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor}" :data-created="msg.created"
                              @mouseover="showDate" @mouseleave="showTime"
-                             class="time_label" >
-                            {{ msg.created | formatTime }}
-                        </div>
+                             class="time_label">{{ msg.created | formatTime }}</div>
                     </div>
 
                 </div>

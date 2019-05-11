@@ -626,16 +626,17 @@ body {
 .message_to .message__wrap_rc {
     background-color: #d9dce1;
 }
-.message_to .message__wrap_rc:before {
-    position: absolute;
-    left: -6px;
-    top: 8px;
-    content: '';
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 4.5px 6px 4.5px 0;
-    border-color: transparent #f7f2dc transparent transparent; }
+    .message_to .message__wrap_rc:before {
+        position: absolute;
+        left: -6px;
+        top: 8px;
+        content: '';
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 4.5px 6px 4.5px 0;
+        border-color: transparent #d9dce1 transparent transparent;
+    }
 
 .message_from .message__wrap_rc:before {
     position: absolute;
@@ -646,7 +647,8 @@ body {
     height: 0;
     border-style: solid;
     border-width: 4.5px 0 4.5px 6px;
-    border-color: transparent transparent transparent #f4f4f4; }
+    border-color: transparent transparent transparent #9ACD32;
+}
 
 
 .message__wrap_rc {
