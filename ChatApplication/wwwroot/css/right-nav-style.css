@@ -690,3 +690,8 @@ body {
     overflow: hidden;
     max-width: 133px;
 }
+
+.day_repeater {
+    text-align: center;
+    margin: 12px;
+}

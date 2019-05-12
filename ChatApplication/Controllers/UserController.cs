@@ -87,11 +87,21 @@ namespace ChatApplication.Controllers
             _logger.LogInformation($"Retrive data for topic id: {id}");
             try
             {
+                var user = _ctx.Users.GetUserByName(User.Identity.Name);
                 var messages = await _ctx.Messages.GetMessagesForTopic(id);
                 var rt = Mapper.Map<IEnumerable<MessageModel>>(messages);
-
+                var days = new List<string>();
                 foreach (var message in rt)
                 {
+
+                    if (message.AuthorId != user.Id)
+                        message.IsAuthor = false;
+                    var day = $"{message.Created.Year}_{message.Created.Month}_{message.Created.Day}";
+                    if (!days.Contains(day))
+                    {
+                        message.NewDay = true;
+                        days.Add(day);
+                    }
                     var dbattachment = await _ctx.Files.GetForMessage(message.Id);
                     var attachment = Mapper.Map<AttachmentModel>(dbattachment);
                     if (attachment != null)
@@ -194,6 +204,7 @@ namespace ChatApplication.Controllers
                 var dbMessage = await _ctx.Messages.Create(msg);
                 await _ctx.Topics.UpdateTs(id);
                 var model = Mapper.Map<MessageModel>(dbMessage);
+                model.IsAuthor = true;
                 return Json(model);
             }
             catch (Exception ex)

@@ -549,6 +549,16 @@
             Файл прикрепленный к сообщению
             </summary>
         </member>
+        <member name="P:ChatApplication.Models.MessageModel.NewDay">
+            <summary>
+            Отметка первого дня в списке сообщений
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.MessageModel.IsAuthor">
+            <summary>
+            Является ли пользователь автором сообщения в топике
+            </summary>
+        </member>
         <member name="T:ChatApplication.Models.RefreshTokenModel">
             <summary>
             Модель обновления токена

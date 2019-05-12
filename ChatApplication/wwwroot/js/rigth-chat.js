@@ -29,10 +29,11 @@ var RigthChatApp = new Vue({
         showDeveloperConsole: false,
         mailRefresh: true,
         showSearchLoader: false,
-        showMessagePanel: false
+        showMessagePanel: false        
     },
     methods: {
         showThread: function (id, el, event) {
+            RigthChatApp.dayExist = [];
             RigthChatApp.actualtopic = findTopic(RigthChatApp.topics, id);
             RigthChatApp.showMessagePanel = true;
             RigthChatApp.topicId = id;
@@ -67,25 +68,25 @@ var RigthChatApp = new Vue({
         backToTopics: function () {
             RigthChatApp.showMessagePanel = false;
         },
-        appendNewLine: function() {
+        appendNewLine: function () {
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
         },
-        showTime: function (el) {            
+        showTime: function (el) {
             var ts = $(el.srcElement).find('.time_label').first();
-            if (ts != null) {                
+            if (ts != null) {
                 var val = Vue.filter('formatTime')(ts.data('created'));
                 $(el.srcElement).find('.time_label').text(val);
-            }                            
+            }
         },
         showDate: function (el) {
             var ts = $(el.srcElement).find('.time_label').first();
             if (ts != null) {
-                
+
                 var val = Vue.filter('formatDateTime')(ts.data('created'));
                 $(el.srcElement).find('.time_label').text(val);
-            }              
+            }
         },
-        isLastMessage: function(message) {
+        isLastMessage: function (message) {
             var len = RigthChatApp.posts.length;
             if (RigthChatApp.posts[len - 1] == message) return true;
             return false;
@@ -120,6 +121,13 @@ Vue.filter('formatTime', function (value) {
         var d = new Date(Date.parse(value));
         var opt = { hour: '2-digit', minute: '2-digit' }
         return d.toLocaleTimeString('ru-RU', opt);
+    }
+});
+Vue.filter('formatMonthDay', function (value) {
+    if (value) {
+        var d = new Date(Date.parse(value));
+        var opt = { day: 'numeric', month: 'short' }
+        return d.toLocaleDateString('ru-RU', opt);
     }
 });
 Vue.filter('formatDateTime', function (value) {
@@ -201,10 +209,7 @@ function getMessagesForTopicRc(id, authorId) {
         },
         success: function (data) {
 
-            for (i = 0; i < data.length; i++) {
-                if (data[i].authorId == authorId) data[i].isAuthor = true;
-                else data[i].isAuthor = false;
-            }
+            
 
             RigthChatApp.posts = data;
             setTimeout(function () {
@@ -243,7 +248,7 @@ function sendMessageToTopicRc(body, topicId) {
         },
         success: function (data) {
             RigthChatApp.messageArea = "";
-            data.isAuthor = true;
+            
             setTimeout(function () {
                 $('.msg_h').scrollTop(99999);
             }, 300);
@@ -358,7 +363,7 @@ $(document).ready(function () {
 
     $('#close-span').click(function () {
 
-        showRigthChatPanel = !showRigthChatPanel;        
+        showRigthChatPanel = !showRigthChatPanel;
         localStorage.setItem(openPanelKey, showRigthChatPanel);
         showRigthChat(showRigthChatPanel);
     });
@@ -581,13 +586,7 @@ function getMessagesForTopic(id, authorId) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
-        success: function (data) {
-
-            for (i = 0; i < data.length; i++) {
-                if (data[i].authorId == authorId) data[i].isAuthor = true;
-                else data[i].isAuthor = false;
-            }
-
+        success: function (data) {            
             ChatApp.posts = data;
 
             setTimeout(function () {
@@ -627,7 +626,7 @@ function sendMessageToTopic(body, topicId) {
         },
         success: function (data) {
             ChatApp.messageArea = "";
-            data.isAuthor = true;
+            
             if (isFileSelected()) {
                 uploadFile(ChatApp.topicId, data.id);
             }

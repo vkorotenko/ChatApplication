@@ -1137,11 +1137,13 @@
             <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
                 <div v-if="posts.length == 0">
                     В данном чате пока нет сообщений.
-                </div>
+                </div>               
                 <div v-for="msg in posts"
                      v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
                      class="row" @mouseover="showDate" @mouseleave="showTime">
-
+                    <div class="col-md-11 day_repeater" v-if="msg.newDay">
+                        {{msg.created | formatMonthDay }}
+                    </div>
                     <div class="mp-0 col-md-2" v-if="!msg.isAuthor">
                         <img :src="msg.avatarUrl" alt="" class="w40 mlt-5" v-if="!msg.isAuthor">
                     </div>

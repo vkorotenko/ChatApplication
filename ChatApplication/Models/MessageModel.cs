@@ -55,5 +55,15 @@ namespace ChatApplication.Models
         /// Файл прикрепленный к сообщению
         /// </summary>
         public AttachmentModel Attachment { get; set; }
+
+
+        /// <summary>
+        /// Отметка первого дня в списке сообщений
+        /// </summary>
+        public bool NewDay { get; set; }
+        /// <summary>
+        /// Является ли пользователь автором сообщения в топике
+        /// </summary>
+        public bool IsAuthor { get; set; }
     }
 }
