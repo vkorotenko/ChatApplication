@@ -598,13 +598,12 @@ body {
     padding: 0;
 }
 .attachment_url {
-    text-decoration: underline;
-    color: #000000;
+    color: #5d6064;
     font-weight: bold;
     text-wrap: none;
     overflow: hidden;
     display: block;
-    max-width: 260px;
+    max-width: 200px;
 }
 .mp-0 {
     margin: 0;
@@ -675,4 +674,19 @@ body {
 }
 .tar {
     text-align: right;
+}
+.download_ico {
+    border: solid 1px #5d6064;
+    display: block;
+    width: 1.2rem;
+    height: 1.2rem;    
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: baseline;
+}
+.tx_download_wrap {
+    display: inline-block;
+    text-wrap: none;
+    overflow: hidden;
+    max-width: 133px;
 }

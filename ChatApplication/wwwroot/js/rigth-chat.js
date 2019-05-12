@@ -84,6 +84,11 @@ var RigthChatApp = new Vue({
                 var val = Vue.filter('formatDateTime')(ts.data('created'));
                 $(el.srcElement).find('.time_label').text(val);
             }              
+        },
+        isLastMessage: function(message) {
+            var len = RigthChatApp.posts.length;
+            if (RigthChatApp.posts[len - 1] == message) return true;
+            return false;
         }
     }
 });
