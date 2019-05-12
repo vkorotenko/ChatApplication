@@ -418,8 +418,8 @@ body {
 }
 
 .back_container {
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: #f1c400;
+    border: 1px solid #000;
     padding: 6px 12px;
     line-height: 20px;
     cursor: pointer;
