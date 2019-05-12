@@ -688,7 +688,7 @@ body {
     display: inline-block;
     text-wrap: none;
     overflow: hidden;
-    max-width: 133px;
+    max-width: 120px;
 }
 
 .day_repeater {

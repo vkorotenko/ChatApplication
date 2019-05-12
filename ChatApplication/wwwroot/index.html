@@ -1146,6 +1146,10 @@
                     </div>
                     <div class="mp-0 col-md-2" v-if="!msg.isAuthor">
                         <img :src="msg.avatarUrl" alt="" class="w40 mlt-5" v-if="!msg.isAuthor">
+                        <br/>
+                        <div class="mlt-5">
+                            {{msg.fullName}}
+                        </div>
                     </div>
                     <div v-bind:class="{ 'col-md-9': !msg.isAuthor, 'col-md-12': msg.isAuthor, tar: msg.isAuthor }"
                          class=" msg-clear " @mouseover="showDate" @mouseleave="showTime">
@@ -1153,8 +1157,26 @@
                             <span v-html="msg.body" @mouseover="showDate" @mouseleave="showTime"></span>
 
                             <template v-if="msg.attachment && msg.attachment.name != null" @mouseover="showDate" @mouseleave="showTime">
-                                <br />
-                                <img class="img-responsive" style="width: 250px!important" v-if="msg.attachment.isImage" :src="msg.attachment.url" :alt="msg.attachment.name" @mouseover="showDate" @mouseleave="showTime" />
+                                <br />                                
+                                
+                                <div class="popup popup_normal block block_popup" :id="'popup-img-' + msg.id">
+                                    <div class="popup__title"> {{ msg.attachment.name }} </div>
+                                    <div class="popup__wrap row row-">
+                                        <img v-if="msg.attachment.isImage" 
+                                             :src="msg.attachment.url" 
+                                             :alt="msg.attachment.name"  />
+                                    </div>
+                                </div>
+
+                                <a data-fancybox :data-src="'#popup-img-' + msg.id" href="javascript:;">
+                                    <img class="img-responsive" 
+                                         style="width: 250px!important" 
+                                         v-if="msg.attachment.isImage" 
+                                         :src="msg.attachment.url" 
+                                         :alt="msg.attachment.name" 
+                                         @mouseover="showDate" 
+                                         @mouseleave="showTime" />
+                                </a>                                
                                 <b>
                                     <a :href="msg.attachment.url" class="attachment_url" @mouseover="showDate" @mouseleave="showTime" target="_blank">
                                         <div class="row" v-if="!msg.attachment.isImage" @mouseover="showDate" @mouseleave="showTime">

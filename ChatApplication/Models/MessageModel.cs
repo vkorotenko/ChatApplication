@@ -65,5 +65,9 @@ namespace ChatApplication.Models
         /// Является ли пользователь автором сообщения в топике
         /// </summary>
         public bool IsAuthor { get; set; }
+        /// <summary>
+        /// Полное имя
+        /// </summary>
+        public string FullName { get; set; }
     }
 }

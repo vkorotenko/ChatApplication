@@ -102,6 +102,9 @@ namespace ChatApplication.Controllers
                         message.NewDay = true;
                         days.Add(day);
                     }
+
+                    var msguser = await _ctx.Users.Get(message.AuthorId);
+                    message.FullName = msguser.FullName;
                     var dbattachment = await _ctx.Files.GetForMessage(message.Id);
                     var attachment = Mapper.Map<AttachmentModel>(dbattachment);
                     if (attachment != null)
