@@ -87,15 +87,15 @@ namespace ChatApplication.Controllers
             _logger.LogInformation($"Retrive data for topic id: {id}");
             try
             {
-                var user = _ctx.Users.GetUserByName(User.Identity.Name);
+                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
                 var messages = await _ctx.Messages.GetMessagesForTopic(id);
                 var rt = Mapper.Map<IEnumerable<MessageModel>>(messages);
                 var days = new List<string>();
                 foreach (var message in rt)
                 {
 
-                    if (message.AuthorId != user.Id)
-                        message.IsAuthor = false;
+                    if (message.AuthorId == user.Id)
+                        message.IsAuthor = true;
                     var day = $"{message.Created.Year}_{message.Created.Month}_{message.Created.Day}";
                     if (!days.Contains(day))
                     {
