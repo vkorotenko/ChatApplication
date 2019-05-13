@@ -7,6 +7,7 @@
 #endregion
 
 using AutoMapper;
+using ChatApplication.Code;
 using ChatApplication.Dbl;
 using ChatApplication.Dbl.Models;
 using ChatApplication.Models;
@@ -22,7 +23,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ChatApplication.Code;
 
 namespace ChatApplication.Controllers
 {
@@ -82,15 +82,17 @@ namespace ChatApplication.Controllers
         [Authorize]
         [HttpGet]
         [Route("messages/{id}")]
-        public async Task<ActionResult> Messages([FromRoute] long id)
+        public async Task<ActionResult> Messages([FromRoute] int id)
         {
             _logger.LogInformation($"Retrive data for topic id: {id}");
             try
             {
+                await CreateTopicIfNotExist(id);
                 var user = await _ctx.Users.GetUserByName(User.Identity.Name);
                 var messages = await _ctx.Messages.GetMessagesForTopic(id);
                 var rt = Mapper.Map<IEnumerable<MessageModel>>(messages);
                 var days = new List<string>();
+                var users = new Dictionary<int, DbUser>();
                 foreach (var message in rt)
                 {
 
@@ -103,8 +105,14 @@ namespace ChatApplication.Controllers
                         days.Add(day);
                     }
 
-                    var msguser = await _ctx.Users.Get(message.AuthorId);
+                    DbUser msguser;
+                    if (!users.TryGetValue(message.AuthorId, out msguser))
+                    {
+                        msguser = await _ctx.Users.Get(message.AuthorId);
+                        users.Add(msguser.Id, msguser);
+                    }
                     message.FullName = msguser.FullName;
+
                     var dbattachment = await _ctx.Files.GetForMessage(message.Id);
                     var attachment = Mapper.Map<AttachmentModel>(dbattachment);
                     if (attachment != null)
@@ -162,20 +170,20 @@ namespace ChatApplication.Controllers
 
         private async Task<string> GetAvatarImage(int id)
         {
-            var def = "/img/ava.gif";
+            var avatarImage = "/img/ava.gif";
             try
             {
                 var user = await _ctx.Users.Get(id);
                 var url = user.Url;
                 if (string.IsNullOrWhiteSpace(url))
-                    url = def;
+                    url = avatarImage;
                 return url;
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 _logger.LogError($"Failed retrive awatar image user id: {id}");
-                return def;
+                return avatarImage;
             }
         }
         /// <summary>
@@ -252,9 +260,9 @@ namespace ChatApplication.Controllers
                         var fileExt = System.IO.Path.GetExtension(fname);
                         if (!allowedExtension.Contains(fileExt))
                         {
-                            var errmsg =  "Неподдерживаемый тип файла, разрешены только следующие расширения: " + string.Join(" ,", allowedExtension);
+                            var errmsg = "Неподдерживаемый тип файла, разрешены только следующие расширения: " + string.Join(" ,", allowedExtension);
                             await _ctx.Messages.Delete(messageid);
-                            return StatusCode(415,errmsg);                            
+                            return StatusCode(415, errmsg);
                         }
                         path = Path.Combine(path, fname);
                         using (var fileStream = new FileStream(path, FileMode.Create))
@@ -318,7 +326,7 @@ namespace ChatApplication.Controllers
             try
             {
                 var exfiles = _config.GetValue<string>("AllowedExtension");
-                var exarr = exfiles.Split(new string[] {","}, StringSplitOptions.RemoveEmptyEntries);
+                var exarr = exfiles.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                 allowedExtension = exarr;
             }
             catch (Exception ex)
@@ -350,7 +358,7 @@ namespace ChatApplication.Controllers
                 {
                     count = await _ctx.Messages.GetUnreadMessages(userid);
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -388,28 +396,7 @@ namespace ChatApplication.Controllers
                 return BadRequest();
             }
         }
-        /// <summary>
-        /// Получение списка обьявлений, доступных для авторизованного пользователя.
-        /// Служебный метод для получения списка обьявлений.
-        /// </summary>
-        /// <returns></returns>
-        [Authorize]
-        [HttpGet]
-        [Route("articles")]
-        public async Task<IActionResult> Articles()
-        {
-            try
-            {
-                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
-                var articles = await _ctx.Articles.GetAllFromUser(user.Id);
-                return Json(articles);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-                return BadRequest();
-            }
-        }
+        
         /// <summary>
         /// Создание топика на основе обьявления
         /// </summary>
@@ -423,32 +410,37 @@ namespace ChatApplication.Controllers
             _logger.LogInformation($"Create topic from article id: {id}");
             try
             {
-                var topic = await _ctx.Topics.Get(id);
-                if (topic == null)
-                {
-                    var article = await _ctx.Articles.Get((int)id);
-                    if (article != null)
-                    {
-                        var newTopic = new DbTopic
-                        {
-                            Id = article.Id,
-                            AnnouncementId = article.Id,
-                            AuthorId = article.UserId,
-                            Created = DateTime.Now,
-                            Updated = DateTime.Now,
-                            Title = article.Title,
-                            Vendor = article.Vendor,
-                            VendorCode = article.Code
-                        };
-                        await _ctx.Topics.Create(newTopic);
-                    }
-                }
+                await CreateTopicIfNotExist(id);
                 return Ok();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return BadRequest();
+            }
+        }
+
+        private async Task CreateTopicIfNotExist(int id)
+        {
+            var topic = await _ctx.Topics.Get(id);
+            if (topic == null)
+            {
+                var article = await _ctx.Articles.Get((int) id);
+                if (article != null)
+                {
+                    var newTopic = new DbTopic
+                    {
+                        Id = article.Id,
+                        AnnouncementId = article.Id,
+                        AuthorId = article.UserId,
+                        Created = DateTime.Now,
+                        Updated = DateTime.Now,
+                        Title = article.Title,
+                        Vendor = article.Vendor,
+                        VendorCode = article.Code
+                    };
+                    await _ctx.Topics.Create(newTopic);
+                }
             }
         }
 
@@ -482,7 +474,8 @@ namespace ChatApplication.Controllers
                 }
 
                 // поиск по пустой строке, все результаты
-                if (!string.IsNullOrWhiteSpace(query)){                
+                if (!string.IsNullOrWhiteSpace(query))
+                {
 
                     matchTopics = matchTopics.Where(x => x.Title.ToLower().Contains(query)
                                       || x.Vendor.ToLower().Contains(query)
@@ -536,7 +529,7 @@ namespace ChatApplication.Controllers
             try
             {
                 var user = await _ctx.Users.GetUserByName(User.Identity.Name);
-                
+
                 List<DbMessage> msg;
                 if (await IsAdminOrManager(user.Id))
                 {
@@ -545,7 +538,7 @@ namespace ChatApplication.Controllers
                 else
                 {
                     msg = await _ctx.Messages.GetNewMessagesForUser(user.Id);
-                }                
+                }
 
                 var models = Mapper.Map<IEnumerable<LatestMessageModel>>(msg);
                 models = models
@@ -554,7 +547,7 @@ namespace ChatApplication.Controllers
 
                 foreach (var model in models)
                 {
-                   var u = await _ctx.Users.Get(model.AuthorId);
+                    var u = await _ctx.Users.Get(model.AuthorId);
                     model.FullName = u.FullName;
                 }
 
@@ -564,7 +557,7 @@ namespace ChatApplication.Controllers
             {
                 _logger.LogError(e.Message);
                 return Json(new LatestMessageModel[0]);
-            }            
+            }
         }
     }
 }

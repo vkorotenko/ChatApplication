@@ -1072,7 +1072,7 @@
         
         var showRigthChatPanel = false;
 
-
+        
         
 
         
@@ -1105,8 +1105,8 @@
                    class="messager__item row i-mid mp-0"
                    v-bind:class="{ selected: topic.selected }"
                    @click="showThread(topic.id, this, $event)">
-                    <div class="col-md-2 mp-0">
-                        <img class="thumbnail w40 mlt-5" :src="topic.avatarUrl" alt="">
+                    <div class="col-md-2 mp-0">                        
+                        <img class="thumbnail w40 mlt-5" :src="'/api/v1/article/' + topic.announcementId + '/img'" :alt="topic.title">
                     </div>
                     <div class="col-md-10 mp-0">
                         <div class="messager__persona">
@@ -1125,11 +1125,15 @@
         </div>
         <div v-if="showMessagePanel" style="padding-bottom: 8px;">
             <div class="row">
-                <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col-md-2 " />
-                <div class="col-md-10">
-                    {{actualtopic.fullName}} {{actualtopic.created | formatDateTime}}
-                    <br />
-                    {{actualtopic.title}}
+                <div class="col-md-2 mp-0">
+                    <img :src="'/api/v1/article/' + actualtopic.id + '/img'" style="height: 40px;" class="thumbnail" />
+                </div>                
+                <div class="col-md-10 mp-0">
+                    <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col-md-2 " />
+                    {{actualtopic.fullName}} <br />
+                    {{actualtopic.created | formatDateTime}} <br />
+                    {{actualtopic.title}} <br/>
+                    <div class="my_anonce" v-if="id == actualtopic.authorId">Мое обьявление</div>
                 </div>
             </div>
         </div>

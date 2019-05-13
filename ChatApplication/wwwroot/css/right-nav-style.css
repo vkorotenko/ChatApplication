@@ -123,7 +123,7 @@
         box-shadow: -4px 0px 20px 0px rgba(0,0,0, 0.5);
         -moz-box-shadow: -4px 0px 20px 0px rgba(0,0,0, 0.5);
         -webkit-box-shadow: -4px 0px 20px 0px rgba(0,0,0, 0.5);
-        overflow-y: auto;
+        overflow-y: hidden;
     }
 
 
@@ -694,4 +694,11 @@ body {
 .day_repeater {
     text-align: center;
     margin: 12px;
+}
+.my_anonce {
+    font-weight: bold;
+    background-color: #9acd32;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 2px 8px;
 }

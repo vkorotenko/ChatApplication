@@ -39,6 +39,13 @@ namespace ChatApplication.Dbl.Repository
                         ON dm.id = da.manufacture_id
                         WHERE da.id = @id";
             var articles = await _db.QueryAsync<DbArticle>(sql, new { id });
+            foreach (var article in articles)
+            {
+                var aid = article.Id;
+                sql = @"SELECT * FROM admin_zap.article_image WHERE article_id =@aid";
+                var photos = await _db.QueryAsync<ArticleImage>(sql, new { aid });
+                article.Photos = photos;
+            }
             return articles.FirstOrDefault();
         }
 

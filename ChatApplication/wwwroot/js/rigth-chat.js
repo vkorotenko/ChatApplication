@@ -17,6 +17,7 @@ var RigthChatApp = new Vue({
             username: "",
             password: ""
         },
+        id: null,
         topics: [],
         posts: [],
         topicAuthor: 0,
@@ -158,6 +159,7 @@ function GetUserDataRc() {
             RigthChatApp.unreadMessages = data.messages;
             RigthChatApp.user.username = data.username;
             RigthChatApp.username = data.username;
+            RigthChatApp.id = data.id;
             if (RigthChatApp.actualtopic) {
                 var id = RigthChatApp.actualtopic.id;
                 console.log('RC getMessagesForTopicRc: ' + id);
@@ -381,12 +383,16 @@ $(document).ready(function () {
 
 
 
-function showRigthChat(ifShow) {
-
+function showRigthChat(ifShow, id) {
+    console.log('switch chat ' + ifShow);
     showRigthChatPanel = ifShow;
     var st = localStorage.getItem(openPanelKey);
     if (st != null) {
         ifShow = JSON.parse(st);
+    }
+    if (id) {
+        ifShow = true;
+        RigthChatApp.showThread(id);
     }
     if (ifShow) {
         document.getElementById('right-chat-toggle').checked = 'checked';
