@@ -731,3 +731,15 @@ body {
     display: inline-block;
     padding: 2px 8px;
 }
+.anonce_img {
+    border-radius: 5px;
+    height: 40px;
+    max-width: 54px;
+}
+.popup_rchat img {
+    width: 100%;
+    height: 100%;
+}
+.nav .messager__item {
+    padding-bottom: 1rem;
+}

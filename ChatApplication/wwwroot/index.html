@@ -1105,13 +1105,23 @@
                class="messager__item row i-mid mp-0"
                v-bind:class="{ selected: topic.selected }"
                @click="showThread(topic.id, this, $event)">
-                <div class="col-md-2 mp-0">                        
-                    <img class="thumbnail w40 mlt-5" :src="'/api/v1/article/' + topic.announcementId + '/img'" :alt="topic.title">
+                <div class="col-md-2 mp-0">
+                    <img class="anonce_img mlt-5" :src="'/api/v1/article/' + topic.announcementId + '/img'" :alt="topic.title">                    
                 </div>
                 <div class="col-md-10 mp-0">
+                    <span style="float: right; display: inline-block; margin-right: 5px;">
+                        {{topic.created | formatMonthDay}}
+                    </span>
                     <div class="messager__persona">
-                        <div class="messager__name">{{topic.title}}</div>
-                        <div class="messager__text">{{topic.vendor}} {{topic.vendorCode}} </div>
+                        <div class="messager__name">
+                            <img :src="'/api/v1/user/avatar/' + topic.authorId" class="w20 " style="margin: 5px 0 -5px 5px;"/>
+                            {{topic.name}}
+                        </div>
+                        <div class="messager__text">
+                            {{topic.title}}<br />
+                            {{topic.vendor}}, {{topic.vendorCode}},
+                            {{ topic.price }} &#x20bd;.
+                        </div>
                         <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
                     </div>
                 </div>
@@ -1125,17 +1135,31 @@
     </div>
     <div v-if="showMessagePanel" style="padding-bottom: 8px;">
         <div class="row">
-            <a :href="'/article/view?id=' + actualtopic.id" style="cursor: pointer;">
-                <div class="col-md-3 mp-0">
-                    <img :src="'/api/v1/article/' + actualtopic.id + '/img'" style="height: 40px;" class=""/>
+            <a :href="'/article/view?id=' + actualtopic.id" style="cursor: pointer; width: 100%;">
+                
+                <div class="col-md-2 mp-0">
+                    <img class="anonce_img mlt-5" :src="'/api/v1/article/' + actualtopic.id + '/img'" :alt="actualtopic.title">
                 </div>
-                <div class="col-md-9 mp-0">
-                    <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col-md-2 " style="padding-right: 5px"/>
-                    {{actualtopic.fullName}} <br/>
-                    {{actualtopic.created | formatDateTime}} <br/>
-                    {{actualtopic.title}} <br/>
-                    <div class="my_anonce" v-if="aid == actualtopic.authorId">Мое обьявление</div>
+                <div class="col-md-10 mp-0">
+                    <span style="float: right; display: inline-block; margin-right: 5px;">
+                        {{actualtopic.created | formatMonthDay}}
+                    </span>
+                    <div class="messager__persona mp-0">
+                        <div class="messager__name">
+                            <img :src="'/api/v1/user/avatar/' + actualtopic.authorId" class="w20 " style="margin: 5px 0 -5px 5px;" />
+                            {{actualtopic.name}}
+                        </div>
+                        <div class="messager__text">
+                            {{actualtopic.title}}<br />
+                            {{actualtopic.vendor}}, {{actualtopic.vendorCode}},
+                            {{ actualtopic.price }} &#x20bd;.<br />
+                            <div class="my_anonce" v-if="aid == actualtopic.authorId">Мое обьявление</div>
+                        </div>                        
+                    </div>
                 </div>
+
+
+
             </a>            
         </div>
     </div>
@@ -1165,8 +1189,8 @@
                         <template v-if="msg.attachment && msg.attachment.name != null" >
                             <br />                                
                                 
-                            <div class="popup popup_normal block block_popup" :id="'popup-img-' + msg.id">
-                                <!--<div class="popup__title"> {{ msg.attachment.name }} </div>-->
+                            <div class="popup popup_normal block block_popup popup_rchat" :id="'popup-img-' + msg.id">
+                                <div class="popup__title">  </div>
                                 <div class=" popup__wrap row ">
                                     <img v-if="msg.attachment.isImage" 
                                          :src="msg.attachment.url" 

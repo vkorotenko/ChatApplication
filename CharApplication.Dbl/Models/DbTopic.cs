@@ -72,5 +72,9 @@ namespace ChatApplication.Dbl.Models
         /// Полное имя автора
         /// </summary>
         public string FullName { get; set; }
+
+        public string Name { get; set; }
+
+        public int Price { get; set; }
     }
 }

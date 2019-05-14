@@ -75,5 +75,20 @@ namespace ChatApplication.Dbl.Repository
                         WHERE da.user_id =@id";
             return (await _db.QueryAsync<DbArticle>(sql, new { id })).ToList();
         }
+
+        /// <summary>
+        /// Получение цены по номеру обьявления.
+        /// </summary>
+        /// <param name="id">Идентификатор обьявления</param>
+        /// <returns></returns>
+        public async Task<int> GetPrice(long id)
+        {
+            var sql = @"SELECT new_price 
+                        FROM admin_zap.article 
+                        WHERE id=@id";
+            var results = await _db.QueryAsync<int>(sql, new { id });
+            var result = results.FirstOrDefault();
+            return result;
+        }
     }
 }

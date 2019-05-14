@@ -31,5 +31,12 @@ namespace ChatApplication.Dbl.Repository
         /// </summary>
         /// <returns></returns>
         Task<List<DbArticle>> GetAllFromUser(int id);
+        
+        /// <summary>
+        /// Получение цены по номеру обьявления.
+        /// </summary>
+        /// <param name="id">Идентификатор обьявления</param>
+        /// <returns></returns>
+        Task<int> GetPrice(long id);
     }
 }

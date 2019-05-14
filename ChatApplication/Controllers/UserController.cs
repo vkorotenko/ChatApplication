@@ -487,6 +487,8 @@ namespace ChatApplication.Controllers
                 foreach (var topic in matchTopics)
                 {
                     topic.FullName = user.FullName;
+                    topic.Name = appUser.Name;
+                    topic.Price = await _ctx.Articles.GetPrice(topic.AnnouncementId);
                     if (string.IsNullOrWhiteSpace(url))
                     {
                         url = await GetAvatarImage(topic.AuthorId);
