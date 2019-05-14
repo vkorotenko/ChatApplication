@@ -656,6 +656,27 @@ body {
     border-color: transparent transparent transparent #9ACD32;
 }
 
+.message_from .tl_long {
+    display: none;
+}
+.message_from:hover .tl_long {
+    display: block;
+}
+.message_from:hover .tl_short {
+    display: none;
+}
+
+.message_to .tl_long {
+    display: none;
+}
+
+.message_to:hover .tl_long {
+    display: block;
+}
+
+.message_to:hover .tl_short {
+    display: none;
+}
 
 .message__wrap_rc {
     position: relative;

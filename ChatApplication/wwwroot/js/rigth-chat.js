@@ -139,6 +139,13 @@ Vue.filter('formatDateTime', function (value) {
     }
 });
 
+Vue.filter('formatDate', function (value) {
+    if (value) {
+        var d = new Date(Date.parse(value));
+        var opt = { year: 'numeric', month: 'short', day: 'numeric'}
+        return d.toLocaleDateString('ru-RU', opt);
+    }
+});
 GetUserDataRc();
 function findTopic(array, id) {
     for (i = 0; i < array.length; i++) {

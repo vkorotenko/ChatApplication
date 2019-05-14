@@ -1126,11 +1126,11 @@
     <div v-if="showMessagePanel" style="padding-bottom: 8px;">
         <div class="row">
             <a :href="'/article/view?id=' + actualtopic.id" style="cursor: pointer;">
-                <div class="col-md-2 mp-0">
+                <div class="col-md-3 mp-0">
                     <img :src="'/api/v1/article/' + actualtopic.id + '/img'" style="height: 40px;" class=""/>
                 </div>
-                <div class="col-md-10 mp-0">
-                    <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col-md-2 "/>
+                <div class="col-md-9 mp-0">
+                    <img :src="'/api/v1/user/avatar/' + topicAuthor" class="thumbnail w40 col-md-2 " style="padding-right: 5px"/>
                     {{actualtopic.fullName}} <br/>
                     {{actualtopic.created | formatDateTime}} <br/>
                     {{actualtopic.title}} <br/>
@@ -1157,7 +1157,7 @@
                         {{msg.fullName}}
                     </div>
                 </div>
-                <div v-bind:class="{ 'col-md-9': !msg.isAuthor, 'col-md-12': msg.isAuthor, tar: msg.isAuthor }"
+                <div v-bind:class="{ 'col-md-10': !msg.isAuthor, 'col-md-12': msg.isAuthor, tar: msg.isAuthor }"
                      class=" msg-clear " >
                     <div class="message__wrap_rc" >
                         <span v-html="msg.body"></span>
@@ -1200,11 +1200,24 @@
                         </template>
                     </div>
                     <br />
-                    <div class="">
-                        <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor, tl_readed: !msg.isAuthor && msg.isRead }" :data-created="msg.created" class="time_label">
+                    
+                    <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor, tl_readed: !msg.isAuthor && msg.isRead }" 
+                             :data-created="msg.created" 
+                             class="time_label tl_short">
                             {{ msg.created | formatTime }}
-                        </div>                        
                     </div>                        
+                    <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor, tl_readed: !msg.isAuthor && msg.isRead }"
+                         :data-created="msg.created"
+                         class="time_label tl_long">
+                        <template v-if="!msg.isAuthor">
+                            {{ msg.created | formatTime }}, {{ msg.created | formatDate }}
+                        </template>
+                        <template v-else>
+                            {{ msg.created | formatDateTime }}
+                        </template>
+                        
+                    </div>                        
+                    
                 </div>
 
             </div>
