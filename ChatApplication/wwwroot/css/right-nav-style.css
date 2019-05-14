@@ -570,10 +570,14 @@ body {
 .tl_left {
     margin-left: 12px; 
 }
-.tl_right {
-    text-align: right;
-    margin-right: 18px;
+.tl_readed:after {
+    content: ' \2714';
+    color: #9ACD32;
 }
+.tl_right {
+        text-align: right;
+        margin-right: 18px;
+    }
 #bodyContentLeft {
     padding-right: 0;
 }
