@@ -1218,7 +1218,7 @@
     <div class="messager__foot" v-if="showMessagePanel">
         <div class="loader" v-if="showLoader"></div>
         <div class="messager__textarea">
-            <textarea placeholder="Enter - отправка сообщения, Ctrl + Enter - новая строка" v-model="messageArea" @keyup.enter.exact="sendMessage" @keyup.enter.ctrl.exact="appendNewLine"></textarea>
+            <textarea placeholder="Напишите сообщение..." v-model="messageArea" @keyup.enter.exact="sendMessage" @keyup.enter.ctrl.exact="appendNewLine"></textarea>
         </div>
         <div class="messager__control row">
             <div class="messager__file file file_small">
