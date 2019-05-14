@@ -637,7 +637,9 @@ body {
         border-width: 4.5px 6px 4.5px 0;
         border-color: transparent #d9dce1 transparent transparent;
     }
-
+.message_to, .message_from {
+    padding-bottom: 1rem;
+}
 .message_from .message__wrap_rc:before {
     position: absolute;
     right: -6px;
