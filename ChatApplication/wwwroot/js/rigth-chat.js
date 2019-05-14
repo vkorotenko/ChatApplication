@@ -17,7 +17,7 @@ var RigthChatApp = new Vue({
             username: "",
             password: ""
         },
-        id: null,
+        aid: null,
         topics: [],
         posts: [],
         topicAuthor: 0,
@@ -159,7 +159,7 @@ function GetUserDataRc() {
             RigthChatApp.unreadMessages = data.messages;
             RigthChatApp.user.username = data.username;
             RigthChatApp.username = data.username;
-            RigthChatApp.id = data.id;
+            RigthChatApp.aid = data.id;
             if (RigthChatApp.actualtopic) {
                 var id = RigthChatApp.actualtopic.id;
                 console.log('RC getMessagesForTopicRc: ' + id);

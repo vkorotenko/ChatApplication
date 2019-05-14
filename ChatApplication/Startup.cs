@@ -24,6 +24,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using ChatApplication.Hubs;
 
 namespace ChatApplication
 {
@@ -123,6 +124,7 @@ namespace ChatApplication
                             .AllowAnyMethod();
                     });
             });
+            services.AddSignalR();
             _logger.LogInformation("End configuring services");
         }
 
@@ -191,6 +193,7 @@ namespace ChatApplication
                 app.UseHsts();
             }
             _logger.LogInformation("App start");
+            
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -202,6 +205,10 @@ namespace ChatApplication
             //app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
             app.UseMvc();
         }
         
