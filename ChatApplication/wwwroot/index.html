@@ -215,8 +215,7 @@
 
     <div class="row">
         <div class="col-md-12" id="bodyContentLeft_">
-            <label for="right-chat-toggle" class="nav-toggle" onclick>
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="17" viewBox="0 0 22 17"><defs><path id="oh16a" d="M1142 19v17h-22V19zm-3 2h-16l8 7.06zm-17 2v10l6-5zm2 11h14l-5-5-2 1-2-1zm16-1V23l-6 5z"></path></defs><g><g transform="translate(-1120 -19)"><use xlink:href="#oh16a"></use></g></g></svg>
+            <label for="right-chat-toggle" class="nav-toggle float_button_no_bg" onclick>                
                 <span id="totalUnreadMessagesRc" style="display: none;"></span>
             </label>
 
@@ -1084,59 +1083,95 @@
     </script>
     
     <!-- right-chat-toggle-->
-    <input type="checkbox" id="right-chat-toggle" hidden>
+<input type="checkbox" id="right-chat-toggle" hidden>
+<div class="mask-content"></div>
+<style>
+    @import "/viewbox/viewbox.css";
+
+    .viewbox-container {
+        z-index: 10000
+    }
+    .w100 {
+        list-style: none;
+    }
+    .w100 img {
+        width: 100px;
+    }
+</style>
+<script>
+    var elem = document.createElement('script');
+    elem.src = "/viewbox/jquery.viewbox.min.js";
+    document.body.appendChild(elem);
+</script>
 <nav class="nav" id="rigth-chat-app">
+    
     <div class="nav-header">
 
         <h2 class="logo">
-            ЧАТ ПОДДЕРЖКИ
-            <span style="float: right; cursor: pointer" id="close-span">  &#x2715;</span>
+            ЧАТ ПОДДЕРЖКИ 
+            <div id="top_chat_counter" class="rigth_chat_count_bg">                
+                    3                
+            </div>
+            <span style="float: right; cursor: pointer" id="close-span"> &#x2715;</span>
         </h2>
     </div>
     <div @click="backToTopics" class="back_container mb-1r" v-if="showMessagePanel">
         <!-- Кнопка назад -->
         <span>&#8249;</span><span>Назад к темам</span>
     </div>
-    <input type="text" placeholder="Поиск..." class="form-control mb-1r" @input="search" v-if="!showMessagePanel" />
-    <div class=" messager__list " v-show="!showMessagePanel">
-        <template class="post_list">
+    <input type="text" placeholder="Поиск..." class="rigth_chat_search_input" @input="search" v-if="!showMessagePanel"/>
+    <div class="ms_container" v-show="!showMessagePanel">
+        <template class="">
             <a v-for="topic in topics"
                :href="'#message-' + topic.id"
-               class="messager__item row i-mid mp-0"
+               v-bind:class="{active : topic.selected}"
+               class="msg_container mp-0 h100"
                v-bind:class="{ selected: topic.selected }"
                @click="showThread(topic.id, this, $event)">
-                <div class="col-md-2 mp-0">
-                    <img class="anonce_img mlt-5" :src="'/api/v1/article/' + topic.announcementId + '/img'" :alt="topic.title">                    
-                </div>
-                <div class="col-md-10 mp-0">
-                    <span style="float: right; display: inline-block; margin-right: 5px;">
-                        {{topic.created | formatMonthDay}}
-                    </span>
-                    <div class="messager__persona">
-                        <div class="messager__name">
-                            <img :src="'/api/v1/user/avatar/' + topic.authorId" class="w20 " style="margin: 5px 0 -5px 5px;"/>
-                            {{topic.name}}
-                        </div>
-                        <div class="messager__text">
-                            {{topic.title}}<br />
-                            {{topic.vendor}}, {{topic.vendorCode}},
-                            {{ topic.price }} &#x20bd;.
-                        </div>
-                        <div v-if="topic.hasMessages" class="messager__count">{{ topic.unread }}</div>
+                
+                <div class="row h68">
+                    <div class="col-md-2 mp-0 ms_first">
+                        <img :src="'/api/v1/user/avatar/' + topic.authorId" class="w48 " />
+                    </div>
+                    <div class="col-md-8 mp-0 ms_body">
+                        <span class="message-name"> {{ topic.lmName }}  </span>
+                        <span
+                            v-bind:class="{ readed : topic.lmIsReaded }"
+                            class=" message-time-label tl_short">                            
+                            {{topic.lmCreated | formatMonthDayEx }}
+                        </span>
+                        <span v-bind:class="{ readed : topic.lmIsReaded }"
+                              class=" message-time-label tl_long">
+                            {{topic.lmCreated | formatDateTime }}
+                        </span>                        
+                        <br/>
+                        <span class="message-text-label" >
+                            <span v-if="topic.lmIsCurrent">Вы: </span> <span v-html="topic.lastMessage"></span>
+                        </span>
+                    </div>
+                    <div class="col-md-2 mp-0 end_col">
+                        <img class="w48r3" :src="'/api/v1/article/' + topic.announcementId + '/img'" >
                     </div>
                 </div>
+                <div class="row low_row_border">
+                    <div class="col-md-12 mp-0 message-meta">
+                        {{topic.title}} Цена: {{ topic.price }} &#x20bd; <br />
+                        Артикул: {{topic.vendorCode}} Производитель: {{topic.vendor}}
+                    </div>
+                </div>                              
             </a>
             <a v-if="topics.length == 0">
-                <div class="messager__persona">
-                    <div class="messager__name">Нет результатов</div>
+                <div class="no_result">
+                    Нет результатов
                 </div>
             </a>
         </template>
     </div>
+
     <div v-if="showMessagePanel" style="padding-bottom: 8px;">
         <div class="row">
             <a :href="'/article/view?id=' + actualtopic.id" style="cursor: pointer; width: 100%;">
-                
+
                 <div class="col-md-2 mp-0">
                     <img class="anonce_img mlt-5" :src="'/api/v1/article/' + actualtopic.id + '/img'" :alt="actualtopic.title">
                 </div>
@@ -1144,33 +1179,33 @@
                     <span style="float: right; display: inline-block; margin-right: 5px;">
                         {{actualtopic.created | formatMonthDay}}
                     </span>
-                    <div class="messager__persona mp-0">
+                    <div class="messager__persona mp-0" style="margin-left: 5px;">
                         <div class="messager__name">
-                            <img :src="'/api/v1/user/avatar/' + actualtopic.authorId" class="w20 " style="margin: 5px 0 -5px 5px;" />
+                            <img :src="'/api/v1/user/avatar/' + actualtopic.authorId" class="w20 " style="margin: 5px 0 -5px 5px;"/>
                             {{actualtopic.name}}
                         </div>
                         <div class="messager__text">
-                            {{actualtopic.title}}<br />
+                            {{actualtopic.title}}<br/>
                             {{actualtopic.vendor}}, {{actualtopic.vendorCode}},
-                            {{ actualtopic.price }} &#x20bd;.<br />
+                            {{ actualtopic.price }} &#x20bd;.<br/>
                             <div class="my_anonce" v-if="aid == actualtopic.authorId">Мое обьявление</div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
 
 
 
-            </a>            
+            </a>
         </div>
     </div>
     <div class="messager__list msg_h" v-if="showMessagePanel">
         <div v-if="showMessagePanel" style="background-color: #ffffff; padding-top: 9px;">
             <div v-if="posts.length == 0">
                 В данном чате пока нет сообщений.
-            </div>               
+            </div>
             <div v-for="msg in posts"
                  v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
-                 class="row" >
+                 class="row">
                 <div class="col-md-11 day_repeater" v-if="msg.newDay">
                     {{msg.created | formatMonthDay }}
                 </div>
@@ -1182,54 +1217,43 @@
                     </div>
                 </div>
                 <div v-bind:class="{ 'col-md-10': !msg.isAuthor, 'col-md-12': msg.isAuthor, tar: msg.isAuthor }"
-                     class=" msg-clear " >
-                    <div class="message__wrap_rc" >
+                     class=" msg-clear ">
+                    <div class="message__wrap_rc">
                         <span v-html="msg.body"></span>
 
-                        <template v-if="msg.attachment && msg.attachment.name != null" >
-                            <br />                                
-                                
-                            <div class="popup popup_normal block block_popup popup_rchat" :id="'popup-img-' + msg.id">
-                                <div class="popup__title">  </div>
-                                <div class=" popup__wrap row ">
-                                    <img v-if="msg.attachment.isImage" 
-                                         :src="msg.attachment.url" 
-                                         :alt="msg.attachment.name"  />
-                                </div>
-                            </div>
-
-                            <a data-fancybox :data-src="'#popup-img-' + msg.id" href="javascript:;">
-                                <img class="img-responsive" 
-                                     style="width: 250px!important" 
-                                     v-if="msg.attachment.isImage" 
-                                     :src="msg.attachment.url" 
-                                     :alt="msg.attachment.name" 
-                                      />
-                            </a>                                
+                        <template v-if="msg.attachment && msg.attachment.name != null">
+                            <br/>
+                            <a :href="msg.attachment.url" onclick="//return jsiBoxOpen(this)" target="_self" class="litebox" data-litebox-group="group-1" tabindex="0">
+                                <img class="img-responsive"
+                                     style="width: 250px !important"
+                                     v-if="msg.attachment.isImage"
+                                     :src="msg.attachment.url"
+                                     :alt="msg.attachment.name"/>
+                            </a>
                             <b>
-                                <a :href="msg.attachment.url" class="attachment_url"  target="_blank">
-                                    <div class="row" v-if="!msg.attachment.isImage" >
+                                <a :href="msg.attachment.url" class="attachment_url" target="_blank">
+                                    <div class="row" v-if="!msg.attachment.isImage">
                                         <div class="col-md-1">
-                                            <svg v-if="!msg.attachment.isImage" width="16" height="14" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:avocode="https://avocode.com/" viewBox="0 0 23 21"><defs><path d="M175.5096,860.07065l-0.10454,-0.10207c-2.30241,-2.21256 -5.99004,-2.1892 -8.26318,0.06829l-10.52525,10.44786c-0.79299,0.78892 -1.64675,2.22011 -1.64675,3.50215c0,1.20297 0.47318,2.33584 1.33132,3.18694c0.85848,0.85218 2.00046,1.32229 3.21548,1.32229h0.00069c1.21493,-0.00144 2.357,-0.47083 3.21479,-1.32373l9.08569,-9.01703c0.62407,-0.61963 0.96602,-1.47792 0.93616,-2.35669c-0.02918,-0.80581 -0.36092,-1.5631 -0.93616,-2.13242c-0.60442,-0.59951 -1.40694,-0.92945 -2.26172,-0.92945c-0.85539,0 -1.65851,0.32958 -2.26164,0.92945l-6.95804,6.90618c-0.17535,0.17216 -0.28487,0.41045 -0.28487,0.67391c0,0.52151 0.42598,0.94598 0.95238,0.94598c0.2629,0 0.50065,-0.10675 0.67266,-0.27783l0.00069,0.00144l6.96507,-6.91373c0.24899,-0.24656 0.59232,-0.36768 0.93478,-0.36193c0.32907,0.00503 0.65472,0.12651 0.89478,0.36409c0.23131,0.22967 0.36572,0.53589 0.37723,0.85972c0.01287,0.36049 -0.12145,0.69978 -0.37851,0.95425l-9.08544,9.01775c-0.49928,0.49492 -1.16241,0.76807 -1.86785,0.76879h-0.00069c-0.70553,0 -1.36934,-0.27387 -1.86862,-0.76879c-0.4979,-0.4942 -0.77299,-1.15121 -0.77299,-1.8492c0,-0.58693 0.49928,-1.57784 1.08945,-2.16512l10.52525,-10.4475c1.54126,-1.53183 4.04451,-1.54261 5.59994,-0.03774l0.10111,0.10064c1.49174,1.548 1.47071,4.01144 -0.0624,5.53429l-8.71164,8.64575c-0.17467,0.17216 -0.28324,0.40937 -0.28324,0.67283c0,0.52151 0.42598,0.9449 0.95281,0.9449c0.26281,0 0.49996,-0.10567 0.67223,-0.27603l0.00069,0.00072l8.71636,-8.65007c2.2861,-2.27079 2.297,-5.95516 0.03399,-8.23889z" id="Path-03333"></path></defs><desc></desc><g transform="matrix(1,0,0,1,-155,-858)"><g><title>Forma 1</title><use xlink:href="#Path-03333" fill="#5d6064" fill-opacity="1"></use></g></g></svg>
+                                            <img v-if="!msg.attachment.isImage" src="/img/document_ico.png" height="16px"/>
                                         </div>
                                         <div class="col-md-9 tx_download_wrap">
                                             {{msg.attachment.name}}
                                         </div>
                                         <div class="col-md-1">
-                                            <span class="download_ico">&#8681;</span>
+                                            <img src="/img/download_ico.png" height="16px"/>
                                         </div>
                                     </div>
                                 </a>
                             </b>
                         </template>
                     </div>
-                    <br />
-                    
-                    <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor, tl_readed: !msg.isAuthor && msg.isRead }" 
-                             :data-created="msg.created" 
-                             class="time_label tl_short">
-                            {{ msg.created | formatTime }}
-                    </div>                        
+                    <br/>
+
+                    <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor, tl_readed: !msg.isAuthor && msg.isRead }"
+                         :data-created="msg.created"
+                         class="time_label tl_short">
+                        {{ msg.created | formatTime }}
+                    </div>
                     <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor, tl_readed: !msg.isAuthor && msg.isRead }"
                          :data-created="msg.created"
                          class="time_label tl_long">
@@ -1239,9 +1263,9 @@
                         <template v-else>
                             {{ msg.created | formatDateTime }}
                         </template>
-                        
-                    </div>                        
-                    
+
+                    </div>
+
                 </div>
 
             </div>
@@ -1264,10 +1288,10 @@
                     <input type="file" id="file-rch" name="uploads" @change="fileSelected">
                 </form>
             </div>
-            <button class="messager__btn btn-small btn_bg-yellow" @click="sendMessage" style="margin-top: 4px;border: solid 1px #000;"><span>Отправить</span></button>
+            <button class="messager__btn btn-small btn_bg-yellow" @click="sendMessage" style="margin-top: 4px; border: solid 1px #000;"><span>Отправить</span></button>
         </div>
-        <br />
-        <br />
+        <br/>
+        <br/>
     </div>
 </nav>
     <script src="~/js/dist/browser/signalr.js"></script>
@@ -2058,6 +2082,7 @@
     });
 </script>
 <script src="/assets/d38a6638/jquery.js?v=1516469217"></script>
+<script src="/viewbox/jquery.viewbox.min.js"></script>
 <script src="/assets/aa7dffa/yii.js?v=1551337386"></script>
 <!--[if lt IE 9]>
 <script src="/assets/f99a0577/dist/html5shiv.min.js?v=1552989966"></script>

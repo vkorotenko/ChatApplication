@@ -76,5 +76,25 @@ namespace ChatApplication.Dbl.Models
         public string Name { get; set; }
 
         public int Price { get; set; }
+
+        /// <summary>
+        /// Автор последнего сообщения в топике является ли текущим пользователем
+        /// </summary>
+        public bool LmIsCurrent { get; set; }
+        /// <summary>
+        /// Текст последнего сообщения
+        /// </summary>
+        public string LastMessage { get; set; }
+        /// <summary>
+        /// идентификатор автора последнего сообщения
+        /// </summary>
+        public int LmAuthorId { get; set; }
+        /// <summary>
+        /// Флаг прочтения последнего сообщения
+        /// </summary>
+        public bool LmIsReaded { get; set; }
+
+        public DateTime LmCreated { get; set; }
+        public string LmName { get; set; }
     }
 }

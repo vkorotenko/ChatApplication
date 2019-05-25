@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Migrations.Design;
 
 namespace ChatApplication.Controllers
 {
@@ -216,6 +217,8 @@ namespace ChatApplication.Controllers
                 await _ctx.Topics.UpdateTs(id);
                 var model = Mapper.Map<MessageModel>(dbMessage);
                 model.IsAuthor = true;
+
+                MessagePolling.Publish(user.Id, new LpMessage{Name = user.FirstName, Topic = id, Unread = 1});
                 return Json(model);
             }
             catch (Exception ex)
@@ -349,23 +352,34 @@ namespace ChatApplication.Controllers
             long count = 0;
             try
             {
-                var roles = await _ctx.Roles.GetRolesForUser(userid);
-                if (await IsAdminOrManager(userid))
-                {
-                    count = await _ctx.Messages.GetUnreadMessagesForAdmin(userid);
-                }
-                else
-                {
-                    count = await _ctx.Messages.GetUnreadMessages(userid);
-                }
-
+                count = await GetUnreadMessages(userid);
+                var lp = new MessagePolling(userid);
+                LpMessage message = await lp.WaitAsync() ?? new LpMessage { Unread = (int)count };
+                return new JsonResult(message);
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
             }
-            return Content(count.ToString());
+            return Json(new LpMessage { Unread = (int)count });
         }
+
+        private async Task<long> GetUnreadMessages(int userid)
+        {
+            long count = 0;
+            var roles = await _ctx.Roles.GetRolesForUser(userid);
+            if (await IsAdminOrManager(userid))
+            {
+                count = await _ctx.Messages.GetUnreadMessagesForAdmin(userid);
+            }
+            else
+            {
+                count = await _ctx.Messages.GetUnreadMessages(userid);
+            }
+
+            return count;
+        }
+
 
         private async Task<bool> IsAdminOrManager(int id)
         {
@@ -396,7 +410,7 @@ namespace ChatApplication.Controllers
                 return BadRequest();
             }
         }
-        
+
         /// <summary>
         /// Создание топика на основе обьявления
         /// </summary>
@@ -425,7 +439,7 @@ namespace ChatApplication.Controllers
             var topic = await _ctx.Topics.Get(id);
             if (topic == null)
             {
-                var article = await _ctx.Articles.Get((int) id);
+                var article = await _ctx.Articles.Get((int)id);
                 if (article != null)
                 {
                     var newTopic = new DbTopic
@@ -489,6 +503,7 @@ namespace ChatApplication.Controllers
                     topic.FullName = user.FullName;
                     topic.Name = appUser.Name;
                     topic.Price = await _ctx.Articles.GetPrice(topic.AnnouncementId);
+                    await FillTopicLastMessage(topic, user);
                     if (string.IsNullOrWhiteSpace(url))
                     {
                         url = await GetAvatarImage(topic.AuthorId);
@@ -517,6 +532,56 @@ namespace ChatApplication.Controllers
                 return BadRequest();
             }
         }
+
+        /// <summary>
+        /// Заполняем поля последнего сообщения в топике, признак прочтения и флаг автор или нет
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        private async Task<DbTopic> FillTopicLastMessage(DbTopic topic, DbUser user)
+        {
+            var msg = await _ctx.Messages.GetLastMessageForTopic(topic.Id);
+            if (msg != null)
+            {
+                var msgUser = await GetCachedUser(msg.AuthorId);
+                topic.LmAuthorId = msg.AuthorId;
+                topic.LmIsCurrent = msg.AuthorId == user.Id;
+                topic.LastMessage = msg.Body;
+                topic.LmIsReaded = msg.IsRead;
+                topic.LmCreated = msg.Created;
+                topic.LmName = msgUser.FirstName;
+            }
+
+            return topic;
+        }
+
+
+        private static object _locker = new object();
+        private Dictionary<int, DbUser> _cashedUser = new Dictionary<int,DbUser>();
+        
+        /// <summary>
+        /// Получение закешированного пользователя.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private async Task<DbUser> GetCachedUser(int id)
+        {
+            lock (_locker)
+            {
+                if (_cashedUser.ContainsKey(id))
+                {
+                    return _cashedUser[id];                
+                }
+            }
+            var u = await _ctx.Users.Get(id);
+            lock (_locker)
+            {
+                _cashedUser.TryAdd(id, u);
+            }
+            return u;
+        }
+
         /// <summary>
         /// Получаем последние 4 непрочтенных сообщения для пользователя.
         /// Либо возвращаем пустой список если их нет.

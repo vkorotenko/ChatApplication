@@ -6,31 +6,27 @@
  */
 
 .nav {
-    /*  ширна произвольная, не стесняйтесь экспериментировать */
-    width: 375px;
-    min-width: 375px;
-    /* фиксируем и выставляем высоту панели на максимум */
+    width: 336px;
+    min-width: 336px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
     height: 100%;
     position: fixed;
     top: 0;
     bottom: 0;
     margin: 0;
-    /* сдвигаем (прячем) панель относительно правого края страницы */
-    right: -375px;
-    /* внутренние отступы */
-    padding: 9px 9px;
-    /*padding-right: 0;*/
+    right: -336px;    
     /* плавный переход смещения панели */
     -webkit-transition: right 0.8s;
     -moz-transition: right 0.8s;
     transition: right 0.8s;
     /* определяем цвет фона панели */
-    background: #f1c400;
+    background: white;
     /* поверх других элементов */
-    z-index: 99999;
-    border-left: solid 1px #ccc;
-    border-bottom: solid 1px #ccc;
-    font-size: 12px;
+    z-index: 99999;    
+    font-size: 12pt;
+    font-family: 'Roboto Condensed', sans-serif;
+    padding-left: 10px;
 }
 
 
@@ -41,14 +37,11 @@
 
 .nav-toggle {
     position: fixed;
-    right: 17px;
-    top: 144px;
-    padding: 0.5em;
-    background-color: #f1c400;
+    right: 52px;
+    top: 144px;    
+    background-color: rgb(244, 196, 58);
     color: white;
-    cursor: pointer;
-    font-size: 1.2em;
-    line-height: 1;
+    cursor: pointer;    
     z-index: 2001;
     -webkit-transition: color .8s ease-in-out;
     -moz-transition: color .8s ease-in-out;
@@ -121,9 +114,9 @@
 
     [id='right-chat-toggle']:checked ~ .nav {
         right: 0;
-        box-shadow: -4px 0px 20px 0px rgba(0,0,0, 0.5);
-        -moz-box-shadow: -4px 0px 20px 0px rgba(0,0,0, 0.5);
-        -webkit-box-shadow: -4px 0px 20px 0px rgba(0,0,0, 0.5);
+        box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
+        -moz-box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
+        -webkit-box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
         overflow-y: hidden;
     }
 
@@ -203,18 +196,12 @@ body {
     text-transform: uppercase;
     padding: 0;
     color: #000;
-    background-color: #f1c400;
-    font-size: 1.3em;
+    background-color: rgb(244, 196, 58);
+    font-size: 13.5pt;
     background: none;
 }
 
-    .nav h2 a {
-        color: #dadada;
-        text-decoration: none;
-        text-transform: uppercase;
-    }
-
-
+    
 /*плавное появление заголовка (логотипа) при раскрытии панели */
 
 [id='right-chat-toggle']:checked ~ .nav h2 {
@@ -226,155 +213,6 @@ body {
 }
 
 
-/**
- * формируем непосредственно само меню
- * используем неупорядоченный список для пунктов меню
- * прикрутим трансфомации и плавные переходы
- */
-
-.nav > ul {
-    display: block;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-    .nav > ul > li {
-        line-height: 1;
-        opacity: 0;
-        width: 100%;
-        /*-webkit-transform: translateX(50%);
-    -moz-transform: translateX(50%);
-    -ms-transform: translateX(50%);
-    transform: translateX(50%);
-    -webkit-transition: opacity .5s .1s, -webkit-transform .5s .1s;
-    -moz-transition: opacity .5s .1s, -moz-transform .5s .1s;
-    -ms-transition: opacity .5s .1s, -ms-transform .5s .1s;
-    transition: opacity .5s .1s, transform .5s .1s;*/
-    }
-
-[id='right-chat-toggle']:checked ~ .nav > ul > li {
-    opacity: 1;
-    -webkit-transform: translateX(0);
-    -moz-transform: translateX(0);
-    -ms-transform: translateX(0);
-    transform: translateX(0);
-}
-
-
-/* определяем интервалы появления пунктов меню */
-
-/*.nav > ul > li:nth-child(2) {
-    -webkit-transition: opacity .5s .2s, -webkit-transform .5s .2s;
-    transition: opacity .5s .2s, transform .5s .2s;
-}
-
-.nav > ul > li:nth-child(3) {
-    -webkit-transition: opacity .5s .3s, -webkit-transform .5s .3s;
-    transition: opacity .5s .3s, transform .5s .3s;
-}
-
-.nav > ul > li:nth-child(4) {
-    -webkit-transition: opacity .5s .4s, -webkit-transform .5s .4s;
-    transition: opacity .5s .4s, transform .5s .4s;
-}
-
-.nav > ul > li:nth-child(5) {
-    -webkit-transition: opacity .5s .5s, -webkit-transform .5s .5s;
-    transition: opacity .5s .5s, transform .5s .5s;
-}
-
-.nav > ul > li:nth-child(6) {
-    -webkit-transition: opacity .5s .6s, -webkit-transform .5s .6s;
-    transition: opacity .5s .6s, transform .5s .6s;
-}
-
-.nav > ul > li:nth-child(7) {
-    -webkit-transition: opacity .5s .7s, -webkit-transform .5s .7s;
-    transition: opacity .5s .7s, transform .5s .7s;
-}*/
-
-
-/**
- * оформление ссылок пунктов меню
- */
-
-.nav > ul > li > a {
-    display: inline-block;
-    position: relative;
-    padding: 0;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
-    font-size: 1rem;
-    color: black;
-    width: 100%;
-    text-decoration: none;
-    /* плавный переход */
-    /*-webkit-transition: color .5s ease, padding .5s ease;
-    -moz-transition: color .5s ease, padding .5s ease;
-    transition: color .5s ease, padding .5s ease;*/
-}
-
-
-    /**
- * состояние ссылок меню при наведении
- */
-
-    .nav > ul > li > a:hover,
-    .nav > ul > li > a:focus {
-        color: #999999;
-        /*padding-left: 15px;*/
-    }
-
-
-    /**
- * линия подчеркивания ссылок меню
- */
-
-    .nav > ul > li > a:before {
-        content: '';
-        display: block;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        height: 1px;
-        width: 100%;
-        -webkit-transition: width 0s ease;
-        transition: width 0s ease;
-    }
-
-    .nav > ul > li > a:after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 1px;
-        width: 100%;
-        background: #999999;
-        -webkit-transition: width .5s ease;
-        transition: width .5s ease;
-    }
-
-
-    /**
- * анимируем линию подчеркивания 
- * ссылок при наведении
- */
-
-    .nav > ul > li > a:hover:before {
-        width: 0%;
-        background: black;
-        -webkit-transition: width .5s ease;
-        transition: width .5s ease;
-    }
-
-    .nav > ul > li > a:hover:after {
-        width: 0%;
-        background: transparent;
-        -webkit-transition: width 0s ease;
-        transition: width 0s ease;
-    }
 
 
 /* фон затемнения на основной контент 
@@ -419,7 +257,7 @@ body {
 }
 
 .back_container {
-    background-color: #f1c400;
+    background-color: rgb(244, 196, 58);
     border: 1px solid #000;
     padding: 6px 12px;
     line-height: 20px;
@@ -440,8 +278,67 @@ body {
 }
 
 .nav-header {
-    padding: 15px 0;
-  /*  background-color: #f1c400;*/
+    margin: 0px 0px 0 -10px;
+    padding: 23px 16px 16px 20px;
+    height: 50px;
+    background-color: rgb(244, 196, 58);
+}
+
+.ms_container {
+    overflow-y: auto;
+    height: calc(100% - 120px);
+}
+.ms_container::-webkit-scrollbar-button { 
+    background-image:url(''); 
+    background-repeat:no-repeat; 
+    width:6px; 
+    height:0px 
+}
+
+.ms_container::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    /*box-shadow: 0px 0px 3px #000 inset;*/
+}
+
+.ms_container::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 1px;
+    border-radius: 1px;
+    background-color: rgb(244, 196, 58);
+    /*box-shadow: 0px 1px 1px #fff inset;*/
+    background-image: url('assets/59610063.png');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.ms_container::-webkit-resizer {
+    background-image: url('');
+    background-repeat: no-repeat;
+    width: 3px;
+    height: 0px
+}
+
+.ms_container::-webkit-scrollbar {
+    width: 3px;
+}
+
+
+/* Счетчик в заголовке*/
+.rigth_chat_count_bg {
+    -moz-border-radius: 50%;
+    display: block;
+    position: absolute;
+    margin-left: 9px;
+    top: -8px;
+    left: 133px;
+    vertical-align: text-bottom;
+    border-radius: 50%;
+    text-align: center;
+    color: rgb(244, 196, 58);
+    font-size: 12px;
+    padding-top: 8px;
+    background-color: rgb(51, 51, 51);
+    width: 24px;
+    height: 24px;
 }
 
 /*стили лоадера */
@@ -460,7 +357,7 @@ body {
         left: -200px;
         width: 200px;
         height: 4px;
-        background-color: #f1c400;
+        background-color: rgb(244, 196, 58);
         animation: loading 2s linear infinite;
     }
 
@@ -678,6 +575,7 @@ body {
     display: none;
 }
 
+
 .message__wrap_rc {
     position: relative;
     /*width: 100%;*/
@@ -718,6 +616,7 @@ body {
     text-wrap: none;
     overflow: hidden;
     max-width: 120px;
+    white-space: nowrap;
 }
 
 .day_repeater {
@@ -742,4 +641,137 @@ body {
 }
 .nav .messager__item {
     padding-bottom: 1rem;
+}
+
+.width_sub_375 {
+    width : calc(100% - 375px);
+}
+
+.rigth_chat_search_input {
+    -moz-border-radius: 3px !important;
+    border-radius: 3px !important;
+    border: 1px solid rgb(241, 241, 241);
+    background-color: rgb(241, 241, 241);
+    padding: 5px 15px;
+    color: #949494;
+    margin: 15px;
+    margin-left: 5px;
+    height: 33px;
+    width: calc(100% - 20px);
+}
+    .rigth_chat_search_input:focus {
+        outline: none !important;
+        border: 1px solid rgb(244, 196, 58);
+        box-shadow: 0px 1px 0px 0 rgb(241, 241, 241);
+    }
+.no_result {
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.msg_container {
+    height: 99px;
+    border-bottom: 1px solid #f1f1f1;
+    display: block;
+}
+    .msg_container:hover .tl_short {
+        display: none;
+    }
+
+    .msg_container:hover .tl_long {
+        display: inline-block;
+    }
+    .msg_container .tl_long {
+        display: none;
+    }
+
+.active {
+    background-color: #fdf3d8;
+}
+.message-meta {
+    padding-left: 10px;
+    font-size: 10.5pt;
+    font-style: italic;
+    padding: 0px 7px 7px 10px;
+    font-family: 'Roboto Italic';
+    color: #c6c6c6;
+}
+.message-time-label {
+    font-size: 9pt;
+    color: #949494;
+    float: right;
+    display: inline-block;
+    margin-right: 5px;
+}
+.readed:after {
+    content: ' ';
+    display: inline-block;
+    width: 15px;
+    height: 11px;
+    margin: 0px -5px -1px 6px;
+    background-image: url(/img/rc/is_read.png);
+}
+}
+.message-text-label {
+    font-size: 12pt;
+    color: #949494!important;
+}
+    .message-text-label span {
+        font-size: 12pt;
+        color: #949494 !important;
+        line-height: 1.7;
+    }
+    .message-name {
+        font-size: 12pt;
+        color: #333333;
+    }
+.w48 {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+}
+.w48r3 {
+    width: 48px;
+    height: 48px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    float: right;
+}
+
+.ms_body {
+    padding: 21px 5px 0px 14px;
+}
+.ms_first {
+    padding: 14px 0px 0px 6px;
+}
+.end_col {
+    padding: 14px 5px 0 0px;
+}
+.h68 {
+    height: 68px;
+}
+.h100 {
+    height: 100px;
+}
+
+.float_button_yes_bg {
+    background-image: url('/img/rc/floating_button_messages.png');
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: rgb(210, 38, 43);
+    box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
+    width: 124px;
+    height: 124px;
+}
+
+.float_button_no_bg {
+    background-image: url('/img/rc/floating_button_nomessages.png');
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: rgb(244, 196, 58);
+    box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
+    width: 124px;
+    height: 124px;
+    z-index: 10;
 }

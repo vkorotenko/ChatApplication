@@ -118,6 +118,17 @@
             Уничтожение обьектов
             </summary>
         </member>
+        <member name="T:ChatApplication.Code.MessagePolling">
+            <summary>
+            Класс долгого опроса сообщений
+            </summary>
+        </member>
+        <member name="M:ChatApplication.Code.MessagePolling.#ctor(System.Int32)">
+            <summary>
+            Конструктор долгого опроса.
+            </summary>
+            <param name="userId"></param>
+        </member>
         <member name="T:ChatApplication.Code.UserRoles">
             <summary>
             символические имена в системе ролей
@@ -345,6 +356,21 @@
             <param name="query"></param>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.UserController.FillTopicLastMessage(ChatApplication.Dbl.Models.DbTopic,ChatApplication.Dbl.Models.DbUser)">
+            <summary>
+            Заполняем поля последнего сообщения в топике, признак прочтения и флаг автор или нет
+            </summary>
+            <param name="topic"></param>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.GetCachedUser(System.Int32)">
+            <summary>
+            Получение закешированного пользователя.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:ChatApplication.Controllers.UserController.GetLatestMessages">
             <summary>
             Получаем последние 4 непрочтенных сообщения для пользователя.
@@ -518,6 +544,21 @@
         <member name="P:ChatApplication.Models.LoginModel.Password">
             <summary>
             Пароль для входа.
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.LpMessage.Unread">
+            <summary>
+            Количество непрочтенных сообщений
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.LpMessage.Name">
+            <summary>
+            Имя печатающего
+            </summary>
+        </member>
+        <member name="P:ChatApplication.Models.LpMessage.Topic">
+            <summary>
+            Идентификатор топика
             </summary>
         </member>
         <member name="T:ChatApplication.Models.Message">

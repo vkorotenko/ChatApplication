@@ -53,8 +53,13 @@ namespace ChatApplication.Dbl.Repository
         /// <param name="id"></param>
         /// <returns></returns>
         Task<List<DbMessage>> GetMessagesForTopic(long id);
-
         /// <summary>
+        /// Получение последнего сообщения в топике.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<DbMessage> GetLastMessageForTopic(long id);
+            /// <summary>
         /// помечает все сообщения топика как прочтенные
         /// </summary>
         /// <param name="topicid">Топик для очистки</param>

@@ -116,6 +116,21 @@ namespace ChatApplication.Dbl.Repository
         }
 
         /// <summary>
+        /// Получение последнего сообщения в топике.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DbMessage> GetLastMessageForTopic(long id)
+        {
+            var sql = @"SELECT * FROM dbmessages
+                        WHERE topicid = @id
+                        ORDER BY created DESC
+                        LIMIT 1";
+            var res = await _dbConn.QueryAsync<DbMessage>(sql, new {id});
+            return res.FirstOrDefault();
+        }
+
+        /// <summary>
         /// Помечает все сообщения топика как прочтенные
         /// </summary>
         /// <param name="topicid"></param>

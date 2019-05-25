@@ -4,7 +4,7 @@ var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
 
 
-setInterval(checkMessagesForUser, 1000);
+checkMessagesForUser();
 setInterval(function () { RefreshToken(sessionToken); }, 55000);
 
 var RigthChatApp = new Vue({
@@ -40,8 +40,7 @@ var RigthChatApp = new Vue({
             RigthChatApp.topicId = id;
             selectItemRc(id);
             getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
-            clearNewMessagesRc(id);
-            RigthChatApp.getUserData();
+            clearNewMessagesRc(id);            
         },
         sendMessage: function () {
             if (RigthChatApp.messageArea != "" || isFileSelectedRc())
@@ -146,6 +145,31 @@ Vue.filter('formatDate', function (value) {
         return d.toLocaleDateString('ru-RU', opt);
     }
 });
+
+Vue.filter('formatMonthDayEx', function (value) {
+    if (value) {
+        var d = new Date(Date.parse(value));
+        var cur = new Date();
+        var opt = { day: 'numeric', month: 'short' };
+
+        // Сегодня
+        if (cur.getFullYear() == d.getFullYear() &&
+            cur.getMonth() == d.getMonth() &&
+            cur.getDate() == d.getDate()) {
+
+            opt = { hour: '2-digit', minute: '2-digit' };
+            return 'сегодня ' + d.toLocaleTimeString('ru-RU', opt);
+        }
+        if (cur.getFullYear() == d.getFullYear() &&
+            cur.getMonth() == d.getMonth() &&
+            cur.getDate() == (d.getDate() + 1)) {
+
+            opt = { hour: '2-digit', minute: '2-digit' };
+            return 'вчера ' + d.toLocaleTimeString('ru-RU', opt);
+        }        
+        return d.toLocaleDateString('ru-RU', opt);
+    }
+});
 GetUserDataRc();
 function findTopic(array, id) {
     for (i = 0; i < array.length; i++) {
@@ -210,7 +234,7 @@ function selectItemRc(id) {
 }
 function getMessagesForTopicRc(id, authorId) {
     var sessionToken = sessionStorage.getItem(tokenKey);
-    var req = $.ajax({
+    $.ajax({
         type: 'GET',
         url: '/api/v1/user/messages/' + id,
         beforeSend: function (xhr) {
@@ -223,21 +247,15 @@ function getMessagesForTopicRc(id, authorId) {
             RigthChatApp.posts = data;
             setTimeout(function () {
                 $('.msg_h').scrollTop(99999);
+                // $('.viewbox-container').remove();
+                // $(".litebox").viewbox = null;
+                var template =
+                    '<div class="viewbox-container width_sub_375"><div class="viewbox-body"><div class="viewbox-header"></div><div class="viewbox-content"></div><div class="viewbox-footer"></div></div></div>';
+                $(".litebox").viewbox({ template: template, navButtons: false, nextOnContentClick: false });
             }, 300);
+            
         }
-    });
-
-    req.fail(function (data, status) {
-        if (data.status == 401) {
-            var te = data.getResponseHeader('Token-Expired');
-            if (te) {
-                RefreshToken(sessionToken);
-                getMessagesForTopicRc(id);
-            }
-        }
-        else
-            console.log('err');
-    });
+    });   
 }
 // Отправка сообщения в топик
 function sendMessageToTopicRc(body, topicId) {
@@ -408,18 +426,25 @@ function showRigthChat(ifShow, id) {
     }
 };
 function checkMessagesForUser() {
-    if (!processRefresh) return;
-    $.ajax({
+    if (!processRefresh)
+        setTimeout(checkMessagesForUser, 5000);
+    var req = $.ajax({
         type: 'GET',
         url: '/api/v1/user/totalunread/' + loggedinUserId,
         success: function (data) {
-            var count = parseInt(data);
-
+            var count = 0;
+            if (data.unread)
+                count = data.unread;
+            if (data.name && data.name != "") {
+                RigthChatApp.setTyping(data.name, data.topic);
+            }
+            // unread, name, topic
             if (count > 0) {
                 totalMessagesSpan.text(count);
                 totalMessagesSpan.show();
                 totalMessagesSpanRc.text(count);
                 totalMessagesSpanRc.show();
+
                 if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
                 if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
                 if (NewMessagesInformer && NewMessagesInformer.getData) NewMessagesInformer.getData();
@@ -427,8 +452,18 @@ function checkMessagesForUser() {
                 totalMessagesSpan.hide();
                 totalMessagesSpanRc.hide();
             }
+            setTimeout(checkMessagesForUser, 5000);
         }
     });
+
+    req.fail(function (data, status) {
+        console.log(status);        
+        if (data.status == 502) {
+            console.log('error 502');
+        }    
+        setTimeout(checkMessagesForUser, 5000);
+    });
+
 }
 function RefreshToken(token) {
     var bd = { token: token };
