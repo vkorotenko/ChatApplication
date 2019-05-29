@@ -20,6 +20,8 @@ namespace ChatApplication.Models
         /// Имя печатающего
         /// </summary>
         public string Name { get; set; }
+
+        public int id { get; set; }
         /// <summary>
         /// Идентификатор топика
         /// </summary>

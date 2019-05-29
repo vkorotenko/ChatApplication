@@ -219,7 +219,13 @@ namespace ChatApplication.Controllers
                 var model = Mapper.Map<MessageModel>(dbMessage);
                 model.IsAuthor = true;
 
-                MessagePolling.Publish(user.Id, new LpMessage{Name = user.FirstName, Topic = id, Unread = 1});
+                MessagePolling.Publish(user.Id, new LpMessage
+                {
+                    Name = user.FirstName,
+                    id = user.Id,
+                    Topic = id,
+                    Unread = 1
+                });
                 return Json(model);
             }
             catch (Exception ex)
@@ -355,7 +361,7 @@ namespace ChatApplication.Controllers
             {
                 count = await GetUnreadMessages(userid);
                 var lp = new MessagePolling(userid);
-                LpMessage message = await lp.WaitAsync() ?? new LpMessage { Unread = (int)count };
+                var message = await lp.WaitAsync() ?? new LpMessage { Unread = (int)count };
                 return new JsonResult(message);
             }
             catch (Exception e)
