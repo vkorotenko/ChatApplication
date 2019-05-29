@@ -69,5 +69,7 @@ namespace ChatApplication.Models
         /// Полное имя
         /// </summary>
         public string FullName { get; set; }
+
+        public string Name { get; set; }
     }
 }

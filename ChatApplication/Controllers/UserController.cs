@@ -113,6 +113,7 @@ namespace ChatApplication.Controllers
                         users.Add(msguser.Id, msguser);
                     }
                     message.FullName = msguser.FullName;
+                    message.Name = msguser.FirstName;
 
                     var dbattachment = await _ctx.Files.GetForMessage(message.Id);
                     var attachment = Mapper.Map<AttachmentModel>(dbattachment);
@@ -363,7 +364,23 @@ namespace ChatApplication.Controllers
             }
             return Json(new LpMessage { Unread = (int)count });
         }
-
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("startunread/{id}")]
+        public async Task<IActionResult> StartUnread([FromRouteAttribute] int id)
+        {
+            long count = 0;
+            try
+            {
+                count = await GetUnreadMessages(id);
+                return Content(count.ToString());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }
+            return Json(new LpMessage { Unread = (int)count });
+        }
         private async Task<long> GetUnreadMessages(int userid)
         {
             long count = 0;
@@ -550,7 +567,10 @@ namespace ChatApplication.Controllers
                 topic.LastMessage = msg.Body;
                 topic.LmIsReaded = msg.IsRead;
                 topic.LmCreated = msg.Created;
-                topic.LmName = msgUser.FirstName;
+                if (msgUser != null)
+                {
+                    topic.LmName = msgUser.FirstName;
+                }                
             }
 
             return topic;
