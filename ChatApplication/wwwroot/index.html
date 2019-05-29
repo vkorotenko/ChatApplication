@@ -1201,14 +1201,14 @@
                     {{msg.created | formatMonthDay }}
                 </div>
                 
-                <div class="col-md-2 mp-0">
+                <div class="col-md-2 mp-0 avatar_flex">
                     <img :src="msg.avatarUrl" 
                          alt="" 
                          class="w40 mlt-5" 
                          v-if="!msg.isAuthor">
                 </div>
                 <div class="col-md-10 mp-0" v-bind:class="{fac_r: msg.isAuthor}">
-                    <div v-if="!msg.isAuthor">{{msg.name}}</div>
+                    <div v-if="!msg.isAuthor" class="top_name">{{msg.name}}</div>
                     <div v-bind:class="{ from_alien: !msg.isAuthor, from_author: msg.isAuthor }">
                         <div v-html="msg.body"></div>                        
                         <template v-if="msg.attachment && msg.attachment.name != null">
@@ -1238,21 +1238,15 @@
                         </template>
 
 
-                        <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor, tl_readed: msg.isRead }"
+                        <div v-bind:class="{  tl_right: true, tl_readed: msg.isRead &&  msg.isAuthor}"
                              :data-created="msg.created"
                              class="time_label tl_short">
                             {{ msg.created | formatTime }}
                         </div>
-                        <div v-bind:class="{ tl_left: !msg.isAuthor, tl_right: msg.isAuthor, tl_readed: msg.isRead }"
+                        <div v-bind:class="{ tl_right: true, tl_readed: msg.isRead &&  msg.isAuthor }"
                              :data-created="msg.created"
-                             class="time_label tl_long">
-                            <template v-if="!msg.isAuthor">
-                                {{ msg.created | formatTime }}, {{ msg.created | formatDate }}
-                            </template>
-                            <template v-else>
-                                {{ msg.created | formatDateTime }}
-                            </template>
-
+                             class="time_label tl_long">                                                        
+                            {{ msg.created | formatDateTime }}                            
                         </div>
                     </div>
                 </div>                                                       

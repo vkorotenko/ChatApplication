@@ -24,7 +24,7 @@
     background: white;
     /* поверх других элементов */
     z-index: 99999;
-    font-size: 12pt;
+    font-size: 16px;
     font-family: 'Roboto Condensed', sans-serif;
     padding-left: 10px;
 
@@ -55,7 +55,7 @@
 
     .nav-toggle > span {
         z-index: 1;
-        font-size: 18pt;
+        font-size: 24px;
         font-weight: 700;
         width: 37px;
         height: 37px;
@@ -202,9 +202,9 @@ body {
 .nav h2 {
     text-transform: uppercase;
     padding: 0;
-    color: #000;
+    color: #333333;
     background-color: rgb(244, 196, 58);
-    font-size: 13.5pt;
+    font-size: 18px;
     background: none;
 }
 
@@ -474,7 +474,7 @@ body {
 
 .time_label {
     color: #949494;
-    font-size: 9pt;    
+    font-size: 12px;    
 }
 
 .tl_left {
@@ -662,6 +662,7 @@ body {
 .day_repeater {
     text-align: center;
     margin: 12px;
+    color: #949494;
 }
 
 .my_anonce {
@@ -739,15 +740,21 @@ body {
 
 .message-meta {
     padding-left: 10px;
-    font-size: 10.5pt;
+    font-size: 14px;
     font-style: italic;
     padding: 0px 7px 7px 10px;
     font-family: 'Roboto Italic';
     color: #c6c6c6;
+    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
 }
 
 .message-time-label {
-    font-size: 9pt;
+    font-size: 12px;
     color: #949494;
     float: right;
     display: inline-block;
@@ -764,7 +771,7 @@ body {
 }
 
 .message-text {
-    font-size: 12pt;
+    font-size: 16px;
     color: #949494 !important;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -774,7 +781,7 @@ body {
 }
 
 .message-name {
-    font-size: 12pt;
+    font-size: 16px;
     color: #333333;
 }
 
@@ -836,7 +843,7 @@ body {
 
 .back_span {
     padding: 0 0 0 0;
-    font-size: 20pt;
+    font-size: 27px;
 }
 
 .anonse_bar {
@@ -847,7 +854,7 @@ body {
 
 .anonse_header {
     margin-left: 12px;
-    font-size: 12pt;
+    font-size: 16px;
     font-weight: bold;
     color: #333333;
     line-height: 1.2;
@@ -855,7 +862,7 @@ body {
 
     .anonse_header > a {
         color: #c6c6c6;
-        font-size: 10.5pt;        
+        font-size: 14px;        
         position: relative;
         top: 0px;
         right: -66px;
@@ -863,7 +870,7 @@ body {
 
         .anonse_header > a:after {
             content: '>';
-            font-size: 10.5pt;
+            font-size: 14px;
         }
 .send_panel {
     background-color: #f1f1f1;
@@ -905,16 +912,26 @@ body {
     padding-right: 16px;
 }
 
+.avatar_flex {
+    display: flex;
+    flex-direction: column-reverse;
+}
 
-
-.from_alien{
+.from_alien {
     -moz-border-radius: 3px;
     border-radius: 3px;
-    background-color: rgb(241, 241, 241);    
+    background-color: rgb(241, 241, 241);
     width: 220px;
-    min-height: 38px;    
+    min-height: 38px;
+    padding: 8px 5px 4px 10px;
 }
 .close_span {
     float: right;
     cursor: pointer;
+}
+.top_name {
+    font-family: "Roboto Italic";
+    font-size: 16px;
+    color: #c6c6c6;
+    margin-bottom: 4px;
 }
