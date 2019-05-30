@@ -30,7 +30,8 @@ var RigthChatApp = new Vue({
         showDeveloperConsole: false,
         mailRefresh: true,
         showSearchLoader: false,
-        showMessagePanel: false
+        showMessagePanel: false,
+        query: ""
     },
     methods: {
         showThread: function(id, el, event) {

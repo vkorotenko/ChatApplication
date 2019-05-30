@@ -1119,7 +1119,13 @@
             <span class="close_span" @click="closePanel"> &#x2715;</span>
         </h2>
     </div>    
-    <input type="text" placeholder="Поиск..." class="rigth_chat_search_input" @input="search" v-if="!showMessagePanel"/>
+    <input 
+        type="text" 
+        placeholder="Поиск..." 
+        class="rigth_chat_search_input" 
+        v-model="query"
+        @input="search" 
+        v-if="!showMessagePanel"/>
     <div class="ms_container" v-show="!showMessagePanel">
         <template class="">
             <a v-for="topic in topics"
