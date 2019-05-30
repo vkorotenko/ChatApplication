@@ -1071,7 +1071,7 @@
         
         var showRigthChatPanel = false;
 
-        
+       
         
 
         
@@ -1130,7 +1130,7 @@
         <template class="">
             <a v-for="topic in topics"
                :href="'#message-' + topic.id"
-               v-bind:class="{active : topic.selected}"
+               v-bind:class="{active : topic.selected, active: topic.hasMessages}"
                class="msg_container mp-0 h100"
                v-bind:class="{ selected: topic.selected }"
                @click="showThread(topic.id, this, $event)">
@@ -1140,7 +1140,9 @@
                         <img :src="'/api/v1/user/avatar/' + topic.authorId" class="w48 " />
                     </div>
                     <div class="col-md-8 mp-0 ms_body">
-                        <span class="message-name"> {{ topic.lmName }}  </span>
+                        <span v-bind:class="{'message-name-active':  topic.hasMessages}"
+                            class="message-name"> {{ topic.lmName }}  
+                            </span>
                         <span v-bind:class="{ readed : topic.lmIsReaded }"
                               class=" message-time-label tl_short">
                             {{topic.lmCreated | formatMonthDayEx }}
@@ -1285,8 +1287,7 @@
             </div>            
         </div>       
     </div>
-</nav>
-    <script src="~/js/dist/browser/signalr.js"></script>
+</nav>    
     <script src="/js/rigth-chat.js"></script>
     <script>showRigthChat(false);</script>
 </body>

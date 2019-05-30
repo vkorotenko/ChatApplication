@@ -698,7 +698,7 @@ body {
 }
 
 .width_sub_375 {
-    width: calc(100% - 375px);
+    width: calc(100% - 336px);
 }
 
 .rigth_chat_search_input {
@@ -793,7 +793,15 @@ body {
     font-size: 16px;
     color: #333333;
 }
-
+.message-name-active:after {
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    content: ' ';
+    position: fixed;
+    background-color: rgb(210, 38, 43);
+    width: 10px;
+    height: 10px;
+}
 .w48 {
     width: 48px;
     height: 48px;
@@ -968,3 +976,6 @@ body {
     height: 33px;
     width: 29px;    
 }
+
+
+

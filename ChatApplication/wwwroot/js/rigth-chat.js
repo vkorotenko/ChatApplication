@@ -7,6 +7,23 @@ var id = findIdFromUrl();
 checkMessagesForUser();
 setInterval(function () { RefreshToken(sessionToken); }, 55000);
 
+
+// Обработчики  событий закрытия панели правого чата
+$(document).ready(function () {
+    showRigthChat(showRigthChatPanel);
+
+    $('.mask-content').click(function () {
+
+        showRigthChatPanel = !showRigthChatPanel;
+        localStorage.setItem(openPanelKey, showRigthChatPanel);
+        showRigthChat(showRigthChatPanel);
+    });
+    $('#right-chat-toggle').change(function () {
+        showRigthChatPanel = document.getElementById('right-chat-toggle').checked;
+        localStorage.setItem(openPanelKey, showRigthChatPanel);
+    });
+});
+
 var RigthChatApp = new Vue({
     el: '#rigth-chat-app',
     data: {
@@ -155,8 +172,9 @@ var RigthChatApp = new Vue({
 
     }
 });
-
+RigthChatApp.startUnread();
 RigthChatApp.getUserData();
+
 var NewMessagesInformer = new Vue({
     el: '#new-messages-informer',
     data: {
@@ -477,22 +495,6 @@ function sortTopics(array, id) {
     });
     return na;
 }
-
-// Обработчики  событий закрытия панели правого чата
-$(document).ready(function () {
-    showRigthChat(showRigthChatPanel);
-   
-    $('.mask-content').click(function () {
-
-        showRigthChatPanel = !showRigthChatPanel;
-        localStorage.setItem(openPanelKey, showRigthChatPanel);
-        showRigthChat(showRigthChatPanel);
-    });
-    $('#right-chat-toggle').change(function () {
-        showRigthChatPanel = document.getElementById('right-chat-toggle').checked;
-        localStorage.setItem(openPanelKey, showRigthChatPanel);
-    });
-});
 
 function closeRigthPanel() {
     showRigthChatPanel = !showRigthChatPanel;
