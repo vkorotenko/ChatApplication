@@ -241,12 +241,11 @@ Vue.filter('striphtml', function (value) {
 });
 
 Vue.filter('fileSize', function (value) {
-    console.log(value)
+    
     var int = parseInt(value);
     var kb = Math.floor(int / 1024);
     var mb = Math.floor(int / (1024 * 1024) );
 
-    console.log("int: " + int + " kb: " + kb + " mb: " + mb);
     var result;
     if (int < 1024) {
         result = '1 КБ';
@@ -342,9 +341,7 @@ function getMessagesForTopicRc(id, authorId) {
 
             RigthChatApp.posts = data;
             setTimeout(function () {
-                $('.msg_h').scrollTop(99999);
-                // $('.viewbox-container').remove();
-                // $(".litebox").viewbox = null;
+                $('.ms_container').scrollTop(99999);                
                 var template =
                     '<div class="viewbox-container width_sub_375"><div class="viewbox-body"><div class="viewbox-header"></div><div class="viewbox-content"></div><div class="viewbox-footer"></div></div></div>';
                 $(".litebox").viewbox({ template: template, navButtons: false, nextOnContentClick: false });
@@ -373,7 +370,7 @@ function sendMessageToTopicRc(body, topicId) {
             RigthChatApp.messageArea = "";
             
             setTimeout(function () {
-                $('.msg_h').scrollTop(99999);
+                $('.ms_container').scrollTop(99999);
             }, 300);
             if (isFileSelectedRc()) {
                 console.log('Topicid ' + topicId);
@@ -412,7 +409,7 @@ function uploadFileRc(topicid, messageid) {
             RigthChatApp.showLoader = false;
             assignAttacmentToMessageRc(messageid, data);
             setTimeout(function () {
-                $('.msg_h').scrollTop(99999);
+                $('.ms_container').scrollTop(99999);
             }, 300);
         },
         error: function (data) {
