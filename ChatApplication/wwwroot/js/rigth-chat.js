@@ -239,6 +239,34 @@ Vue.filter('striphtml', function (value) {
     var text = div.textContent || div.innerText || "";
     return text;
 });
+
+Vue.filter('fileSize', function (value) {
+    console.log(value)
+    var int = parseInt(value);
+    var kb = Math.floor(int / 1024);
+    var mb = Math.floor(int / (1024 * 1024) );
+
+    console.log("int: " + int + " kb: " + kb + " mb: " + mb);
+    var result;
+    if (int < 1024) {
+        result = '1 КБ';
+    }
+    else if (kb > 0 && kb < 1024) {
+        result = kb + 1 + ' КБ';
+    }
+    else if (mb >= 1) {
+        result = mb + 1  + ' МБ';
+    }
+    return result;
+});
+
+Vue.filter('getIcon', function(value) {
+    var chk = value.split('.');
+    var ext = chk[chk.length - 1];
+    return '/img/rc/ico/' + ext + '.png';
+});
+
+
 function findTopic(array, id) {
     for (i = 0; i < array.length; i++) {
         if (array[i].id == id) return array[i];

@@ -70,6 +70,6 @@ namespace ChatApplication.Models
         /// </summary>
         public string FullName { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; }        
     }
 }

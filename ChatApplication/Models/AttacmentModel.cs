@@ -31,5 +31,9 @@ namespace ChatApplication.Models
         /// Является ли файл картинкой
         /// </summary>
         public bool IsImage { get; set; }
+        /// <summary>
+        /// Размер файла в байтах
+        /// </summary>
+        public long Size { get; set; }
     }
 }

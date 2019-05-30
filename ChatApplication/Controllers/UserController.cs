@@ -94,6 +94,7 @@ namespace ChatApplication.Controllers
                 var rt = Mapper.Map<IEnumerable<MessageModel>>(messages);
                 var days = new List<string>();
                 var users = new Dictionary<int, DbUser>();
+                var basePath = _config.GetValue<string>("Upload:Path");
                 foreach (var message in rt)
                 {
 
@@ -117,10 +118,15 @@ namespace ChatApplication.Controllers
 
                     var dbattachment = await _ctx.Files.GetForMessage(message.Id);
                     var attachment = Mapper.Map<AttachmentModel>(dbattachment);
+
                     if (attachment != null)
                     {
                         attachment.Url = $"/upload/topic/{id}/{attachment.Name}";
                         attachment.IsImage = IsImage(attachment.Name);
+                        var fp = Path.Combine(basePath, $"topic/{id}/{attachment.Name}");
+                        if(System.IO.File.Exists(fp))
+                            attachment.Size = new FileInfo(fp).Length;
+
                         message.Attachment = attachment;
                     }
                     else

@@ -1210,7 +1210,7 @@
                 <div class="col-md-10 mp-0" v-bind:class="{fac_r: msg.isAuthor}">
                     <div v-if="!msg.isAuthor" class="top_name">{{msg.name}}</div>
                     <div v-bind:class="{ from_alien: !msg.isAuthor, from_author: msg.isAuthor }">
-                        <div v-html="msg.body"></div>                        
+                        <div v-html="msg.body" class="mgs_body"></div>                        
                         <template v-if="msg.attachment && msg.attachment.name != null">
                             <br/>
                             <a :href="msg.attachment.url" onclick="//return jsiBoxOpen(this)" target="_self" class="litebox" data-litebox-group="group-1" tabindex="0">
@@ -1223,27 +1223,28 @@
                             <b>
                                 <a :href="msg.attachment.url" class="attachment_url" target="_blank">
                                     <div class="row" v-if="!msg.attachment.isImage">
-                                        <div class="col-md-1">
-                                            <img v-if="!msg.attachment.isImage" src="/img/document_ico.png" height="16px"/>
+                                        <div class="col-md-2 mp-0">
+                                            <img v-if="!msg.attachment.isImage" 
+                                                 :src="msg.attachment.name | getIcon"
+                                                 class="document_ico"
+                                                 />
                                         </div>
-                                        <div class="col-md-9 tx_download_wrap">
+                                        <div class="col-md-10 mp-0 mgs_file" :title="msg.attachment.name">
                                             {{msg.attachment.name}}
-                                        </div>
-                                        <div class="col-md-1">
-                                            <img src="/img/download_ico.png" height="16px"/>
-                                        </div>
+                                            <div class="download_size">{{msg.attachment.size | fileSize}}</div>
+                                        </div>                                        
                                     </div>
                                 </a>
                             </b>
                         </template>
 
 
-                        <div v-bind:class="{  tl_right: true, tl_readed: msg.isRead &&  msg.isAuthor}"
+                        <div v-bind:class="{  tl_right: true, tl_readed: msg.isRead &&  msg.isAuthor, tl_not_readed: !msg.isRead &&  msg.isAuthor }"
                              :data-created="msg.created"
                              class="time_label tl_short">
                             {{ msg.created | formatTime }}
                         </div>
-                        <div v-bind:class="{ tl_right: true, tl_readed: msg.isRead &&  msg.isAuthor }"
+                        <div v-bind:class="{ tl_right: true, tl_readed: msg.isRead &&  msg.isAuthor, tl_not_readed: !msg.isRead &&  msg.isAuthor }"
                              :data-created="msg.created"
                              class="time_label tl_long">                                                        
                             {{ msg.created | formatDateTime }}                            

@@ -446,6 +446,11 @@
             Является ли файл картинкой
             </summary>
         </member>
+        <member name="P:ChatApplication.Models.AttachmentModel.Size">
+            <summary>
+            Размер файла в байтах
+            </summary>
+        </member>
         <member name="T:ChatApplication.Models.BaseUser">
             <summary>
             Базовый класс для всех пользователей
