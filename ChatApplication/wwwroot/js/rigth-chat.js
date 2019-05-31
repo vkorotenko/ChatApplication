@@ -88,7 +88,8 @@ var RigthChatApp = new Vue({
             var query = event.target.value;
             searchTopicsRc(query);
         },
-        backToTopics: function() {
+        backToTopics: function () {
+            console.log('Back from topic');
             RigthChatApp.showMessagePanel = false;
         },
         appendNewLine: function() {
@@ -176,15 +177,12 @@ var RigthChatApp = new Vue({
         },
         collapse: function() {
             RigthChatApp.application.state = RigthChatApp.application.stateMax;                        
-            $('#rigth-chat-app').animate({ height: '60%', height: '100%' }, 300);            
-          
+            $('#rigth-chat-app').animate({ height: '60%', height: '100%' }, 800);
+
         },
         maximize: function() {
             RigthChatApp.application.state = RigthChatApp.application.stateMin;
-
-
-            $('#rigth-chat-app').animate({ height: '100%', height: '60%' }, 300);
-
+            $('#rigth-chat-app').animate({ height: '100%', height: '60%' }, 800);            
         }
     }
 });
