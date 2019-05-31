@@ -1103,20 +1103,31 @@
     elem.src = "/viewbox/jquery.viewbox.min.js";
     document.body.appendChild(elem);
 </script>
-<nav class="nav" id="rigth-chat-app">
+<nav class="nav" id="rigth-chat-app" style="bottom: 0">
     
     <div class="nav-header">
         <h2 v-if="!showMessagePanel">
-            ЧАТ ПОДДЕРЖКИ 
-            <span class="rigth_chat_count_bg" v-if="unreadMessages > 0">
+            ЧАТ ПОДДЕРЖКИ
+            <span class="rigth_chat_count_bg" v-if="unreadMessages > 0 && !showMessagePanel">
                 {{unreadMessages}}
-            </span>
-            <span class="close_span" @click="closePanel"> &#x2715;</span>
+            </span>            
+            <!-- maximize -->
+            <span class="close_span" @click="collapse" v-if="application.state === application.stateMin"  >&#x1F5D6;</span>
+            <!-- collapse -->
+            <span class="close_span" @click="maximize" v-if="application.state === application.stateMax">&#x1F5D7;</span>
+            <!-- minimize  -->
+            <span class="close_span">&#x1F5D5;</span>
         </h2>
-        <h2 v-else @click="backToTopics" style="margin-top: -5px; cursor: pointer;">
+        <h2 v-else @click="backToTopics" style="cursor: pointer;">
             <span class="back_span">&#8249;</span>
             ВЫЙТИ ИЗ ДИАЛОГА
-            <span class="close_span" @click="closePanel"> &#x2715;</span>
+            <!-- maximize -->
+            <span class="close_span" @click="collapse" v-if="application.state === application.stateMin"  >&#x1F5D6;</span>
+            <!-- collapse -->
+            <span class="close_span" @click="maximize" v-if="application.state === application.stateMax">&#x1F5D7;</span>
+            <!-- minimize  -->
+            <span class="close_span">&#x1F5D5;</span>
+
         </h2>
     </div>    
     <input 

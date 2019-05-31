@@ -27,6 +27,11 @@ $(document).ready(function () {
 var RigthChatApp = new Vue({
     el: '#rigth-chat-app',
     data: {
+        application: {
+            state: 'maximized',
+            stateMax: 'maximized',
+            stateMin: 'minimized'            
+        },
         unreadMessages: 0,
         actualtopic: null,
         username: "",
@@ -168,8 +173,19 @@ var RigthChatApp = new Vue({
             console.log(ta.scrollHeight);
             //ta.style.height = ta.scrollHeight + 37 + 'px';
             sp.style.height = str * fs + 'px';            
-        }
+        },
+        collapse: function() {
+            RigthChatApp.application.state = RigthChatApp.application.stateMax;                        
+            $('#rigth-chat-app').animate({ height: '60%', height: '100%' }, 300);            
+          
+        },
+        maximize: function() {
+            RigthChatApp.application.state = RigthChatApp.application.stateMin;
 
+
+            $('#rigth-chat-app').animate({ height: '100%', height: '60%' }, 300);
+
+        }
     }
 });
 RigthChatApp.startUnread();

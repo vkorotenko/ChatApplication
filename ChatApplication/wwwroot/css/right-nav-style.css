@@ -11,10 +11,8 @@
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
     height: 100%;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    margin: 0;
+    position: fixed;    
+    margin: 0;    
     right: -336px;
     /* плавный переход смещения панели */
     -webkit-transition: right 0.8s;
@@ -752,7 +750,7 @@ body {
     font-size: 14px;
     font-style: italic;
     padding: 0px 7px 7px 10px;
-    font-family: 'Roboto Italic';
+    font-family: 'RobotoCondensed';
     color: #c6c6c6;
     word-break: break-all;
     white-space: nowrap;
@@ -860,7 +858,10 @@ body {
 
 .back_span {
     padding: 0 0 0 0;
+    position: relative;
     font-size: 27px;
+    display: inline-block;
+    margin-top: -14px;
 }
 
 .anonse_bar {
@@ -949,7 +950,7 @@ body {
     cursor: pointer;
 }
 .top_name {
-    font-family: "Roboto Italic";
+    font-family: "RobotoCondensed";
     font-size: 16px;
     color: #c6c6c6;
     margin-bottom: 4px;
@@ -970,7 +971,7 @@ body {
     padding-top: 8px;
     color: #c6c6c6;
     font-size: 16px;
-    font-family: "Roboto Condensed";
+    font-family: "RobotoCondensed";
 }
 .document_ico {
     height: 33px;
