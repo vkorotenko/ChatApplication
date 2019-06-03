@@ -78,6 +78,8 @@ var RigthChatApp = new Vue({
             console.log(file_data);
             RigthChatApp.fileAdded = true;
             RigthChatApp.selectFileName = file_data.name;
+            // auto post after file added
+            sendMessageToTopicRc(RigthChatApp.messageArea, RigthChatApp.topicId);
         },
         changeRefresh: function() {
             processRefresh = !processRefresh;
