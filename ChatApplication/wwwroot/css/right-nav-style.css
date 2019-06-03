@@ -13,7 +13,7 @@
     bottom: -4000px;
     position: fixed;
     margin: 0;
-    right: 0;    
+    right: 39px;    
     /* плавный переход смещения панели */
     -webkit-transition: right 0.8s;
     -moz-transition: right 0.8s;
@@ -1011,3 +1011,16 @@ body {
     margin-right: 22px;
 }
 
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+    opacity: 0;
+}
+
+.unfade-enter-active, .unfade-leave-active {
+    transition: opacity 1s;
+}
+.unfade-enter, .unfade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+    opacity: 0;
+}
