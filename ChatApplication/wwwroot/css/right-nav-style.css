@@ -29,6 +29,10 @@
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
+    /* плавный переход смещения панели */
+    -webkit-transition: bottom 0.8s;
+    -moz-transition: bottom 0.8s;
+    transition: bottom 0.8s;
 }
 
 
@@ -143,15 +147,8 @@
     }
 
 
-    /*
- * изменение символа переключателя,
- * привычный крестик (MULTIPLICATION X), 
- * вы можете испльзовать любой другой значок
-*/
 
-    [id='right-chat-toggle']:checked ~ .nav > .nav-toggle:after {
-        content: '\2715';
-    }
+
 
 
 /**
