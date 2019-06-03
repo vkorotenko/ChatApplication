@@ -10,14 +10,14 @@
     min-width: 375px;
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
-    bottom: -4000px;
+    -moz-box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
+    overflow-y: hidden;
+    bottom: -100%;
     position: fixed;
+    height: 0;
     margin: 0;
-    right: 39px;    
-    /* плавный переход смещения панели */
-    -webkit-transition: right 0.8s;
-    -moz-transition: right 0.8s;
-    transition: right 0.8s;
+    right: 39px;
     /* определяем цвет фона панели */
     background: white;
     /* поверх других элементов */
@@ -30,11 +30,22 @@
     justify-content: flex-end;
     flex-direction: column;
     /* плавный переход смещения панели */
-    -webkit-transition: bottom 0.8s;
-    -moz-transition: bottom 0.8s;
-    transition: bottom 0.8s;
+    -webkit-transition: all .8s ease-in;
+    -moz-transition: all .8s ease-in;
+    transition: all 0.8s ease-in;
 }
+/**
+ * Когда флажок установлен, открывается панель
+ * используем псевдокласс:checked
+ */
 
+[id='right-chat-toggle']:checked ~ .nav {
+    height: 100%;
+    bottom: 0;
+    -webkit-transition: all .8s ease-out;
+    -moz-transition: all .8s ease-out;
+    transition: all .8s ease-out;
+}
 
 /**
  * Кнопка переключения панели
@@ -115,23 +126,7 @@
     }
 
 
-    /**
- * Когда флажок установлен, открывается панель
- * используем псевдокласс:checked
- */
 
-    [id='right-chat-toggle']:checked ~ .nav {
-        height: 100%;
-        bottom: 0;
-        box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
-        -moz-box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
-        -webkit-box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
-        overflow-y: hidden;
-        /* плавный переход смещения панели */
-        -webkit-transition: bottom 0.8s;
-        -moz-transition: bottom 0.8s;
-        transition: bottom 0.8s;
-    }
 
 
     /* 

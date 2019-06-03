@@ -1147,7 +1147,7 @@
                         {{actualtopic.title}} <br/>
                         Артикул: {{actualtopic.vendorCode}}<br />
                         Производитель: {{actualtopic.vendor}} <br />
-                        Цена: {{ actualtopic.price }} &#x20bd;
+                        Цена: {{ actualtopic.price }} <img src='/img/rc/rub13.png' style="height: 11px"/>
                         <a :href="'/article/view?id=' + actualtopic.id">к обьявлению </a>
                     </div>
                 </div>
@@ -1174,13 +1174,9 @@
                                     {{ topic.lmName }}
                                 </span>
                                 <span v-bind:class="{ readed : topic.lmIsReaded }"
-                                      class=" message-time-label tl_short">
+                                      class=" message-time-label">
                                     {{topic.lmCreated | formatMonthDayEx }}
-                                </span>
-                                <span v-bind:class="{ readed : topic.lmIsReaded }"
-                                      class=" message-time-label tl_long">
-                                    {{topic.lmCreated | formatDateTime }}
-                                </span>
+                                </span>                                
                                 <br />
 
                                 <span class="message-text" v-if="topic.lmIsCurrent">
@@ -1196,7 +1192,7 @@
                         </div>
                         <div class="row low_row_border">
                             <div class="col-md-12 mp-0 message-meta">
-                                {{topic.title}} Цена: {{ topic.price }} &#x20bd; <br />
+                                {{topic.title}} Цена: {{ topic.price }} <img src="/img/rc/run14it.png" style="height: 11px"/> <br />
                                 Артикул: {{topic.vendorCode}} Производитель: {{topic.vendor}}
                             </div>
                         </div>
