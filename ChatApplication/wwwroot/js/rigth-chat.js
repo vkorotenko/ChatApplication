@@ -173,12 +173,13 @@ var RigthChatApp = new Vue({
         },
         collapse: function() {
             RigthChatApp.application.state = RigthChatApp.application.stateMax;                        
-            $('#rigth-chat-app').animate({ height: '60%', height: '100%' }, 800);
-
+            //$('#rigth-chat-app').animate({ height: '60%', height: '100%' }, 800);
+            $('#rigth-chat-app').height('100%')
         },
         maximize: function() {
             RigthChatApp.application.state = RigthChatApp.application.stateMin;
-            $('#rigth-chat-app').animate({ height: '100%', height: '60%' }, 800);            
+            //$('#rigth-chat-app').animate({ height: '100%', height: '60%' }, 800);            
+            $('#rigth-chat-app').height('60%')
         }
     }
 });
