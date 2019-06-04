@@ -17,7 +17,7 @@
     position: fixed;
     height: 0;
     margin: 0;
-    right: 39px;
+    right: 20px;
     /* определяем цвет фона панели */
     background: white;
     /* поверх других элементов */
@@ -467,8 +467,8 @@ body {
 }
 
 .time_label {
-    color: #949494;
-    font-size: 12px;    
+    color: #4d4d4d;
+    font-size: 12px;
 }
 
 .tl_left {
@@ -747,7 +747,7 @@ body {
     font-style: italic;
     padding: 0px 7px 7px 10px;
     font-family: 'RobotoCondensed';
-    color: #c6c6c6;
+    color: #949494;
     word-break: break-all;
     white-space: nowrap;
     overflow: hidden;
@@ -928,7 +928,7 @@ body {
     width: 220px;
     min-height: 38px;
     padding: 6px 5px 4px 8px;
-    color: #949494;
+    color: #4d4d4d;
 }
 .fac_r {
     display: flex;
@@ -948,7 +948,7 @@ body {
     width: 220px;
     min-height: 38px;
     padding: 8px 5px 4px 10px;
-    color: #949494;
+    color: #4d4d4d;
 }
 .close_span {
     float: right;
@@ -957,7 +957,7 @@ body {
 .top_name {
     font-family: "RobotoCondensed";
     font-size: 16px;
-    color: #c6c6c6;
+    color: #949494;
     margin-bottom: 4px;
 }
 .mgs_body {
@@ -969,12 +969,12 @@ body {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    color: #949494;
+    color: #4d4d4d;
     padding-left: 8px;
 }
 .download_size {
     padding-top: 8px;
-    color: #c6c6c6;
+    color: #949494;
     font-size: 16px;
     font-family: "RobotoCondensed";
 }
