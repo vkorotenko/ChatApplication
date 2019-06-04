@@ -58,8 +58,7 @@ var RigthChatApp = new Vue({
     methods: {
         showThread: function(id, el, event) {
             RigthChatApp.dayExist = [];
-            RigthChatApp.actualtopic = findTopic(RigthChatApp.topics, id);
-            RigthChatApp.showMessagePanel = true;
+            RigthChatApp.actualtopic = findTopic(RigthChatApp.topics, id);            
             RigthChatApp.topicId = id;
             selectItemRc(id);
             getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
@@ -169,12 +168,7 @@ var RigthChatApp = new Vue({
 
             var fs = parseInt($('#ta_send_panel').css('font-size'));
             var h = ta.value.length * fs * 0.7 ;
-            var str = h / ta.clientWidth;
-            console.log(str * fs);
-
-            
-            console.log(ta.scrollHeight);
-            //ta.style.height = ta.scrollHeight + 37 + 'px';
+            var str = h / ta.clientWidth;            
             sp.style.height = str * fs + 'px';            
         },
         collapse: function() {
@@ -381,7 +375,7 @@ function getMessagesForTopicRc(id, authorId) {
                     '<div class="viewbox-container width_sub_375"><div class="viewbox-body"><div class="viewbox-header"></div><div class="viewbox-content"></div><div class="viewbox-footer"></div></div></div>';
                 $(".litebox").viewbox({ template: template, navButtons: false, nextOnContentClick: false });
             }, 300);
-            
+            RigthChatApp.showMessagePanel = true;   
         }
     });   
 }

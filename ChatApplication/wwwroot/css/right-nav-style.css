@@ -1016,3 +1016,11 @@ body {
 .unfade-enter, .unfade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
     opacity: 0;
 }
+
+.fadetop-enter-active, .fadetop-leave-active {
+    transition: opacity 1s;
+}
+
+.fadetop-enter, .fadetop-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+    opacity: 0;
+}

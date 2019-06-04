@@ -1136,24 +1136,26 @@
                v-model="query"
                @input="search"
                v-if="!showMessagePanel" />
-        <div v-if="showMessagePanel" class="anonse_bar">
+        <transition name="fadetop">
+            <div v-if="showMessagePanel" class="anonse_bar">
 
-            <div class="row">
-                <div class="col-md-2 mp-0">
-                    <img class="w48r3" :src="'/api/v1/article/' + actualtopic.id + '/img'">
-                </div>
-                <div class="col-md-10 mp-0">
-                    <div class="anonse_header">
-                        {{actualtopic.title}} <br/>
-                        Артикул: {{actualtopic.vendorCode}}<br />
-                        Производитель: {{actualtopic.vendor}} <br />
-                        Цена: {{ actualtopic.price }} <img src='/img/rc/rub13.png' style="height: 11px"/>
-                        <a :href="'/article/view?id=' + actualtopic.id">к обьявлению </a>
+                <div class="row">
+                    <div class="col-md-2 mp-0">
+                        <img class="w48r3" :src="'/api/v1/article/' + actualtopic.id + '/img'">
                     </div>
-                </div>
+                    <div class="col-md-10 mp-0">
+                        <div class="anonse_header">
+                            {{actualtopic.title}} <br />
+                            Артикул: {{actualtopic.vendorCode}}<br />
+                            Производитель: {{actualtopic.vendor}} <br />
+                            Цена: {{ actualtopic.price }} <img src='/img/rc/rub13.png' style="height: 11px" />
+                            <a :href="'/article/view?id=' + actualtopic.id">к обьявлению </a>
+                        </div>
+                    </div>
 
+                </div>
             </div>
-        </div>
+        </transition>
         <transition name="fade" >
             <div class="ms_container" v-show="!showMessagePanel">
                 <template class="">

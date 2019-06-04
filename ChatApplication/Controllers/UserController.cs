@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -97,7 +98,7 @@ namespace ChatApplication.Controllers
                 var basePath = _config.GetValue<string>("Upload:Path");
                 foreach (var message in rt)
                 {
-
+                    Debug.WriteLine(message.Id);
                     if (message.AuthorId == user.Id)
                         message.IsAuthor = true;
                     var day = $"{message.Created.Year}_{message.Created.Month}_{message.Created.Day}";
@@ -111,11 +112,16 @@ namespace ChatApplication.Controllers
                     if (!users.TryGetValue(message.AuthorId, out msguser))
                     {
                         msguser = await _ctx.Users.Get(message.AuthorId);
-                        users.Add(msguser.Id, msguser);
+                        if (msguser != null)
+                            users.Add(msguser.Id, msguser);
                     }
-                    message.FullName = msguser.FullName;
-                    message.Name = msguser.FirstName;
 
+                    if (msguser != null)
+                    {
+                        message.FullName = msguser.FullName;
+                        message.Name = msguser.FirstName;
+                    }
+                    
                     var dbattachment = await _ctx.Files.GetForMessage(message.Id);
                     var attachment = Mapper.Map<AttachmentModel>(dbattachment);
 
@@ -124,7 +130,7 @@ namespace ChatApplication.Controllers
                         attachment.Url = $"/upload/topic/{id}/{attachment.Name}";
                         attachment.IsImage = IsImage(attachment.Name);
                         var fp = Path.Combine(basePath, $"topic/{id}/{attachment.Name}");
-                        if(System.IO.File.Exists(fp))
+                        if (System.IO.File.Exists(fp))
                             attachment.Size = new FileInfo(fp).Length;
 
                         message.Attachment = attachment;
@@ -582,7 +588,7 @@ namespace ChatApplication.Controllers
                 if (msgUser != null)
                 {
                     topic.LmName = msgUser.FirstName;
-                }                
+                }
             }
 
             return topic;
@@ -590,8 +596,8 @@ namespace ChatApplication.Controllers
 
 
         private static object _locker = new object();
-        private Dictionary<int, DbUser> _cashedUser = new Dictionary<int,DbUser>();
-        
+        private Dictionary<int, DbUser> _cashedUser = new Dictionary<int, DbUser>();
+
         /// <summary>
         /// Получение закешированного пользователя.
         /// </summary>
@@ -603,7 +609,7 @@ namespace ChatApplication.Controllers
             {
                 if (_cashedUser.ContainsKey(id))
                 {
-                    return _cashedUser[id];                
+                    return _cashedUser[id];
                 }
             }
             var u = await _ctx.Users.Get(id);
