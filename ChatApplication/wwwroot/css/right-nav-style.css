@@ -17,14 +17,14 @@
     position: fixed;
     height: 0;
     margin: 0;
-    right: 20px;
+    right: 39px;
     /* определяем цвет фона панели */
     background: white;
     /* поверх других элементов */
     z-index: 99999;
     font-size: 16px;
     font-family: 'RobotoCondensed', sans-serif;
-    padding-left: 10px;
+    /*padding-left: 10px;*/
     /* Прижимаем  потомков вниз*/
     display: flex;
     justify-content: flex-end;
@@ -47,15 +47,14 @@
     transition: all .8s ease-out;
 }
 
+
 /**
  * Кнопка переключения панели
  * тег <label>
  */
-
 .nav-toggle {
     position: fixed;
     right: 52px;
- 
     background-color: rgb(244, 196, 58);
     color: white;
     cursor: pointer;
@@ -328,20 +327,24 @@ body {
 /* Счетчик в заголовке*/
 .rigth_chat_count_bg {
     -moz-border-radius: 50%;
-    display: block;
+    display: none;
     position: absolute;
     margin-left: 9px;
-    top: -8px;
-    left: 133px;
+    top: -6px;
+    left: 135px;
     vertical-align: text-bottom;
     border-radius: 50%;
     text-align: center;
     color: rgb(244, 196, 58);
-    font-size: 12px;
-    padding-top: 8px;
+    font-size: 15.75px;
+    padding-top: 3px;
     background-color: rgb(51, 51, 51);
     width: 24px;
     height: 24px;
+}
+
+[id='right-chat-toggle']:checked ~ .nav > .nav-header > h2 > .rigth_chat_count_bg {
+    display: block;
 }
 
 /*стили лоадера */
@@ -692,7 +695,7 @@ body {
 }
 
 .width_sub_375 {
-    width: calc(100% - 336px);
+    /*width: calc(100% - 336px);*/
 }
 
 .rigth_chat_search_input {
