@@ -1005,19 +1005,7 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
         </div>
     </div>
-    <!--	  <nav id="w0" class="panel__wrap row i-mid navbar"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w0-collapse"><span class="sr-only">Toggle navigation</span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span></button></div><div id="w0-collapse" class="collapse navbar-collapse">    <ul id="w1" class="panel__persona persona hidden-md hidden-sm hidden-xs nav"><li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Иван Иванов <span class="caret"></span></a><ul id="w2" class="dropdown-menu"><li><a href="/user/default/index" tabindex="-1">Настройки</a></li>
-    <li><a href="/user/sign-in/logout" data-method="post" tabindex="-1">Выход</a></li></ul></li>
-    <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Язык <span class="caret"></span></a><ul id="w3" class="dropdown-menu"><li><a href="/site/set-locale?locale=en-US" tabindex="-1">English (US)</a></li>
-    <li class="active"><a href="/site/set-locale?locale=ru-RU" tabindex="-1">Русский (РФ)</a></li>
-    <li><a href="/site/set-locale?locale=uk-UA" tabindex="-1">Українська (Україна)</a></li>
-    <li><a href="/site/set-locale?locale=es" tabindex="-1">Español</a></li>
-    <li><a href="/site/set-locale?locale=vi" tabindex="-1">Tiếng Việt</a></li>
-    <li><a href="/site/set-locale?locale=zh-CN" tabindex="-1">简体中文</a></li>
-    <li><a href="/site/set-locale?locale=pl-PL" tabindex="-1">Polski (PL)</a></li></ul></li></ul>
-        </div></div></nav>   -->
+   
 
     <script type="text/javascript">
 
@@ -1066,12 +1054,7 @@
         var totalMessagesSpan = $('#totalUnreadMessages');
         var totalMessagesSpanRc = $('#totalUnreadMessagesRc');
         var processRefresh = true;
-
         var showRigthChatPanel = false;
-
-
-
-
 
     </script>
 
@@ -1208,7 +1191,7 @@
             </div>
             
         </transition>      
-        <transition name="unfade" >
+        
             <div class="ms_container" v-if="showMessagePanel">
                 <div v-if="showMessagePanel">
                     <div v-if="posts.length == 0">
@@ -1259,12 +1242,12 @@
                                 </template>
 
 
-                                <div v-bind:class="{  tl_right: true, tl_readed: msg.isRead &&  msg.isAuthor, tl_not_readed: !msg.isRead &&  msg.isAuthor }"
+                                <div v-bind:class="{  tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
                                      :data-created="msg.created"
                                      class="time_label tl_short">
                                     {{ msg.created | formatTime }}
                                 </div>
-                                <div v-bind:class="{ tl_right: true, tl_readed: msg.isRead &&  msg.isAuthor, tl_not_readed: !msg.isRead &&  msg.isAuthor }"
+                                <div v-bind:class="{ tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
                                      :data-created="msg.created"
                                      class="time_label tl_long">
                                     {{ msg.created | formatDateTime }}
@@ -1274,7 +1257,7 @@
                     </div>
                 </div>
             </div>
-        </transition>
+       
         <!-- send message bar-->
         <div class="send_panel" v-if="showMessagePanel" id="send_panel">
             <div class="loader" v-if="showLoader"></div>
@@ -1302,7 +1285,6 @@
         </div>
     </nav>
     <script src="/js/rigth-chat.js"></script>
-    <script>showRigthChat(false);</script>
 
     <label for="right-chat-toggle" class="nav-toggle float_button_no_bg" onclick>
         <span id="totalUnreadMessagesRc" style="display: none;"></span>
@@ -2016,6 +1998,21 @@
 </script>
 <script>
     var tokenKey = "accessToken";
+    function showChat(id) {
+        var vars = document.createElement('script');
+        vars.text = 'var loggedinUserId = ' + id;
+        document.body.appendChild(vars);
+
+        var rc = document.createElement('script');
+        rc.type = 'text/javascript';
+        rc.src = "/js/rigth-chat.js";
+        //document.body.appendChild(rc);
+
+
+        var start = document.createElement('script');
+        start.text = 'showRigthChat(false)';
+        document.body.appendChild(start);
+    }
     $('#login_bitton').click(function (e) {
         $(".form-signin").submit(function (e) {
             e.preventDefault();
@@ -2036,7 +2033,15 @@
                 $('.userInfo').css('display', 'block');
                 $('.form-signin').css('display', 'none');
                 // сохраняем в хранилище sessionStorage токен доступа
+
                 sessionStorage.setItem(tokenKey, data.access_token);
+                showChat(data.id);                                
+                if (loggedinUserId) loggedinUserId = data.id;
+                if (RigthChatApp) {
+                    RigthChatApp.id = data.id;
+                    RigthChatApp.getUserData();
+                }
+                    
                 console.log(data);
                 // window.location.assign('chat.html');
             },

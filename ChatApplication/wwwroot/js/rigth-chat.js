@@ -30,7 +30,7 @@ var RigthChatApp = new Vue({
         application: {
             state: 'maximized',
             stateMax: 'maximized',
-            stateMin: 'minimized'            
+            stateMin: 'minimized'
         },
         unreadMessages: 0,
         actualtopic: null,
@@ -56,22 +56,22 @@ var RigthChatApp = new Vue({
         query: ""
     },
     methods: {
-        showThread: function(id, el, event) {
+        showThread: function (id, el, event) {
             RigthChatApp.dayExist = [];
-            RigthChatApp.actualtopic = findTopic(RigthChatApp.topics, id);            
+            RigthChatApp.actualtopic = findTopic(RigthChatApp.topics, id);
             RigthChatApp.topicId = id;
             selectItemRc(id);
             getMessagesForTopicRc(id, RigthChatApp.topicAuthor);
             clearNewMessagesRc(id);
         },
-        sendMessage: function() {
+        sendMessage: function () {
             if (RigthChatApp.messageArea != "" || isFileSelectedRc())
                 sendMessageToTopicRc(RigthChatApp.messageArea, RigthChatApp.topicId);
         },
-        getUserData: function() {
+        getUserData: function () {
             GetUserDataRc();
         },
-        fileSelected: function() {
+        fileSelected: function () {
 
             var file_data = $('#file-rch').prop('files')[0];
             console.log(file_data);
@@ -80,11 +80,11 @@ var RigthChatApp = new Vue({
             // auto post after file added
             sendMessageToTopicRc(RigthChatApp.messageArea, RigthChatApp.topicId);
         },
-        changeRefresh: function() {
+        changeRefresh: function () {
             processRefresh = !processRefresh;
             RigthChatApp.mailRefresh = processRefresh;
         },
-        search: function(event) {
+        search: function (event) {
             RigthChatApp.showSearchLoader = true;
             var query = event.target.value;
             searchTopicsRc(query);
@@ -92,18 +92,20 @@ var RigthChatApp = new Vue({
         backToTopics: function () {
             console.log('Back from topic');
             RigthChatApp.showMessagePanel = false;
+            RigthChatApp.actualtopic = null;
+            RigthChatApp.getUserData();
         },
-        appendNewLine: function() {
+        appendNewLine: function () {
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
         },
-        showTime: function(el) {
+        showTime: function (el) {
             var ts = $(el.srcElement).find('.time_label').first();
             if (ts != null) {
                 var val = Vue.filter('formatTime')(ts.data('created'));
                 $(el.srcElement).find('.time_label').text(val);
             }
         },
-        showDate: function(el) {
+        showDate: function (el) {
             var ts = $(el.srcElement).find('.time_label').first();
             if (ts != null) {
 
@@ -111,22 +113,22 @@ var RigthChatApp = new Vue({
                 $(el.srcElement).find('.time_label').text(val);
             }
         },
-        isLastMessage: function(message) {
+        isLastMessage: function (message) {
             var len = RigthChatApp.posts.length;
             if (RigthChatApp.posts[len - 1] == message) return true;
             return false;
         },
-        setTyping: function(name, topic) {
+        setTyping: function (name, topic) {
             console.log('setTyping name: ' + name + ' topic: ' + topic);
         },
-        closePanel: function() {
+        closePanel: function () {
             closeRigthPanel();
         },
-        startUnread: function() {
+        startUnread: function () {
             var req = $.ajax({
                 type: 'GET',
                 url: '/api/v1/user/startunread/' + loggedinUserId,
-                success: function(data) {
+                success: function (data) {
                     var count = 0;
                     if (data)
                         count = parseInt(data);
@@ -153,7 +155,7 @@ var RigthChatApp = new Vue({
                 }
             });
 
-            req.fail(function(data, status) {
+            req.fail(function (data, status) {
                 console.log(status);
                 if (data.status == 502) {
                     console.log('error 502');
@@ -161,22 +163,22 @@ var RigthChatApp = new Vue({
                 console.log(data.status);
             });
         },
-        resizeSendArea: function() {
-            
+        resizeSendArea: function () {
+
             var ta = document.getElementById('ta_send_panel');
             var sp = document.getElementById('send_panel');
 
             var fs = parseInt($('#ta_send_panel').css('font-size'));
-            var h = ta.value.length * fs * 0.7 ;
-            var str = h / ta.clientWidth;            
-            sp.style.height = str * fs + 'px';            
+            var h = ta.value.length * fs * 0.7;
+            var str = h / ta.clientWidth;
+            sp.style.height = str * fs + 'px';
         },
-        collapse: function() {
-            RigthChatApp.application.state = RigthChatApp.application.stateMax;                        
+        collapse: function () {
+            RigthChatApp.application.state = RigthChatApp.application.stateMax;
             //$('#rigth-chat-app').animate({ height: '60%', height: '100%' }, 800);
             $('#rigth-chat-app').height('100%')
         },
-        maximize: function() {
+        maximize: function () {
             RigthChatApp.application.state = RigthChatApp.application.stateMin;
             //$('#rigth-chat-app').animate({ height: '100%', height: '60%' }, 800);            
             $('#rigth-chat-app').height('60%')
@@ -233,7 +235,7 @@ Vue.filter('formatDateTime', function (value) {
 Vue.filter('formatDate', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
-        var opt = { year: 'numeric', month: 'short', day: 'numeric'}
+        var opt = { year: 'numeric', month: 'short', day: 'numeric' }
         return d.toLocaleDateString('ru-RU', opt);
     }
 });
@@ -258,7 +260,7 @@ Vue.filter('formatMonthDayEx', function (value) {
 
             opt = { hour: '2-digit', minute: '2-digit' };
             return 'вчера ' + d.toLocaleTimeString('ru-RU', opt);
-        }        
+        }
         return d.toLocaleDateString('ru-RU', opt);
     }
 });
@@ -271,10 +273,10 @@ Vue.filter('striphtml', function (value) {
 });
 
 Vue.filter('fileSize', function (value) {
-    
+
     var int = parseInt(value);
     var kb = Math.floor(int / 1024);
-    var mb = Math.floor(int / (1024 * 1024) );
+    var mb = Math.floor(int / (1024 * 1024));
 
     var result;
     if (int < 1024) {
@@ -284,12 +286,12 @@ Vue.filter('fileSize', function (value) {
         result = kb + 1 + ' КБ';
     }
     else if (mb >= 1) {
-        result = mb + 1  + ' МБ';
+        result = mb + 1 + ' МБ';
     }
     return result;
 });
 
-Vue.filter('getIcon', function(value) {
+Vue.filter('getIcon', function (value) {
     var chk = value.split('.');
     var ext = chk[chk.length - 1];
     return '/img/rc/ico/' + ext + '.png';
@@ -304,6 +306,7 @@ function findTopic(array, id) {
 }
 function GetUserDataRc() {
     var sessionToken = sessionStorage.getItem(tokenKey);
+    if (id > -1) createTopic(id);
     $.ajax({
         type: 'GET',
         url: '/api/v1/user',
@@ -367,18 +370,19 @@ function getMessagesForTopicRc(id, authorId) {
         },
         success: function (data) {
 
-            
+
 
             RigthChatApp.posts = data;
             setTimeout(function () {
-                $('.ms_container').scrollTop(99999);                
+                var sh = $('.ms_container:visible')[0].scrollHeight + 1024;
+                $('.ms_container').scrollTop(sh);
                 var template =
                     '<div class="viewbox-container width_sub_375"><div class="viewbox-body"><div class="viewbox-header"></div><div class="viewbox-content"></div><div class="viewbox-footer"></div></div></div>';
                 $(".litebox").viewbox({ template: template, navButtons: false, nextOnContentClick: false });
             }, 300);
-            RigthChatApp.showMessagePanel = true;   
+            RigthChatApp.showMessagePanel = true;
         }
-    });   
+    });
 }
 // Отправка сообщения в топик
 function sendMessageToTopicRc(body, topicId) {
@@ -398,9 +402,11 @@ function sendMessageToTopicRc(body, topicId) {
         },
         success: function (data) {
             RigthChatApp.messageArea = "";
-            
+
             setTimeout(function () {
-                $('.ms_container').scrollTop(99999);
+                var sh = $('.ms_container:visible')[0].scrollHeight
+                console.log(sh)
+                $('.ms_container').scrollTop(sh);
             }, 300);
             if (isFileSelectedRc()) {
                 console.log('Topicid ' + topicId);
@@ -408,13 +414,20 @@ function sendMessageToTopicRc(body, topicId) {
             }
             var arr = RigthChatApp.topics;
             RigthChatApp.topics = sortTopics(arr, topicId);
+            console.log(data)
             RigthChatApp.posts.push(data);
         }
     });
 }
 // есть ли файл в форме отправки
 function isFileSelectedRc() {
-    return $('#file-rch').prop('files').length > 0;
+    try {
+        return $('#file-rch').prop('files').length > 0;
+    }
+    catch (e) {
+        console.log(e)
+        return false;
+    }
 }
 // загрузка файла
 function uploadFileRc(topicid, messageid) {
@@ -439,7 +452,8 @@ function uploadFileRc(topicid, messageid) {
             RigthChatApp.showLoader = false;
             assignAttacmentToMessageRc(messageid, data);
             setTimeout(function () {
-                $('.ms_container').scrollTop(99999);
+                var sh = $('.ms_container:visible')[0].scrollHeight
+                $('.ms_container').scrollTop(sh);
             }, 300);
         },
         error: function (data) {
@@ -543,7 +557,7 @@ function checkMessagesForUser() {
             if (data.name && data.name != "") {
                 RigthChatApp.setTyping(data.name, data.topic);
             }
-
+            totalMessagesSpanRc = $('#totalUnreadMessagesRc');
             var button = $('.nav-toggle');
             // unread, name, topic
             if (count > 0) {
@@ -551,13 +565,14 @@ function checkMessagesForUser() {
                 button.removeClass('float_button_no_bg');
                 button.addClass('float_button_yes_bg');
                 totalMessagesSpan.show();
+                console.log('Unread: ' + count);
                 totalMessagesSpanRc.text(count);
                 totalMessagesSpanRc.show();
 
                 if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
                 if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
                 if (NewMessagesInformer && NewMessagesInformer.getData) NewMessagesInformer.getData();
-            } else {                
+            } else {
                 button.removeClass('float_button_yes_bg');
                 button.addClass('float_button_no_bg');
 
@@ -569,16 +584,17 @@ function checkMessagesForUser() {
     });
 
     req.fail(function (data, status) {
-        console.log(status);        
+        console.log(status);
         if (data.status == 502) {
             console.log('error 502');
-        }    
+        }
         setTimeout(checkMessagesForUser, 5000);
     });
 
 }
 function RefreshToken(token) {
-    var bd = { token: token };
+    var sessionToken = sessionStorage.getItem(tokenKey);
+    var bd = { token: sessionToken };
     $.ajax({
         type: 'POST',
         url: '/api/v1/account/refresh',
@@ -707,22 +723,7 @@ function GetUserData(id) {
             console.log('err');
     });
 }
-function RefreshToken(token) {
-    var bd = { token: token };
-    $.ajax({
-        type: 'POST',
-        url: '/api/v1/account/refresh',
-        data: JSON.stringify(bd),
-        contentType: "application/json",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + token);
-        },
-        success: function (data) {
-            sessionStorage.setItem(tokenKey, data.access_token);
-            sessionToken = data.access_token;
-        }
-    });
-}
+
 function selectItem(id) {
     for (i = 0; i < ChatApp.topics.length; i++) {
         ChatApp.topics[i].selected = false;
@@ -746,11 +747,12 @@ function getMessagesForTopic(id, authorId) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
-        success: function (data) {            
+        success: function (data) {
             ChatApp.posts = data;
 
             setTimeout(function () {
-                $('.messager__body').scrollTop(99999);
+                var sh = $('.ms_container:visible')[0].scrollHeight;
+                $('.ms_container').scrollTop(sh);
             }, 300);
         }
     });
@@ -786,7 +788,7 @@ function sendMessageToTopic(body, topicId) {
         },
         success: function (data) {
             ChatApp.messageArea = "";
-            
+
             if (isFileSelected()) {
                 uploadFile(ChatApp.topicId, data.id);
             }
@@ -917,7 +919,6 @@ function createTopic(id) {
         },
         success: function () {
             console.log('Created topic from article id: ' + id);
-            //ChatApp.showThread(id);
         }
     });
 }
@@ -959,9 +960,12 @@ function specialLogin(username, password) {
             sessionStorage.setItem(tokenKey, data.access_token);
             ChatApp.username = data.username;
             ChatApp.id = data.id;
-            console.log(data);
-            ChatApp.getUserData();
             if (loggedinUserId) loggedinUserId = data.id;
+            RigthChatApp.id = data.id;
+
+            RigthChatApp.getUserData();
+            ChatApp.getUserData();
+            console.log(data);
         }
     });
 }
@@ -980,3 +984,7 @@ function sortTopics(array, id) {
     });
     return na;
 }
+
+
+
+

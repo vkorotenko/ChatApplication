@@ -121,7 +121,7 @@ namespace ChatApplication.Controllers
                         message.FullName = msguser.FullName;
                         message.Name = msguser.FirstName;
                     }
-                    
+
                     var dbattachment = await _ctx.Files.GetForMessage(message.Id);
                     var attachment = Mapper.Map<AttachmentModel>(dbattachment);
 
@@ -218,6 +218,8 @@ namespace ChatApplication.Controllers
                 message.Body = Regex.Replace(message.Body, "<.*?>", string.Empty);
                 message.Body = message.Body.Replace("\r\n", "\n");
                 message.Body = message.Body.Replace("\n", "<br/>");
+                if (message.Body.Length > 4)
+                    message.Body = message.Body.Substring(0, message.Body.Length - 5);
                 var msg = new DbMessage
                 {
                     AuthorId = user.Id,
@@ -373,7 +375,10 @@ namespace ChatApplication.Controllers
             {
                 count = await GetUnreadMessages(userid);
                 var lp = new MessagePolling(userid);
+                Debug.WriteLine("Send unread: totalunread");
                 var message = await lp.WaitAsync() ?? new LpMessage { Unread = (int)count };
+                message.Unread = (int)count;
+                Debug.WriteLine("Send unread: totalunread");
                 return new JsonResult(message);
             }
             catch (Exception e)

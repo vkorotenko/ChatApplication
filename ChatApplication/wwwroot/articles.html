@@ -63,7 +63,7 @@
                         <ul class="simple_list">
                             <li v-for="article in articles">
                                 <div>
-                                    <a :href="'chat.html?id=' + article.id">{{article.title}} vendor: {{article.vendor}} code: {{article.code}}</a>
+                                    <a :href="'/?id=' + article.id">{{article.title}} vendor: {{article.vendor}} code: {{article.code}}</a>
                                 </div>
                             </li>
                         </ul>
@@ -97,7 +97,7 @@
             var sessionToken = sessionStorage.getItem(tokenKey);
             $.ajax({
                 type: 'GET',
-                url: '/api/v1/user/articles',
+                url: '/api/v1/article/articles',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
                 },

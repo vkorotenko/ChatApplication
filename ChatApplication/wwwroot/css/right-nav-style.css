@@ -55,7 +55,7 @@
 .nav-toggle {
     position: fixed;
     right: 52px;
-    background-color: rgb(244, 196, 58);
+    background-color: #f4c43a;
     color: white;
     cursor: pointer;
     z-index: 2001;
@@ -66,21 +66,21 @@
 
     .nav-toggle > span {
         z-index: 1;
-        font-size: 24px;
+        font-size: 14px;
         font-weight: 700;
-        width: 37px;
-        height: 37px;
-        line-height: 17px;
+        width: 26px;
+        height: 26px;
+        /* line-height: 17px; */
         text-align: center;
-        padding-top: 10px;
+        padding-top: 6px;
         position: absolute;
         color: #f4c43a;
         background-color: #333333;
         -webkit-border-radius: 50%;
         border-radius: 50%;
         letter-spacing: -0.27px;
-        right: 3px;
-        top: 0px;
+        right: -9px;
+        top: -3px;    
     }
 
     /* определяем текст кнопки 
@@ -196,7 +196,7 @@ body {
     text-transform: uppercase;
     padding: 0;
     color: #333333;
-    background-color: rgb(244, 196, 58);
+    background-color: #f4c43a;
     font-size: 18px;
     background: none;
 }
@@ -257,7 +257,8 @@ body {
 }
 
 .back_container {
-    background-color: rgb(244, 196, 58);
+    background-color: #f4c43a; 
+    background-color: #f4c43a;
     border: 1px solid #000;
     padding: 6px 12px;
     line-height: 20px;
@@ -281,7 +282,7 @@ body {
     margin: 0px 0px 0 -10px;
     padding: 23px 0px 16px 20px;
     height: 50px;
-    background-color: rgb(244, 196, 58);
+    background-color: #f4c43a;
 }
 
 .ms_container {
@@ -305,7 +306,7 @@ body {
     .ms_container::-webkit-scrollbar-thumb {
         -webkit-border-radius: 1px;
         border-radius: 1px;
-        background-color: rgb(244, 196, 58);
+        background-color: #f4c43a;
         /*box-shadow: 0px 1px 1px #fff inset;*/
         background-image: url('assets/59610063.png');
         background-position: center;
@@ -363,7 +364,7 @@ body {
         left: -200px;
         width: 200px;
         height: 4px;
-        background-color: rgb(244, 196, 58);
+        background-color: #dda0dd;
         animation: loading 2s linear infinite;
     }
 
@@ -487,13 +488,22 @@ body {
     background-image: url('/img/rc/is_read.png');    
 }
 
-.tl_not_readed:after {
+.tl_readed_ms:after {
     content: ' ';
     display: inline-block;
     position: relative;
+    width: 13px;
+    height: 7px;
+    background: url('/img/rc/dblchk.png') 100% 100% no-repeat;
+    background-size: cover; /* Масштабируем фон */
+}
+.tl_not_readed:after {
+    content: ' ';
+    /*display: inline-block;
+    position: relative;
     width: 15px;
     height: 11px;
-    background-image: url('/img/rc/is_not_read.png');
+    background-image: url('/img/rc/is_not_read.png');*/
 }
 
 .tl_right {
@@ -778,7 +788,7 @@ body {
 
 .message-text {
     font-size: 16px;
-    color: #949494 !important;
+    color: #4d4d4d !important;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -795,6 +805,7 @@ body {
     border-radius: 50%;
     content: ' ';
     position: fixed;
+    margin-left: 8px;
     background-color: rgb(210, 38, 43);
     width: 10px;
     height: 10px;
@@ -855,7 +866,7 @@ body {
     -moz-border-radius: 50%;
     background-position: center;
     border-radius: 50%;
-    background-color: rgb(244, 196, 58);
+    background-color: #f4c43a;
     box-shadow: 0px 15px 49px 1px rgba(0, 0, 0, 0.25);
     position: absolute;
     bottom: 20px;
@@ -888,10 +899,11 @@ body {
 
     .anonse_header > a {
         color: #c6c6c6;
-        font-size: 14px;        
+        font-size: 14px;
         position: relative;
+        float: right;
         top: 0px;
-        right: -66px;
+        right: 10px;
     }
 
         .anonse_header > a:after {
@@ -927,7 +939,7 @@ body {
 .from_author {
     -moz-border-radius: 3px;
     border-radius: 3px;
-    background-color: rgba(244, 196, 58, 0.2);
+    background-color: #f7db88;
     width: 220px;
     min-height: 38px;
     padding: 6px 5px 4px 8px;
@@ -947,7 +959,7 @@ body {
 .from_alien {
     -moz-border-radius: 3px;
     border-radius: 3px;
-    background-color: rgb(241, 241, 241);
+    background-color: #d9dce1;
     width: 220px;
     min-height: 38px;
     padding: 8px 5px 4px 10px;

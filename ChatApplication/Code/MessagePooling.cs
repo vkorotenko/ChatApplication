@@ -26,7 +26,7 @@ namespace ChatApplication.Code
                 var all = Subscribers.ToList();
                 foreach (var poll in all)
                 {
-                    if (poll.UserId == userId) poll.Notify(message);
+                    if (poll.UserId != userId) poll.Notify(message);
                 }
             }
         }
