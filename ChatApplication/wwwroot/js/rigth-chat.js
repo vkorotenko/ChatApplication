@@ -30,7 +30,19 @@ var RigthChatApp = new Vue({
         application: {
             state: 'maximized',
             stateMax: 'maximized',
-            stateMin: 'minimized'
+            stateMin: 'minimized',
+            typing: false,
+            tipinginterval: null,
+            localtypingdate: null
+        },
+        /**
+         * Устанавливаем при получении данных о печати.
+         */
+        typingData: {
+            id: null,
+            name: null,
+            topic: null,
+            unread: null
         },
         unreadMessages: 0,
         actualtopic: null,
@@ -97,29 +109,17 @@ var RigthChatApp = new Vue({
         },
         appendNewLine: function () {
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
-        },
-        showTime: function (el) {
-            var ts = $(el.srcElement).find('.time_label').first();
-            if (ts != null) {
-                var val = Vue.filter('formatTime')(ts.data('created'));
-                $(el.srcElement).find('.time_label').text(val);
-            }
-        },
-        showDate: function (el) {
-            var ts = $(el.srcElement).find('.time_label').first();
-            if (ts != null) {
+        },      
+        setTyping: function (data) {
+            console.log('setTyping');
+            console.log(data);
 
-                var val = Vue.filter('formatDateTime')(ts.data('created'));
-                $(el.srcElement).find('.time_label').text(val);
-            }
-        },
-        isLastMessage: function (message) {
-            var len = RigthChatApp.posts.length;
-            if (RigthChatApp.posts[len - 1] == message) return true;
-            return false;
-        },
-        setTyping: function (name, topic) {
-            console.log('setTyping name: ' + name + ' topic: ' + topic);
+            RigthChatApp.typingData.id = data.id;
+            RigthChatApp.typingData.name = data.name;
+            RigthChatApp.typingData.topic = data.topic;
+            RigthChatApp.typingData.unread = data.unread;
+
+            setTimeout(clearTypingInterval, 5000);
         },
         closePanel: function () {
             closeRigthPanel();
@@ -172,6 +172,7 @@ var RigthChatApp = new Vue({
             var h = ta.value.length * fs * 0.7;
             var str = h / ta.clientWidth;
             sp.style.height = str * fs + 'px';
+            RigthChatApp.typing();
         },
         collapse: function () {
             RigthChatApp.application.state = RigthChatApp.application.stateMax;
@@ -182,9 +183,35 @@ var RigthChatApp = new Vue({
             RigthChatApp.application.state = RigthChatApp.application.stateMin;
             //$('#rigth-chat-app').animate({ height: '100%', height: '60%' }, 800);            
             $('#rigth-chat-app').height('60%')
+        },
+        typing: function () {
+            var tm = RigthChatApp.localtypingdate;
+            var ct = new Date().getTime();
+
+            if (tm == null || tm < ct) {
+                var url = '/api/v1/user/typing/' + RigthChatApp.actualtopic.id;
+                console.log('typing: ' + url);
+                RigthChatApp.localtypingdate = ct + 5000;
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
+                    },
+                    success: function () {                        
+                    }
+                });
+            }
+
         }
     }
 });
+
+function clearTypingInterval() {
+    RigthChatApp.typingData.id = null;    
+    RigthChatApp.typingData.topic = null;    
+}
+
 RigthChatApp.startUnread();
 RigthChatApp.getUserData();
 
@@ -546,7 +573,7 @@ function showRigthChat(ifShow, id) {
 };
 function checkMessagesForUser() {
     if (!processRefresh)
-        setTimeout(checkMessagesForUser, 5000);
+        setTimeout(checkMessagesForUser, 500);
     var req = $.ajax({
         type: 'GET',
         url: '/api/v1/user/totalunread/' + loggedinUserId,
@@ -555,7 +582,7 @@ function checkMessagesForUser() {
             if (data.unread)
                 count = data.unread;
             if (data.name && data.name != "") {
-                RigthChatApp.setTyping(data.name, data.topic);
+                RigthChatApp.setTyping(data);
             }
             totalMessagesSpanRc = $('#totalUnreadMessagesRc');
             var button = $('.nav-toggle');
@@ -579,7 +606,7 @@ function checkMessagesForUser() {
                 totalMessagesSpan.hide();
                 totalMessagesSpanRc.hide();
             }
-            setTimeout(checkMessagesForUser, 5000);
+            setTimeout(checkMessagesForUser, 500);
         }
     });
 

@@ -1165,11 +1165,24 @@
                                 <br />
 
                                 <span class="message-text" v-if="topic.lmIsCurrent">
-                                    Вы: {{topic.lastMessage |striphtml}}
+                                    <!--Вывод последнего сообщения или маркера печати-->
+                                    <span v-if="typingData && typingData.topic == topic.id"  class="body_typing_i" >
+                                        печатает
+                                    </span>
+                                    <template v-else>
+                                        Вы: {{topic.lastMessage |striphtml}}
+                                    </template>
+
                                 </span>
                                 <span class="message-text" v-else>
-                                    {{topic.lastMessage |striphtml}}
-                                </span>
+                                    <!--Вывод последнего сообщения или маркера печати-->
+                                    <span v-if="typingData && typingData.topic == topic.id" class="body_typing_i" >
+                                        печатает
+                                    </span>
+                                    <template v-else>
+                                        {{topic.lastMessage |striphtml}}                                        
+                                    </template>
+                                </span>                                
                             </div>
                             <div class="col-md-2 mp-0 end_col">
                                 <img class="w48r3" :src="'/api/v1/article/' + topic.announcementId + '/img'">
@@ -1255,6 +1268,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="body_typing" v-if="typingData && typingData.topic == actualtopic.id">
+                        {{typingData.name}} печатает
+                    </div>
                 </div>
             </div>
        
@@ -1274,7 +1290,7 @@
                     <textarea class="send_ta" id="ta_send_panel"
                                   placeholder="Напишите сообщение..."
                                   v-model="messageArea"
-                                  @keyup="resizeSendArea"
+                                  @keyup="resizeSendArea"                                  
                                   @keyup.enter.exact="sendMessage"
                                   @keyup.enter.ctrl.exact="appendNewLine"></textarea>
                 </div>
@@ -2034,6 +2050,7 @@
                 $('.form-signin').css('display', 'none');
                 // сохраняем в хранилище sessionStorage токен доступа
 
+                sessionToken = data.access_token;
                 sessionStorage.setItem(tokenKey, data.access_token);
                 showChat(data.id);                                
                 if (loggedinUserId) loggedinUserId = data.id;

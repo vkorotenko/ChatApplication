@@ -373,9 +373,15 @@
         </member>
         <member name="M:ChatApplication.Controllers.UserController.GetLatestMessages">
             <summary>
-            Получаем последние 4 непрочтенных сообщения для пользователя.
-            Либо возвращаем пустой список если их нет.
+            
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.Typing(System.Int32)">
+            <summary>
+            Вызывается при пользовательском вводе на клиенте. Дергает цикл с сообщениями
+            </summary>
+            <param name="topicid"></param>
             <returns></returns>
         </member>
         <member name="T:ChatApplication.Controllers.ValuesController">

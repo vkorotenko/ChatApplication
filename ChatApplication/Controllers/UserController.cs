@@ -626,8 +626,7 @@ namespace ChatApplication.Controllers
         }
 
         /// <summary>
-        /// Получаем последние 4 непрочтенных сообщения для пользователя.
-        /// Либо возвращаем пустой список если их нет.
+        /// 
         /// </summary>
         /// <returns></returns>
         [Authorize]
@@ -667,6 +666,34 @@ namespace ChatApplication.Controllers
             {
                 _logger.LogError(e.Message);
                 return Json(new LatestMessageModel[0]);
+            }
+        }
+        
+        /// <summary>
+        /// Вызывается при пользовательском вводе на клиенте. Дергает цикл с сообщениями
+        /// </summary>
+        /// <param name="topicid"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost]
+        [Route("typing/{topicid}")]
+        public async Task<ActionResult> Typing(int topicid)
+        {
+            try
+            {
+                var user = await _ctx.Users.GetUserByName(User.Identity.Name);
+                MessagePolling.Publish(user.Id, new LpMessage
+                {
+                    Topic = topicid,
+                    Name = user.FirstName,
+                    id = user.Id
+                });
+                return Json(null);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return Json(null);
             }
         }
     }
