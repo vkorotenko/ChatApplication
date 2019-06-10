@@ -1119,7 +1119,7 @@
                v-model="query"
                @input="search"
                v-if="!showMessagePanel" />
-        <transition name="fadetop">
+        
             <div v-if="showMessagePanel" class="anonse_bar">
 
                 <div class="row">
@@ -1137,9 +1137,8 @@
                     </div>
 
                 </div>
-            </div>
-        </transition>
-        <transition name="fade" >
+            </div>        
+      
             <div class="ms_container" v-show="!showMessagePanel">
                 <template class="">
                     <a v-for="topic in topics"
@@ -1203,7 +1202,7 @@
                 </template>
             </div>
             
-        </transition>      
+        
         
             <div class="ms_container" v-if="showMessagePanel">
                 <div v-if="showMessagePanel">
@@ -1301,10 +1300,16 @@
         </div>
     </nav>
     <script src="/js/rigth-chat.js"></script>
-
-    <label for="right-chat-toggle" class="nav-toggle float_button_no_bg" onclick>
+    
+<div id="floatMessageButton">
+    <label for="right-chat-toggle" 
+           v-bind:class="{float_button_no_bg: !showCounter, float_button_yes_bg: showCounter, 'nav-toggle': true }"
+           onclick>
+        <span v-if="showCounter">{{count}}</span>
         <span id="totalUnreadMessagesRc" style="display: none;"></span>
     </label>
+</div>
+
 </body>
 </html>
 <div id="yii-debug-toolbar" data-url="/debug/default/toolbar?tag=5cd0818e1c039" style="display:none" class="yii-debug-toolbar-bottom"></div>

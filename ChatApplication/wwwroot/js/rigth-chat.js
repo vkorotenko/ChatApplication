@@ -24,6 +24,32 @@ $(document).ready(function () {
     });
 });
 
+var FloatMessageButton;
+$(document).ready(function () {
+    /**
+     * Плавающая кнопка и индикатор.
+     */
+    FloatMessageButton = new Vue({
+        el: '#floatMessageButton',
+        data: {
+            count: 0,
+            showCounter: false
+        },
+        methods: {
+            setCount: function (unread) {
+                FloatMessageButton.count = unread;
+                if (unread > 0)
+                    FloatMessageButton.showCounter = true;
+                else
+                    FloatMessageButton.showCounter = false;
+            }
+        }
+    });
+    /*end*/
+});
+
+
+
 var RigthChatApp = new Vue({
     el: '#rigth-chat-app',
     data: {
@@ -79,7 +105,7 @@ var RigthChatApp = new Vue({
         sendMessage: function () {
             if (RigthChatApp.messageArea != "" || isFileSelectedRc())
                 sendMessageToTopicRc(RigthChatApp.messageArea, RigthChatApp.topicId);
-        },
+        },        
         getUserData: function () {
             GetUserDataRc();
         },
@@ -109,7 +135,7 @@ var RigthChatApp = new Vue({
         },
         appendNewLine: function () {
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
-        },      
+        },
         setTyping: function (data) {
             console.log('setTyping');
             console.log(data);
@@ -132,26 +158,13 @@ var RigthChatApp = new Vue({
                     var count = 0;
                     if (data)
                         count = parseInt(data);
-                    var button = $('.nav-toggle');
+
+                    FloatMessageButton.setCount(count);
 
                     if (count > 0) {
-                        totalMessagesSpan.text(count);
-                        button.removeClass('float_button_no_bg');
-                        button.addClass('float_button_yes_bg');
-                        totalMessagesSpan.show();
-                        totalMessagesSpanRc.text(count);
-                        totalMessagesSpanRc.show();
-
-                        if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
                         if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
-                        if (NewMessagesInformer && NewMessagesInformer.getData) NewMessagesInformer.getData();
-                    } else {
-                        button.removeClass('float_button_yes_bg');
-                        button.addClass('float_button_no_bg');
 
-                        totalMessagesSpan.hide();
-                        totalMessagesSpanRc.hide();
-                    }
+                    } 
                 }
             });
 
@@ -198,7 +211,7 @@ var RigthChatApp = new Vue({
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
                     },
-                    success: function () {                        
+                    success: function () {
                     }
                 });
             }
@@ -208,35 +221,14 @@ var RigthChatApp = new Vue({
 });
 
 function clearTypingInterval() {
-    RigthChatApp.typingData.id = null;    
-    RigthChatApp.typingData.topic = null;    
+    RigthChatApp.typingData.id = null;
+    RigthChatApp.typingData.topic = null;
 }
 
 RigthChatApp.startUnread();
 RigthChatApp.getUserData();
 
-var NewMessagesInformer = new Vue({
-    el: '#new-messages-informer',
-    data: {
-        items: [],
-        unread: 0
-    },
-    methods: {
-        getData: function () {
-            var sessionToken = sessionStorage.getItem(tokenKey);
-            $.ajax({
-                type: 'GET',
-                url: '/api/v1/user/getlatestmessages',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
-                },
-                success: function (data) {
-                    NewMessagesInformer.items = data;
-                }
-            });
-        }
-    }
-});
+
 Vue.filter('formatTime', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
@@ -401,8 +393,8 @@ function getMessagesForTopicRc(id, authorId) {
 
             RigthChatApp.posts = data;
             setTimeout(function () {
-                var sh = $('.ms_container:visible')[0].scrollHeight + 1024;
-                $('.ms_container').scrollTop(sh);
+                var sh = $('.ms_container:visible')[0].scrollHeight + 9999999;
+                $('.ms_container:visible').scrollTop(sh);
                 var template =
                     '<div class="viewbox-container width_sub_375"><div class="viewbox-body"><div class="viewbox-header"></div><div class="viewbox-content"></div><div class="viewbox-footer"></div></div></div>';
                 $(".litebox").viewbox({ template: template, navButtons: false, nextOnContentClick: false });
@@ -416,6 +408,8 @@ function sendMessageToTopicRc(body, topicId) {
 
     if (topicId == null) return;
     var sessionToken = sessionStorage.getItem(tokenKey);
+    console.log('sendMessageToTopicRc');
+    console.log(body);
     var bd = {
         body: body
     };
@@ -431,9 +425,9 @@ function sendMessageToTopicRc(body, topicId) {
             RigthChatApp.messageArea = "";
 
             setTimeout(function () {
-                var sh = $('.ms_container:visible')[0].scrollHeight
-                console.log(sh)
-                $('.ms_container').scrollTop(sh);
+                var sh = $('.ms_container:visible')[0].scrollHeight + 9999999;
+                console.log(sh);
+                $('.ms_container:visible').scrollTop(sh);
             }, 300);
             if (isFileSelectedRc()) {
                 console.log('Topicid ' + topicId);
@@ -441,7 +435,7 @@ function sendMessageToTopicRc(body, topicId) {
             }
             var arr = RigthChatApp.topics;
             RigthChatApp.topics = sortTopics(arr, topicId);
-            console.log(data)
+            console.log(data);
             RigthChatApp.posts.push(data);
         }
     });
@@ -479,8 +473,8 @@ function uploadFileRc(topicid, messageid) {
             RigthChatApp.showLoader = false;
             assignAttacmentToMessageRc(messageid, data);
             setTimeout(function () {
-                var sh = $('.ms_container:visible')[0].scrollHeight
-                $('.ms_container').scrollTop(sh);
+                var sh = $('.ms_container:visible')[0].scrollHeight + 9999999;
+                $('.ms_container:visible').scrollTop(sh);
             }, 300);
         },
         error: function (data) {
@@ -584,27 +578,12 @@ function checkMessagesForUser() {
             if (data.name && data.name != "") {
                 RigthChatApp.setTyping(data);
             }
-            totalMessagesSpanRc = $('#totalUnreadMessagesRc');
             var button = $('.nav-toggle');
-            // unread, name, topic
+
+            FloatMessageButton.setCount(count);
             if (count > 0) {
-                totalMessagesSpan.text(count);
-                button.removeClass('float_button_no_bg');
-                button.addClass('float_button_yes_bg');
-                totalMessagesSpan.show();
                 console.log('Unread: ' + count);
-                totalMessagesSpanRc.text(count);
-                totalMessagesSpanRc.show();
-
-                if (ChatApp && ChatApp.getUserData) ChatApp.getUserData();
                 if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
-                if (NewMessagesInformer && NewMessagesInformer.getData) NewMessagesInformer.getData();
-            } else {
-                button.removeClass('float_button_yes_bg');
-                button.addClass('float_button_no_bg');
-
-                totalMessagesSpan.hide();
-                totalMessagesSpanRc.hide();
             }
             setTimeout(checkMessagesForUser, 500);
         }
@@ -615,7 +594,7 @@ function checkMessagesForUser() {
         if (data.status == 502) {
             console.log('error 502');
         }
-        setTimeout(checkMessagesForUser, 5000);
+        setTimeout(checkMessagesForUser, 500);
     });
 
 }
@@ -638,118 +617,6 @@ function RefreshToken(token) {
 }
 
 
-var ChatApp = new Vue({
-    el: '#chatApp',
-    data: {
-        unreadMessages: 0,
-        username: "",
-        user: {
-            username: "",
-            password: ""
-        },
-        topics: [],
-        posts: [],
-        topicAuthor: 0,
-        topicId: null,
-        messageArea: "",
-        userId: null,
-        selectFileName: null,
-        fileAdded: false,
-        showLoader: false,
-        showDeveloperConsole: false,
-        mailRefresh: true,
-        showSearchLoader: false
-    },
-    methods: {
-        showThread: function (id, el, event) {
-            ChatApp.actualtopic = findTopic(ChatApp.topics, id);
-            ChatApp.topicId = id;
-            selectItem(id);
-            getMessagesForTopic(id, ChatApp.topicAuthor);
-            clearNewMessages(id);
-        },
-        sendMessage: function () {
-            if (ChatApp.messageArea != "" || isFileSelected())
-                sendMessageToTopic(ChatApp.messageArea, ChatApp.topicId);
-        },
-        getUserData: function () {
-            GetUserData();
-        },
-        fileSelected: function () {
-
-            var file_data = $('#file-1').prop('files')[0];
-            console.log(file_data);
-            ChatApp.fileAdded = true;
-            ChatApp.selectFileName = file_data.name;
-        },
-        changeRefresh: function () {
-            processRefresh = !processRefresh;
-            ChatApp.mailRefresh = processRefresh;
-        },
-        newLogin: function () {
-            var user = ChatApp.user;
-            specialLogin(user.username, user.password);
-        },
-        search: function (event) {
-            ChatApp.showSearchLoader = true;
-            var query = event.target.value;
-            searchTopics(query);
-        }
-    }
-});
-
-if (id > -1) {
-    GetUserData(id);
-} else GetUserData();
-
-// консоль отладки
-function keyUpHandlerCtrlShiftL(e) {
-    if (e.code == "KeyL" && e.ctrlKey && e.shiftKey) {
-        ChatApp.showDeveloperConsole = !ChatApp.showDeveloperConsole;
-        if (ChatApp.showDeveloperConsole) {
-            processRefresh = ChatApp.mailRefresh = false;
-        }
-    }
-}
-function GetUserData(id) {
-    var sessionToken = sessionStorage.getItem(tokenKey);
-    if (id) createTopic(id);
-    var req = $.ajax({
-        type: 'GET',
-        url: '/api/v1/user',
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
-        },
-        success: function (data) {
-            ChatApp.topics = applyTopicsSelected(data.topics);
-            ChatApp.unreadMessages = data.messages;
-            ChatApp.user.username = data.username;
-            ChatApp.username = data.username;
-
-            if (ChatApp.actualtopic) {
-                var id = ChatApp.actualtopic.id;
-                console.log('Chat getMessagesForTopic: ' + id);
-                getMessagesForTopic(id, ChatApp.topicAuthor);
-            }
-            if (id) {
-                ChatApp.showThread(id);
-            }
-            window.addEventListener('keyup', keyUpHandlerCtrlShiftL);
-        }
-    });
-
-    req.fail(function (data, status) {
-        if (data.status == 401) {
-            var te = data.getResponseHeader('Token-Expired');
-            if (te) {
-                RefreshToken(sessionToken);
-                GetUserData();
-            }
-        }
-        else
-            console.log('err');
-    });
-}
 
 function selectItem(id) {
     for (i = 0; i < ChatApp.topics.length; i++) {
@@ -778,8 +645,8 @@ function getMessagesForTopic(id, authorId) {
             ChatApp.posts = data;
 
             setTimeout(function () {
-                var sh = $('.ms_container:visible')[0].scrollHeight;
-                $('.ms_container').scrollTop(sh);
+                var sh = $('.ms_container:visible')[0].scrollHeight + 9999999;
+                $('.ms_container:visible').scrollTop(sh);
             }, 300);
         }
     });

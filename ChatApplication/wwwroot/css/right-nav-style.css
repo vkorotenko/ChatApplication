@@ -18,21 +18,18 @@
     height: 0;
     margin: 0;
     right: 39px;
-    /* определяем цвет фона панели */
     background: white;
-    /* поверх других элементов */
     z-index: 99999;
     font-size: 16px;
     font-family: 'RobotoCondensed', sans-serif;
-    /*padding-left: 10px;*/
-    /* Прижимаем  потомков вниз*/
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
+    opacity: 0;
     /* плавный переход смещения панели */
-    -webkit-transition: all .8s ease-in;
-    -moz-transition: all .8s ease-in;
-    transition: all 0.8s ease-in;
+    -webkit-transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
+    -moz-transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
+    transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
 }
 /**
  * Когда флажок установлен, открывается панель
@@ -41,10 +38,11 @@
 
 [id='right-chat-toggle']:checked ~ .nav {
     height: 100%;
+    opacity: 1;
     bottom: 0;
-    -webkit-transition: all .8s ease-out;
-    -moz-transition: all .8s ease-out;
-    transition: all .8s ease-out;
+    -webkit-transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
+    -moz-transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
+    transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
 }
 
 
@@ -707,6 +705,7 @@ body {
 
 .width_sub_375 {
     /*width: calc(100% - 336px);*/
+    z-index: 99999 !important;
 }
 
 .rigth_chat_search_input {

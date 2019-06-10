@@ -216,10 +216,9 @@ namespace ChatApplication.Controllers
                 var user = await _ctx.Users.GetUserByName(User.Identity.Name);
 
                 message.Body = Regex.Replace(message.Body, "<.*?>", string.Empty);
-                message.Body = message.Body.Replace("\r\n", "\n");
-                message.Body = message.Body.Replace("\n", "<br/>");
-                if (message.Body.Length > 4)
-                    message.Body = message.Body.Substring(0, message.Body.Length - 5);
+                message.Body = message.Body.Replace("\r\n", "\n");                
+                var msgstring = message.Body.Split(new[] {"\n"}, StringSplitOptions.None);
+                message.Body = string.Join("<br/>", msgstring);
                 var msg = new DbMessage
                 {
                     AuthorId = user.Id,
