@@ -1,10 +1,38 @@
 ﻿@charset "UTF-8";
 
+
+@-webkit-keyframes intercom-notification-body-animation {
+    0%,50% {
+        opacity: 0
+    }
+    50% {
+        opacity: 0.5;
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes intercom-notification-body-animation {
+    from {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
 /**
  * Переключаемая боковая панель навигации
  * выдвигающаяся справа
  */
-
 .nav {
     width: 375px;
     min-width: 375px;
@@ -27,9 +55,11 @@
     flex-direction: column;
     opacity: 0;
     /* плавный переход смещения панели */
-    -webkit-transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
-    -moz-transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
-    transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
+    /*-webkit-transition: all .4s ease-in;
+    -moz-transition: all .4s ease-in;
+    transition: all .4s ease-in;*/
+    transition: opacity .8s ease-in, height 0.16s ease-in-out 0.8s, bottom 0.4s ease-in-out 0.8s;
+    
 }
 /**
  * Когда флажок установлен, открывается панель
@@ -40,9 +70,10 @@
     height: 100%;
     opacity: 1;
     bottom: 0;
-    -webkit-transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
-    -moz-transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
-    transition: height .8s ease-out, opacity 1.6s ease-out, bottom .8s ease-out;
+    /*-webkit-transition: all .4s ease-out;
+    -moz-transition: all .4s ease-out;
+    transition: all .4s ease-out;*/
+    transition: opacity .8s ease-in 0.7s, height 0.16s ease-in-out;
 }
 
 
@@ -894,8 +925,13 @@ body {
 }
 
 @keyframes visibility {
-    from { opacity: 0;}
-    to { opacity: 1;}
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .anonse_header {
@@ -1087,7 +1123,7 @@ body {
 }
 
     .body_typing_i:after {
-        content: ' .';        
+        content: ' .';
         animation: dotss 1s steps(5, end) infinite;
     }
 
@@ -1111,26 +1147,23 @@ body {
         text-shadow: 10px 0 0 #c6c6c6, 20px 0 0 #c6c6c6;
     }
 }
+
 @keyframes dotss {
     0%, 20% {
         color: rgba(0,0,0,0);
-        text-shadow: 5px 0 0 rgba(0,0,0,0), 
-                     10px 0 0 rgba(0,0,0,0);
+        text-shadow: 5px 0 0 rgba(0,0,0,0), 10px 0 0 rgba(0,0,0,0);
     }
 
     40% {
         color: #c6c6c6;
-        text-shadow: 5px 0 0 rgba(0,0,0,0), 
-                     10px 0 0 rgba(0,0,0,0);
+        text-shadow: 5px 0 0 rgba(0,0,0,0), 10px 0 0 rgba(0,0,0,0);
     }
 
     60% {
-        text-shadow: 5px 0 0 #c6c6c6, 
-                     10px 0 0 rgba(0,0,0,0);
+        text-shadow: 5px 0 0 #c6c6c6, 10px 0 0 rgba(0,0,0,0);
     }
 
     80%, 100% {
-        text-shadow: 5px 0 0 #c6c6c6, 
-                     10px 0 0 #c6c6c6;
+        text-shadow: 5px 0 0 #c6c6c6, 10px 0 0 #c6c6c6;
     }
 }
