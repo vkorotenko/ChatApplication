@@ -58,7 +58,7 @@
     /*-webkit-transition: all .4s ease-in;
     -moz-transition: all .4s ease-in;
     transition: all .4s ease-in;*/
-    transition: opacity .8s ease-in, height 0.16s ease-in-out 0.8s, bottom 0.4s ease-in-out 0.8s;
+    transition: opacity .4s ease-in, height 0.16s ease-in-out .4s, bottom 0.4s ease-in-out 0.4s;
     
 }
 /**
@@ -73,7 +73,7 @@
     /*-webkit-transition: all .4s ease-out;
     -moz-transition: all .4s ease-out;
     transition: all .4s ease-out;*/
-    transition: opacity .8s ease-in 0.7s, height 0.16s ease-in-out;
+    transition: opacity .4s ease-in, height 0.16s ease-in-out;
 }
 
 
