@@ -1,33 +1,6 @@
 ﻿@charset "UTF-8";
 
 
-@-webkit-keyframes intercom-notification-body-animation {
-    0%,50% {
-        opacity: 0
-    }
-    50% {
-        opacity: 0.5;
-    }
-
-    to {
-        opacity: 1
-    }
-}
-
-@keyframes intercom-notification-body-animation {
-    from {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 0.5;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
 
 /**
  * Переключаемая боковая панель навигации
@@ -59,7 +32,6 @@
     -moz-transition: all .4s ease-in;
     transition: all .4s ease-in;*/
     transition: opacity .4s ease-in, height 0.16s ease-in-out .4s, bottom 0.4s ease-in-out 0.4s;
-    
 }
 /**
  * Когда флажок установлен, открывается панель
@@ -216,6 +188,21 @@ body {
     }
 }
 
+@keyframes hideout {
+    from {
+        opacity: 0;        
+    }    
+    25% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.1;
+    }    
+    to {
+        opacity: 1;
+        translateY: (1);
+    }
+}
 
 /**
  * Формируем стиль заголовка (логотип) панели 
@@ -224,22 +211,25 @@ body {
 .nav h2 {
     text-transform: uppercase;
     padding: 0;
+    opacity: 1;
     color: #333333;
     background-color: #f4c43a;
     font-size: 18px;
-    background: none;
+    background: none;    
+    animation: hideout .6s ease-in;    
 }
 
 
 /*плавное появление заголовка (логотипа) при раскрытии панели */
 
-[id='right-chat-toggle']:checked ~ .nav h2 {
-    opacity: 1;
+/*[id='right-chat-toggle']:checked ~ .nav h2 {
+    opacity: 0.5;
     transform: scale(1, 1);
     -ms-transform: scale(1, 1);
     -moz-transform: scale(1, 1);
     -webkit-transform: scale(1, 1);
-}
+    transition: opacity 2s ease-in-out;
+}*/
 
 
 
@@ -318,8 +308,11 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
-    animation: visibility 1.6s ease-in-out;
+    animation: hideout .6s ease-in;
 }
+    .ms_container a {
+        animation: hideout .6s ease-out;
+    }
 
     .ms_container::-webkit-scrollbar-button {
         background-image: url('');
@@ -739,7 +732,9 @@ body {
     /*width: calc(100% - 336px);*/
     z-index: 99999 !important;
 }
-
+.first_hider {
+    animation: hideout .6s ease-in;
+}
 .rigth_chat_search_input {
     -moz-border-radius: 3px !important;
     border-radius: 3px !important;
@@ -751,6 +746,7 @@ body {
     margin-left: 5px;
     height: 33px;
     width: calc(100% - 20px);
+    animation: hideout .6s ease-out;
 }
 
     .rigth_chat_search_input:focus {
@@ -781,10 +777,10 @@ body {
     .msg_container .tl_long {
         display: none;
     }
-
-.active {
-    background-color: #fdf3d8;
-}
+    
+    .active {
+        background-color: #fdf3d8;
+    }
 
 .message-meta {
     padding-left: 10px;
@@ -921,7 +917,7 @@ body {
     background-color: #f1f1f1;
     margin: 0 0 0 -10px;
     padding: 10px 10px 10px 10px;
-    animation: visibility 1.6s ease-in-out;
+    animation: hideout .6s ease-in;    
 }
 
 @keyframes visibility {
@@ -966,6 +962,7 @@ body {
     display: flex;
     padding-top: 8px;
     min-height: 47px;
+    animation: hideout .6s ease-in;
 }
 
 .flx_bt {

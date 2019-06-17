@@ -1089,7 +1089,7 @@
     <nav class="nav" id="rigth-chat-app">
 
         <div class="nav-header">
-            <h2 v-if="!showMessagePanel">
+            <h2 v-show="!showMessagePanel">
                 ЧАТ ПОДДЕРЖКИ
                 <span class="rigth_chat_count_bg" v-if="unreadMessages > 0 && !showMessagePanel">
                     {{unreadMessages}}
@@ -1101,7 +1101,7 @@
                 <!-- minimize  -->
                 <span class="close_span minimize_btn" @click="closePanel"></span>
             </h2>
-            <h2 v-else>
+            <h2 v-show="showMessagePanel">
                 <span class="back_span back_btn" @click="backToTopics" style="cursor: pointer;"></span>
                 <span @click="backToTopics" style="cursor: pointer;">ВЫЙТИ ИЗ ДИАЛОГА</span>
                 <!-- maximize -->
@@ -1118,7 +1118,7 @@
                class="rigth_chat_search_input"
                v-model="query"
                @input="search"
-               v-if="!showMessagePanel" />
+               v-show="!showMessagePanel" />
         
             <div v-if="showMessagePanel" class="anonse_bar">
 
@@ -1139,72 +1139,75 @@
                 </div>
             </div>        
       
-            <div class="ms_container" v-show="!showMessagePanel">
-                <template class="">
-                    <a v-for="topic in topics"
-                       :href="'#message-' + topic.id"
-                       v-bind:class="{active : topic.selected, active: topic.hasMessages}"
-                       class="msg_container mp-0 h100"
-                       v-bind:class="{ selected: topic.selected }"
-                       @click="showThread(topic.id, this, $event)">
+  
+        <div class="ms_container first_hider" v-show="!showMessagePanel">
+            <template class="">
+                <a v-for="topic in topics"
+                   :href="'#message-' + topic.id"
+                   v-bind:class="{active : topic.selected, active: topic.hasMessages}"
+                   class="msg_container mp-0 h100"
+                   v-bind:class="{ selected: topic.selected }"
+                   @click="showThread(topic.id, this, $event)">
 
-                        <div class="row h68">
-                            <div class="col-md-2 mp-0 ms_first">
-                                <img :src="'/api/v1/user/avatar/' + topic.authorId" class="w48 " />
-                            </div>
-                            <div class="col-md-8 mp-0 ms_body">
-                                <span v-bind:class="{'message-name-active':  topic.hasMessages}"
-                                      class="message-name">
-                                    {{ topic.lmName }}
+                    <div class="row h68">
+                        <div class="col-md-2 mp-0 ms_first">
+                            <img :src="'/api/v1/user/avatar/' + topic.authorId" class="w48 " />
+                        </div>
+                        <div class="col-md-8 mp-0 ms_body">
+                            <span v-bind:class="{'message-name-active':  topic.hasMessages}"
+                                  class="message-name">
+                                {{ topic.lmName }}
+                            </span>
+                            <span v-bind:class="{ readed : topic.lmIsReaded }"
+                                  class=" message-time-label">
+                                {{topic.lmCreated | formatMonthDayEx }}
+                            </span>
+                            <br />
+
+                            <span class="message-text" v-if="topic.lmIsCurrent">
+                                <!--Вывод последнего сообщения или маркера печати-->
+                                <span v-if="typingData && typingData.topic == topic.id" class="body_typing_i">
+                                    печатает
                                 </span>
-                                <span v-bind:class="{ readed : topic.lmIsReaded }"
-                                      class=" message-time-label">
-                                    {{topic.lmCreated | formatMonthDayEx }}
-                                </span>                                
-                                <br />
+                                <template v-else>
+                                    Вы: {{topic.lastMessage |striphtml}}
+                                </template>
 
-                                <span class="message-text" v-if="topic.lmIsCurrent">
-                                    <!--Вывод последнего сообщения или маркера печати-->
-                                    <span v-if="typingData && typingData.topic == topic.id"  class="body_typing_i" >
-                                        печатает
-                                    </span>
-                                    <template v-else>
-                                        Вы: {{topic.lastMessage |striphtml}}
-                                    </template>
-
+                            </span>
+                            <span class="message-text" v-else>
+                                <!--Вывод последнего сообщения или маркера печати-->
+                                <span v-if="typingData && typingData.topic == topic.id" class="body_typing_i">
+                                    печатает
                                 </span>
-                                <span class="message-text" v-else>
-                                    <!--Вывод последнего сообщения или маркера печати-->
-                                    <span v-if="typingData && typingData.topic == topic.id" class="body_typing_i" >
-                                        печатает
-                                    </span>
-                                    <template v-else>
-                                        {{topic.lastMessage |striphtml}}                                        
-                                    </template>
-                                </span>                                
-                            </div>
-                            <div class="col-md-2 mp-0 end_col">
-                                <img class="w48r3" :src="'/api/v1/article/' + topic.announcementId + '/img'">
-                            </div>
+                                <template v-else>
+                                    {{topic.lastMessage |striphtml}}
+                                </template>
+                            </span>
                         </div>
-                        <div class="row low_row_border">
-                            <div class="col-md-12 mp-0 message-meta">
-                                {{topic.title}} Цена: {{ topic.price }} <img src="/img/rc/run14it.png" style="height: 11px"/> <br />
-                                Артикул: {{topic.vendorCode}} Производитель: {{topic.vendor}}
-                            </div>
+                        <div class="col-md-2 mp-0 end_col">
+                            <img class="w48r3" :src="'/api/v1/article/' + topic.announcementId + '/img'">
                         </div>
-                    </a>
-                    <a v-if="topics.length == 0">
-                        <div class="no_result">
-                            Нет результатов
+                    </div>
+                    <div class="row low_row_border">
+                        <div class="col-md-12 mp-0 message-meta">
+                            {{topic.title}} Цена: {{ topic.price }} <img src="/img/rc/run14it.png" style="height: 11px" /> <br />
+                            Артикул: {{topic.vendorCode}} Производитель: {{topic.vendor}}
                         </div>
-                    </a>
-                </template>
-            </div>
+                    </div>
+                </a>
+                <a v-if="topics.length == 0">
+                    <div class="no_result">
+                        Нет результатов
+                    </div>
+                </a>
+            </template>
+        </div>
+  
+    
             
         
         
-            <div class="ms_container" v-if="showMessagePanel">
+            <div class="ms_container" v-show="showMessagePanel">
                 <div v-if="showMessagePanel">
                     <div v-if="posts.length == 0">
                         В данном чате пока нет сообщений.

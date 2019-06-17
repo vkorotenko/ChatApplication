@@ -189,13 +189,11 @@ var RigthChatApp = new Vue({
         },
         collapse: function () {
             RigthChatApp.application.state = RigthChatApp.application.stateMax;
-            //$('#rigth-chat-app').animate({ height: '60%', height: '100%' }, 800);
-            $('#rigth-chat-app').height('100%')
+            $('#rigth-chat-app').height('100%');
         },
         maximize: function () {
             RigthChatApp.application.state = RigthChatApp.application.stateMin;
-            //$('#rigth-chat-app').animate({ height: '100%', height: '60%' }, 800);            
-            $('#rigth-chat-app').height('60%')
+            $('#rigth-chat-app').height('60%');
         },
         typing: function () {
             var tm = RigthChatApp.localtypingdate;
@@ -551,6 +549,10 @@ function closeRigthPanel() {
 function showRigthChat(ifShow, id) {
     console.log('switch chat ' + ifShow);
     showRigthChatPanel = ifShow;
+
+    RigthChatApp.application.state = RigthChatApp.application.stateMin;
+    $('#rigth-chat-app').height('60%');
+
     var st = localStorage.getItem(openPanelKey);
     if (st != null) {
         ifShow = JSON.parse(st);
@@ -561,6 +563,7 @@ function showRigthChat(ifShow, id) {
     }
     if (ifShow) {
         document.getElementById('right-chat-toggle').checked = 'checked';
+        RigthChatApp.maximize();
     } else {
         document.getElementById('right-chat-toggle').checked = false;
     }
