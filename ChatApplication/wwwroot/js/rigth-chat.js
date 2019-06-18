@@ -129,9 +129,43 @@ var RigthChatApp = new Vue({
         },
         backToTopics: function () {
             console.log('Back from topic');
-            RigthChatApp.showMessagePanel = false;
-            RigthChatApp.actualtopic = null;
-            RigthChatApp.getUserData();
+            // animation: hideout 1.2s ease reverse;
+            var container = $('.ms_container:visible ')[0];
+            //animation: hideout .6s ease-in;
+            var header = $('.nav h2:visible')[0];
+            //animation: hideout_sp .6s ease-out;
+            var send_panel = $('.send_panel')[0];
+            var anonse_bar = $('.anonse_bar')[0];
+            var anonse_bar_r = $('.anonse_bar .row')[0];
+
+            container.style.webkitAnimation = "initial";
+            header.style.webkitAnimation = 'initial';
+            send_panel.style.webkitAnimation = 'initial';
+            anonse_bar.style.webkitAnimation = 'initial';
+            anonse_bar_r.style.webkitAnimation = 'initial';
+
+            setTimeout(function () {
+                container.style.webkitAnimation = "hideout 1.2s ease reverse";
+                anonse_bar_r.style.webkitAnimation = 'hideout_r 1.2s ease reverse';
+
+            }, 10);
+            setTimeout(function () {
+                header.style.webkitAnimation = 'hideout .6s ease reverse';
+                send_panel.style.webkitAnimation = 'hideout_sp .6s ease reverse';
+                anonse_bar.style.webkitAnimation = 'hideout_ab .6s ease-in-out reverse';
+            }, 600);
+
+            setTimeout(function () {
+                container.style.webkitAnimation = "";
+                header.style.webkitAnimation = '';
+                send_panel.style.webkitAnimation = '';
+                anonse_bar.style.webkitAnimation = '';
+                anonse_bar_r.style.webkitAnimation = '';
+
+                RigthChatApp.showMessagePanel = false;
+                RigthChatApp.actualtopic = null;
+                RigthChatApp.getUserData();
+            }, 1200);
         },
         appendNewLine: function () {
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
@@ -379,6 +413,14 @@ function selectItemRc(id) {
 }
 function getMessagesForTopicRc(id, authorId) {
     var sessionToken = sessionStorage.getItem(tokenKey);
+    var container = $('.ms_container:visible')[0];
+    // animation: hideout 1.2s ease;
+    container.style.webkitAnimation = "initial";
+
+    setTimeout(function () {
+        container.style.webkitAnimation = "hideout 1.2s ease reverse";
+    }, 10);
+
     $.ajax({
         type: 'GET',
         url: '/api/v1/user/messages/' + id,
@@ -386,17 +428,17 @@ function getMessagesForTopicRc(id, authorId) {
             xhr.setRequestHeader("Authorization", "Bearer " + sessionToken);
         },
         success: function (data) {
-
-
-
             RigthChatApp.posts = data;
             setTimeout(function () {
                 var sh = $('.ms_container:visible')[0].scrollHeight + 9999999;
-                $('.ms_container:visible').scrollTop(sh);
+                $('.ms_container:visible').scrollTop(sh);                
+                
                 var template =
                     '<div class="viewbox-container width_sub_375"><div class="viewbox-body"><div class="viewbox-header"></div><div class="viewbox-content"></div><div class="viewbox-footer"></div></div></div>';
                 $(".litebox").viewbox({ template: template, navButtons: false, nextOnContentClick: false });
             }, 300);
+
+            container.style.webkitAnimation = "";
             RigthChatApp.showMessagePanel = true;
         }
     });

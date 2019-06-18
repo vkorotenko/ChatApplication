@@ -189,18 +189,11 @@ body {
 }
 
 @keyframes hideout {
-    from {
-        opacity: 0;        
-    }    
-    25% {
+    from,50% {
         opacity: 0;
     }
-    50% {
-        opacity: 0.1;
-    }    
     to {
-        opacity: 1;
-        translateY: (1);
+        opacity: 1;    
     }
 }
 
@@ -215,8 +208,8 @@ body {
     color: #333333;
     background-color: #f4c43a;
     font-size: 18px;
-    background: none;    
-    animation: hideout .6s ease-in;    
+    background: none;
+    animation: hideout .6s ease-in;
 }
 
 
@@ -304,14 +297,19 @@ body {
     background-color: #f4c43a;
 }
 
+.ms_container_hider {
+    animation: hideout 1.2s ease reverse;
+}
+
 .ms_container {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
-    animation: hideout .6s ease-in;
+    animation: hideout 1.2s ease;
 }
+
     .ms_container a {
-        animation: hideout .6s ease-out;
+        animation: hideout 1.2s ease;
     }
 
     .ms_container::-webkit-scrollbar-button {
@@ -732,9 +730,11 @@ body {
     /*width: calc(100% - 336px);*/
     z-index: 99999 !important;
 }
+
 .first_hider {
-    animation: hideout .6s ease-in;
+    animation: hideout 1.2s ease;
 }
+
 .rigth_chat_search_input {
     -moz-border-radius: 3px !important;
     border-radius: 3px !important;
@@ -777,10 +777,10 @@ body {
     .msg_container .tl_long {
         display: none;
     }
-    
-    .active {
-        background-color: #fdf3d8;
-    }
+
+.active {
+    background-color: #fdf3d8;
+}
 
 .message-meta {
     padding-left: 10px;
@@ -917,7 +917,61 @@ body {
     background-color: #f1f1f1;
     margin: 0 0 0 -10px;
     padding: 10px 10px 10px 10px;
-    animation: hideout .6s ease-in;    
+    animation: hideout_ab .6s ease-in-out;
+}
+
+    .anonse_bar .row {
+        opacity: 1;
+        animation: hideout_r 1.2s ease;
+    }
+
+@keyframes hideout_r {
+    from {
+        opacity: 0;
+    }
+    50%{ opacity: 0;}
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes hideout_ab {
+    from {
+        -webkit-transform-origin: top left;
+        -ms-transform-origin: top left;
+        transform-origin: top left;
+        opacity: 0;
+        height: 0px;
+        -o-transform: translateY(-83);
+        -ms-transform: translateY(-83);
+        -moz-transform: translateY(-83);
+        -webkit-transform: translateY(-83);
+        transform: translateY(-83);
+        /*-o-transform: scaleY(0);
+        -ms-transform: scaleY(0);
+        -moz-transform: scaleY(0);
+        -webkit-transform: scaleY(0);
+        transform: scaleY(0);*/
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+
+    to {
+        -o-transform: translateY(0);
+        -ms-transform: translateY(0);
+        -moz-transform: translateY(0);
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        /*-o-transform: scaleY(1);
+        -ms-transform: scaleY(1);
+        -moz-transform: scaleY(1);
+        -webkit-transform: scaleY(1);
+        transform: scaleY(1);*/
+        height: 83px;
+        opacity: 1;
+    }
 }
 
 @keyframes visibility {
@@ -952,6 +1006,30 @@ body {
             font-size: 14px;
         }
 
+@keyframes hideout_sp {
+    from {
+        opacity: 0;
+        -o-transform: translateY(47px);
+        -ms-transform: translateY(47px);
+        -moz-transform: translateY(47px);
+        -webkit-transform: translateY(47px);
+        transform: translateY(47px);
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+
+    to {
+        -o-transform: translateY(0px);
+        -ms-transform: translateY(0px);
+        -moz-transform: translateY(0px);
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
 .send_panel {
     background-color: #f1f1f1;
     margin: 0 0 0 -10px;
@@ -962,8 +1040,9 @@ body {
     display: flex;
     padding-top: 8px;
     min-height: 47px;
-    animation: hideout .6s ease-in;
+    animation: hideout_sp .6s ease-out;
 }
+
 
 .flx_bt {
     -o-justify-content: flex-end;
