@@ -10,11 +10,10 @@ setInterval(function () { RefreshToken(sessionToken); }, 55000);
 
 // Обработчики  событий закрытия панели правого чата
 $(document).ready(function () {
-    showRigthChat(showRigthChatPanel);
-
+    
+    
     $('.mask-content').click(function () {
-
-        showRigthChatPanel = !showRigthChatPanel;
+        
         localStorage.setItem(openPanelKey, showRigthChatPanel);
         showRigthChat(showRigthChatPanel);
     });
@@ -105,7 +104,7 @@ var RigthChatApp = new Vue({
         sendMessage: function () {
             if (RigthChatApp.messageArea != "" || isFileSelectedRc())
                 sendMessageToTopicRc(RigthChatApp.messageArea, RigthChatApp.topicId);
-        },        
+        },
         getUserData: function () {
             GetUserDataRc();
         },
@@ -138,11 +137,18 @@ var RigthChatApp = new Vue({
             var anonse_bar = $('.anonse_bar')[0];
             var anonse_bar_r = $('.anonse_bar .row')[0];
 
+            var ulbar = $('.ul_btn_bar')[0];
+            var ulbar1 = $('.ul_btn_bar')[1];
+
+
             container.style.webkitAnimation = "initial";
             header.style.webkitAnimation = 'initial';
             send_panel.style.webkitAnimation = 'initial';
             anonse_bar.style.webkitAnimation = 'initial';
             anonse_bar_r.style.webkitAnimation = 'initial';
+
+            ulbar.style.webkitAnimation = 'initial';
+            ulbar1.style.webkitAnimation = 'initial';
 
             setTimeout(function () {
                 container.style.webkitAnimation = "hideout 1.2s ease reverse";
@@ -153,6 +159,9 @@ var RigthChatApp = new Vue({
                 header.style.webkitAnimation = 'hideout .6s ease reverse';
                 send_panel.style.webkitAnimation = 'hideout_sp .6s ease reverse';
                 anonse_bar.style.webkitAnimation = 'hideout_ab .6s ease-in-out reverse';
+
+                ulbar.style.webkitAnimation = 'hideout .6s ease reverse';
+                ulbar1.style.webkitAnimation = 'hideout .6s ease reverse';
             }, 600);
 
             setTimeout(function () {
@@ -162,10 +171,13 @@ var RigthChatApp = new Vue({
                 anonse_bar.style.webkitAnimation = '';
                 anonse_bar_r.style.webkitAnimation = '';
 
+                ulbar.style.webkitAnimation = '';
+                ulbar1.style.webkitAnimation = '';
+
                 RigthChatApp.showMessagePanel = false;
                 RigthChatApp.actualtopic = null;
                 RigthChatApp.getUserData();
-            }, 1200);
+            }, 1100);
         },
         appendNewLine: function () {
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
@@ -192,13 +204,13 @@ var RigthChatApp = new Vue({
                     var count = 0;
                     if (data)
                         count = parseInt(data);
-
-                    FloatMessageButton.setCount(count);
+                    if (FloatMessageButton)
+                        FloatMessageButton.setCount(count);
 
                     if (count > 0) {
                         if (RigthChatApp && RigthChatApp.getUserData) RigthChatApp.getUserData();
 
-                    } 
+                    }
                 }
             });
 
@@ -222,12 +234,19 @@ var RigthChatApp = new Vue({
             RigthChatApp.typing();
         },
         collapse: function () {
+            console.log('collapse: ' + RigthChatApp.application.state);
             RigthChatApp.application.state = RigthChatApp.application.stateMax;
-            $('#rigth-chat-app').height('100%');
+            $("#rigth-chat-app").addClass('notransition').animate({ height: '100%'}, 1000, "linear", function() {
+                $("#rigth-chat-app").removeClass('notransition');
+            });
+            // $('#rigth-chat-app').height('100%');
         },
         maximize: function () {
+            console.log('maximize: ' + RigthChatApp.application.state);
             RigthChatApp.application.state = RigthChatApp.application.stateMin;
-            $('#rigth-chat-app').height('60%');
+            $("#rigth-chat-app").addClass('notransition').animate({ height: '60%' }, 1000, "linear", function() {
+                $("#rigth-chat-app").removeClass('notransition');
+            });            
         },
         typing: function () {
             var tm = RigthChatApp.localtypingdate;
@@ -251,6 +270,7 @@ var RigthChatApp = new Vue({
         }
     }
 });
+
 
 function clearTypingInterval() {
     RigthChatApp.typingData.id = null;
@@ -414,12 +434,32 @@ function selectItemRc(id) {
 function getMessagesForTopicRc(id, authorId) {
     var sessionToken = sessionStorage.getItem(tokenKey);
     var container = $('.ms_container:visible')[0];
-    // animation: hideout 1.2s ease;
-    container.style.webkitAnimation = "initial";
+    var top = $('.nav-header h2:visible')[0];
+    var search = $('.rigth_chat_search_input')[0];
 
+    var ulbar = $('.ul_btn_bar')[0];
+    var ulbar1 = $('.ul_btn_bar')[1];
+
+    
+    container.style.webkitAnimation = "initial";
+    top.style.webkitAnimation = "initial";
+    search.style.webkitAnimation = "initial";
     setTimeout(function () {
         container.style.webkitAnimation = "hideout 1.2s ease reverse";
     }, 10);
+    setTimeout(function () {
+        top.style.webkitAnimation = "hideout .6s ease-in reverse";
+        search.style.webkitAnimation = "movetop .6s ease-out reverse";
+
+        ulbar.style.webkitAnimation = 'hideout .6s ease reverse';
+        ulbar1.style.webkitAnimation = 'hideout .6s ease reverse';
+    }, 600);
+    setTimeout(function () {
+        top.style.opacity = 0;        
+        search.style.opacity = 0;
+        ulbar.style.opacity = 0;
+        ulbar1.style.opacity = 0;
+    }, 600);
 
     $.ajax({
         type: 'GET',
@@ -429,17 +469,34 @@ function getMessagesForTopicRc(id, authorId) {
         },
         success: function (data) {
             RigthChatApp.posts = data;
-            setTimeout(function () {
-                var sh = $('.ms_container:visible')[0].scrollHeight + 9999999;
-                $('.ms_container:visible').scrollTop(sh);                
-                
+            setTimeout(function () {                
                 var template =
                     '<div class="viewbox-container width_sub_375"><div class="viewbox-body"><div class="viewbox-header"></div><div class="viewbox-content"></div><div class="viewbox-footer"></div></div></div>';
                 $(".litebox").viewbox({ template: template, navButtons: false, nextOnContentClick: false });
             }, 300);
 
-            container.style.webkitAnimation = "";
-            RigthChatApp.showMessagePanel = true;
+            setTimeout(function () {
+                container.style.webkitAnimation = "";
+                top.style.webkitAnimation = "";
+                search.style.webkitAnimation = "";
+
+                ulbar.style.webkitAnimation = '';
+                ulbar1.style.webkitAnimation = '';
+
+                top.style.opacity = 1;
+                search.style.opacity = 1;
+                ulbar.style.opacity = 1;
+                ulbar1.style.opacity = 1;
+
+                RigthChatApp.showMessagePanel = true;
+
+                setTimeout(function () {
+                    var sh = $('.ms_container:visible')[0].scrollHeight + 9999999;
+                    console.log(sh);
+                    $('.ms_container:visible').scrollTop(sh);
+                }, 300);               
+
+            }, 600);
         }
     });
 }
@@ -583,6 +640,9 @@ function sortTopics(array, id) {
 }
 
 function closeRigthPanel() {
+
+    console.log('closeRigthPanel: ' + showRigthChatPanel);
+
     showRigthChatPanel = !showRigthChatPanel;
     localStorage.setItem(openPanelKey, showRigthChatPanel);
     showRigthChat(showRigthChatPanel);

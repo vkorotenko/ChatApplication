@@ -1005,7 +1005,7 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur sequi veniam odio velit illum quasi vero delectus laborum natus voluptatem ab reprehenderit earum cum eius sit minus rerum ducimus, enim libero! Animi dolorem nulla id. Numquam quaerat quae repellendus architecto saepe, doloremque nobis inventore magnam aspernatur eligendi? Maiores et repellendus ad suscipit soluta animi officiis molestiae commodi explicabo eligendi accusamus, atque! Aliquid temporibus delectus ipsam et illum? Ipsa mollitia, esse quia delectus saepe velit impedit beatae ducimus sint, fuga molestias. Quo voluptates cupiditate placeat commodi pariatur error, perspiciatis est eius vero, debitis, ad veritatis. Repudiandae nulla fugit non exercitationem, quas.</p>
         </div>
     </div>
-   
+
 
     <script type="text/javascript">
 
@@ -1089,29 +1089,39 @@
     <nav class="nav" id="rigth-chat-app">
 
         <div class="nav-header">
-            <h2 v-show="!showMessagePanel">
-                ЧАТ ПОДДЕРЖКИ
-                <span class="rigth_chat_count_bg" v-if="unreadMessages > 0 && !showMessagePanel">
-                    {{unreadMessages}}
-                </span>
-                <!-- maximize -->
-                <span class="close_span maximize_btn" @click="collapse" v-if="application.state === application.stateMin"></span>
-                <!-- collapse -->
-                <span class="close_span restore_btn" @click="maximize" v-if="application.state === application.stateMax"></span>
-                <!-- minimize  -->
-                <span class="close_span minimize_btn" @click="closePanel"></span>
-            </h2>
-            <h2 v-show="showMessagePanel">
-                <span class="back_span back_btn" @click="backToTopics" style="cursor: pointer;"></span>
-                <span @click="backToTopics" style="cursor: pointer;">ВЫЙТИ ИЗ ДИАЛОГА</span>
-                <!-- maximize -->
-                <span class="close_span maximize_btn" @click="collapse" v-if="application.state === application.stateMin"></span>
-                <!-- collapse -->
-                <span class="close_span restore_btn" @click="maximize" v-if="application.state === application.stateMax"></span>
-                <!-- minimize  -->
-                <span class="close_span minimize_btn" @click="closePanel"></span>
-
-            </h2>
+            <div class="row btn_bar">
+                <div class="col-md-2 mp-0 w36">
+                    <ul class="ul_btn_bar">
+                        <li v-show="showMessagePanel" @click="backToTopics">                            
+                            <img src="/img/rc/back_ico.png" class="back_span back_btn" >
+                        </li>
+                    </ul>                    
+                </div>
+                <div class="col-md-8 mp-0" style="padding-top: 9px;">
+                    <h2 v-show="!showMessagePanel">
+                        ЧАТ ПОДДЕРЖКИ
+                    </h2>
+                    <h2 v-show="showMessagePanel">
+                        ВЫЙТИ ИЗ ДИАЛОГА
+                    </h2>
+                    <span class="rigth_chat_count_bg" v-if="unreadMessages > 0 && !showMessagePanel">
+                        {{unreadMessages}}
+                    </span>
+                </div>
+                <div class="col-md-2 mp-0" style="width: 74px;margin-left: auto;">
+                    <ul class="ul_btn_bar">
+                        <li>
+                            <span class="close_span minimize_btn" @click="closePanel"></span>
+                        </li>
+                        <li v-if="application.state === application.stateMax">
+                            <span class="close_span restore_btn" @click="maximize" v-if="application.state === application.stateMax"></span>
+                        </li>
+                        <li v-if="application.state === application.stateMin">
+                            <span class="close_span maximize_btn" @click="collapse" v-if="application.state === application.stateMin"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <input type="text"
                placeholder="Поиск..."
@@ -1119,27 +1129,27 @@
                v-model="query"
                @input="search"
                v-show="!showMessagePanel" />
-        
-            <div v-if="showMessagePanel" class="anonse_bar">
 
-                <div class="row">
-                    <div class="col-md-2 mp-0">
-                        <img class="w48r3" :src="'/api/v1/article/' + actualtopic.id + '/img'">
-                    </div>
-                    <div class="col-md-10 mp-0">
-                        <div class="anonse_header">
-                            {{actualtopic.title}} <br />
-                            Артикул: {{actualtopic.vendorCode}}<br />
-                            Производитель: {{actualtopic.vendor}} <br />
-                            Цена: {{ actualtopic.price }} <img src='/img/rc/rub13.png' style="height: 11px" />
-                            <a :href="'/article/view?id=' + actualtopic.id">к обьявлению </a>
-                        </div>
-                    </div>
+        <div v-if="showMessagePanel" class="anonse_bar">
 
+            <div class="row">
+                <div class="col-md-2 mp-0">
+                    <img class="w48r3" :src="'/api/v1/article/' + actualtopic.id + '/img'">
                 </div>
-            </div>        
-      
-  
+                <div class="col-md-10 mp-0">
+                    <div class="anonse_header">
+                        {{actualtopic.title}} <br />
+                        Артикул: {{actualtopic.vendorCode}}<br />
+                        Производитель: {{actualtopic.vendor}} <br />
+                        Цена: {{ actualtopic.price }} <img src='/img/rc/rub13.png' style="height: 11px" />
+                        <a :href="'/article/view?id=' + actualtopic.id">к обьявлению </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
         <div class="ms_container first_hider" v-show="!showMessagePanel">
             <template class="">
                 <a v-for="topic in topics"
@@ -1202,80 +1212,80 @@
                 </a>
             </template>
         </div>
-  
-    
-            
-        
-        
-            <div class="ms_container" v-show="showMessagePanel">
-                <div v-if="showMessagePanel">
-                    <div v-if="posts.length == 0">
-                        В данном чате пока нет сообщений.
+
+
+
+
+
+        <div class="ms_container" v-show="showMessagePanel">
+            <div v-if="showMessagePanel">
+                <div v-if="posts.length == 0">
+                    В данном чате пока нет сообщений.
+                </div>
+                <div v-for="msg in posts"
+                     v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
+                     class="row">
+
+                    <div class="col-md-12 day_repeater" v-if="msg.newDay">
+                        {{msg.created | formatMonthDay }}
                     </div>
-                    <div v-for="msg in posts"
-                         v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
-                         class="row">
 
-                        <div class="col-md-12 day_repeater" v-if="msg.newDay">
-                            {{msg.created | formatMonthDay }}
-                        </div>
-
-                        <div class="col-md-2 mp-0 avatar_flex">
-                            <img :src="msg.avatarUrl"
-                                 alt=""
-                                 class="w40 mlt-5"
-                                 v-if="!msg.isAuthor">
-                        </div>
-                        <div class="col-md-10 mp-0" v-bind:class="{fac_r: msg.isAuthor}">
-                            <div v-if="!msg.isAuthor" class="top_name">{{msg.name}}</div>
-                            <div v-bind:class="{ from_alien: !msg.isAuthor, from_author: msg.isAuthor }">
-                                <div v-html="msg.body" class="mgs_body"></div>
-                                <template v-if="msg.attachment && msg.attachment.name != null">
-                                    <br />
-                                    <a :href="msg.attachment.url" onclick="//return jsiBoxOpen(this)" target="_self" class="litebox" data-litebox-group="group-1" tabindex="0">
-                                        <img class="img-responsive"
-                                             style="width: 250px !important"
-                                             v-if="msg.attachment.isImage"
-                                             :src="msg.attachment.url"
-                                             :alt="msg.attachment.name" />
-                                    </a>
-                                    <b>
-                                        <a :href="msg.attachment.url" class="attachment_url" target="_blank">
-                                            <div class="row" v-if="!msg.attachment.isImage">
-                                                <div class="col-md-2 mp-0">
-                                                    <img v-if="!msg.attachment.isImage"
-                                                         :src="msg.attachment.name | getIcon"
-                                                         class="document_ico" />
-                                                </div>
-                                                <div class="col-md-10 mp-0 mgs_file" :title="msg.attachment.name">
-                                                    {{msg.attachment.name}}
-                                                    <div class="download_size">{{msg.attachment.size | fileSize}}</div>
-                                                </div>
+                    <div class="col-md-2 mp-0 avatar_flex">
+                        <img :src="msg.avatarUrl"
+                             alt=""
+                             class="w40 mlt-5"
+                             v-if="!msg.isAuthor">
+                    </div>
+                    <div class="col-md-10 mp-0" v-bind:class="{fac_r: msg.isAuthor}">
+                        <div v-if="!msg.isAuthor" class="top_name">{{msg.name}}</div>
+                        <div v-bind:class="{ from_alien: !msg.isAuthor, from_author: msg.isAuthor }">
+                            <div v-html="msg.body" class="mgs_body"></div>
+                            <template v-if="msg.attachment && msg.attachment.name != null">
+                                <br />
+                                <a :href="msg.attachment.url" onclick="//return jsiBoxOpen(this)" target="_self" class="litebox" data-litebox-group="group-1" tabindex="0">
+                                    <img class="img-responsive"
+                                         style="width: 250px !important"
+                                         v-if="msg.attachment.isImage"
+                                         :src="msg.attachment.url"
+                                         :alt="msg.attachment.name" />
+                                </a>
+                                <b>
+                                    <a :href="msg.attachment.url" class="attachment_url" target="_blank">
+                                        <div class="row" v-if="!msg.attachment.isImage">
+                                            <div class="col-md-2 mp-0">
+                                                <img v-if="!msg.attachment.isImage"
+                                                     :src="msg.attachment.name | getIcon"
+                                                     class="document_ico" />
                                             </div>
-                                        </a>
-                                    </b>
-                                </template>
+                                            <div class="col-md-10 mp-0 mgs_file" :title="msg.attachment.name">
+                                                {{msg.attachment.name}}
+                                                <div class="download_size">{{msg.attachment.size | fileSize}}</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </b>
+                            </template>
 
 
-                                <div v-bind:class="{  tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
-                                     :data-created="msg.created"
-                                     class="time_label tl_short">
-                                    {{ msg.created | formatTime }}
-                                </div>
-                                <div v-bind:class="{ tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
-                                     :data-created="msg.created"
-                                     class="time_label tl_long">
-                                    {{ msg.created | formatDateTime }}
-                                </div>
+                            <div v-bind:class="{  tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
+                                 :data-created="msg.created"
+                                 class="time_label tl_short">
+                                {{ msg.created | formatTime }}
+                            </div>
+                            <div v-bind:class="{ tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
+                                 :data-created="msg.created"
+                                 class="time_label tl_long">
+                                {{ msg.created | formatDateTime }}
                             </div>
                         </div>
                     </div>
-                    <div class="body_typing" v-if="typingData && typingData.topic == actualtopic.id">
-                        {{typingData.name}} печатает
-                    </div>
+                </div>
+                <div class="body_typing" v-if="typingData && typingData.topic == actualtopic.id">
+                    {{typingData.name}} печатает
                 </div>
             </div>
-       
+        </div>
+
         <!-- send message bar-->
         <div class="send_panel" v-show="showMessagePanel" id="send_panel">
             <div class="loader" v-if="showLoader"></div>
@@ -1290,11 +1300,11 @@
                 </div>
                 <div class="col-md-8 mp-0">
                     <textarea class="send_ta" id="ta_send_panel"
-                                  placeholder="Напишите сообщение..."
-                                  v-model="messageArea"
-                                  @keyup="resizeSendArea"                                  
-                                  @keyup.enter.exact="sendMessage"
-                                  @keyup.enter.ctrl.exact="appendNewLine"></textarea>
+                              placeholder="Напишите сообщение..."
+                              v-model="messageArea"
+                              @keyup="resizeSendArea"
+                              @keyup.enter.exact="sendMessage"
+                              @keyup.enter.ctrl.exact="appendNewLine"></textarea>
                 </div>
                 <div class="col-md-2 mp-0 flx_bt">
                     <img src="/img/rc/send.png" width="23px" class="" @click="sendMessage" title="Отправить" style="margin-bottom: 17px;margin-left: 7px; " />
@@ -1303,15 +1313,15 @@
         </div>
     </nav>
     <script src="/js/rigth-chat.js"></script>
-    
-<div id="floatMessageButton">
-    <label for="right-chat-toggle" 
-           v-bind:class="{float_button_no_bg: !showCounter, float_button_yes_bg: showCounter, 'nav-toggle': true }"
-           onclick>
-        <span v-if="showCounter">{{count}}</span>
-        <span id="totalUnreadMessagesRc" style="display: none;"></span>
-    </label>
-</div>
+
+    <div id="floatMessageButton">
+        <label for="right-chat-toggle"
+               v-bind:class="{float_button_no_bg: !showCounter, float_button_yes_bg: showCounter, 'nav-toggle': true }"
+               onclick>
+            <span v-if="showCounter">{{count}}</span>
+            <span id="totalUnreadMessagesRc" style="display: none;"></span>
+        </label>
+    </div>
 
 </body>
 </html>
@@ -2060,13 +2070,13 @@
 
                 sessionToken = data.access_token;
                 sessionStorage.setItem(tokenKey, data.access_token);
-                showChat(data.id);                                
+                showChat(data.id);
                 if (loggedinUserId) loggedinUserId = data.id;
                 if (RigthChatApp) {
                     RigthChatApp.id = data.id;
                     RigthChatApp.getUserData();
                 }
-                    
+
                 console.log(data);
                 // window.location.assign('chat.html');
             },
