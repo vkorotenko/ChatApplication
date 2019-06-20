@@ -1092,7 +1092,7 @@
             <div class="row btn_bar">
                 <div class="col-md-2 mp-0 w36">
                     <ul class="ul_btn_bar">
-                        <li v-show="showMessagePanel" @click="backToTopics">                            
+                        <li v-if="showMessagePanel" @click="backToTopics">                            
                             <img src="/img/rc/back_ico.png" class="back_span back_btn" >
                         </li>
                     </ul>                    

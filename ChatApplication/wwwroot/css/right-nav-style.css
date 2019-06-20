@@ -189,7 +189,9 @@ body {
 }
 
 @keyframes hideout {
-    from,50% {
+    from{opacity: 0}
+    
+    50% {
         opacity: 0;
     }
 
@@ -293,7 +295,7 @@ body {
 
 .nav-header {
     margin: 0px 0px 0 -10px;
-    padding: 0px 7px 0 10px;
+    padding: 7px 7px 0 10px;
     height: 50px;
     min-height: 50px;
     background-color: #f1c400;
@@ -1298,7 +1300,7 @@ body {
 
 .ul_btn_bar {    
     text-align: right;
-    animation: hideout .6s ease-in-out;
+    animation: hideout .6s ease-in;
 }
 
     .ul_btn_bar li {
@@ -1308,6 +1310,7 @@ body {
         padding: 9px;
         display: inline-table;
         cursor: pointer;
+        animation: hideout .6s ease-in;
     }
 
         .ul_btn_bar li:hover {
