@@ -2,7 +2,7 @@
 var openPanelKey = 'openPanelKey';
 var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
-
+var gcOut = 0;
 
 checkMessagesForUser();
 setInterval(function () { RefreshToken(sessionToken); }, 55000);
@@ -10,16 +10,16 @@ setInterval(function () { RefreshToken(sessionToken); }, 55000);
 
 // Обработчики  событий закрытия панели правого чата
 $(document).ready(function () {
-    
-    
+
+
     $('.mask-content').click(function () {
-        
-        localStorage.setItem(openPanelKey, showRigthChatPanel);
-        showRigthChat(showRigthChatPanel);
+
+        localStorage.setItem(openPanelKey, RigthChatApp.showRC);
+        showRigthChat(RigthChatApp.showRC);
     });
     $('#right-chat-toggle').change(function () {
-        showRigthChatPanel = document.getElementById('right-chat-toggle').checked;
-        localStorage.setItem(openPanelKey, showRigthChatPanel);
+        RigthChatApp.showRC = document.getElementById('right-chat-toggle').checked;
+        localStorage.setItem(openPanelKey, RigthChatApp.showRC);
     });
 });
 
@@ -46,7 +46,6 @@ $(document).ready(function () {
     });
     /*end*/
 });
-
 
 
 var RigthChatApp = new Vue({
@@ -90,7 +89,8 @@ var RigthChatApp = new Vue({
         mailRefresh: true,
         showSearchLoader: false,
         showMessagePanel: false,
-        query: ""
+        query: "",
+        showRC: true
     },
     methods: {
         showThread: function (id, el, event) {
@@ -194,7 +194,19 @@ var RigthChatApp = new Vue({
             setTimeout(clearTypingInterval, 5000);
         },
         closePanel: function () {
-            closeRigthPanel();
+            var bottom = getComputedStyle(document.getElementById('rigth-chat-app')).bottom;
+            console.log('gcOut: ' + gcOut + ' bottom: ' + bottom + ' RigthChatApp.showRC: ' + RigthChatApp.showRC);
+            if (bottom == '0px') {
+                RigthChatApp.showRC = true;
+                console.log('2px');
+            } else {
+                console.log('bottom: ' + bottom);
+            }
+
+            console.log('closeRigthPanel: ' + RigthChatApp.showRC);
+            RigthChatApp.showRC = !RigthChatApp.showRC;
+            localStorage.setItem(openPanelKey, RigthChatApp.showRC);
+            showRigthChat(RigthChatApp.showRC);
         },
         startUnread: function () {
             var req = $.ajax({
@@ -236,7 +248,7 @@ var RigthChatApp = new Vue({
         collapse: function () {
             console.log('collapse: ' + RigthChatApp.application.state);
             RigthChatApp.application.state = RigthChatApp.application.stateMax;
-            $("#rigth-chat-app").addClass('notransition').animate({ height: '100%'}, 1000, "linear", function() {
+            $("#rigth-chat-app").addClass('notransition').animate({ height: '100%' }, 1000, "linear", function () {
                 $("#rigth-chat-app").removeClass('notransition');
                 scroolToBottom();
             });
@@ -245,10 +257,11 @@ var RigthChatApp = new Vue({
         maximize: function () {
             console.log('maximize: ' + RigthChatApp.application.state);
             RigthChatApp.application.state = RigthChatApp.application.stateMin;
-            $("#rigth-chat-app").addClass('notransition').animate({ height: '60%' }, 1000, "linear", function() {
+            scroolToBottomRep(0, 202);
+            $("#rigth-chat-app").addClass('notransition').animate({ height: '60%' }, 1000, "linear", function () {
                 $("#rigth-chat-app").removeClass('notransition');
                 scroolToBottom();
-            });            
+            });
         },
         typing: function () {
             var tm = RigthChatApp.localtypingdate;
@@ -440,11 +453,11 @@ function getMessagesForTopicRc(id, authorId) {
     var search = $('.rigth_chat_search_input')[0];
 
     var ulbar = $('.ul_btn_bar')[0];
-    
-    var ulbar1 = $('.ul_btn_bar')[1];
-    
 
-    
+    var ulbar1 = $('.ul_btn_bar')[1];
+
+
+
     container.style.webkitAnimation = "initial";
     top.style.webkitAnimation = "initial";
     search.style.webkitAnimation = "initial";
@@ -462,7 +475,7 @@ function getMessagesForTopicRc(id, authorId) {
         ulbar1.style.webkitAnimation = 'hideout .6s ease-in reverse';
     }, 600);
     setTimeout(function () {
-        top.style.opacity = 0;        
+        top.style.opacity = 0;
         search.style.opacity = 0;
         ulbar.style.opacity = 0;
         ulbar1.style.opacity = 0;
@@ -476,7 +489,7 @@ function getMessagesForTopicRc(id, authorId) {
         },
         success: function (data) {
             RigthChatApp.posts = data;
-            setTimeout(function () {                
+            setTimeout(function () {
                 var template =
                     '<div class="viewbox-container width_sub_375"><div class="viewbox-body"><div class="viewbox-header"></div><div class="viewbox-content"></div><div class="viewbox-footer"></div></div></div>';
                 $(".litebox").viewbox({ template: template, navButtons: false, nextOnContentClick: false });
@@ -500,16 +513,30 @@ function getMessagesForTopicRc(id, authorId) {
 
                 setTimeout(function () {
                     scroolToBottom();
-                }, 300);                                      
+                }, 300);
             }, 600);
         }
     });
 }
 
+function scroolToBottomRep(count, total) {
+    setTimeout(function () {
+        scroolToBottom();
+        count += 1;
+        if(count < total)
+            scroolToBottomRep(count, total);
+    }, 5);
+}
+
 function scroolToBottom() {
-    var sh = $('.ms_container:visible')[0].scrollHeight + 9999999;
-    console.log(sh);
-    $('.ms_container:visible').scrollTop(sh);
+
+    var sh = $('.ms_container:visible')[0].scrollHeight + 50;
+    if (!RigthChatApp.showMessagePanel) {
+
+        $('.ms_container:visible').scrollTop(0);
+    } else {
+        $('.ms_container:visible').scrollTop(sh);
+    }
 }
 // Отправка сообщения в топик
 function sendMessageToTopicRc(body, topicId) {
@@ -647,19 +674,9 @@ function sortTopics(array, id) {
     return na;
 }
 
-function closeRigthPanel() {
-
-    console.log('closeRigthPanel: ' + showRigthChatPanel);
-
-    showRigthChatPanel = !showRigthChatPanel;
-    localStorage.setItem(openPanelKey, showRigthChatPanel);
-    showRigthChat(showRigthChatPanel);
-}
-
 function showRigthChat(ifShow, id) {
     console.log('switch chat ' + ifShow);
-    showRigthChatPanel = ifShow;
-
+    RigthChatApp.showRC = ifShow;
     RigthChatApp.application.state = RigthChatApp.application.stateMin;
     $('#rigth-chat-app').height('60%');
 

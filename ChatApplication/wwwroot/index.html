@@ -1110,14 +1110,14 @@
                 </div>
                 <div class="col-md-2 mp-0" style="width: 74px;margin-left: auto;">
                     <ul class="ul_btn_bar">
-                        <li>
-                            <span class="close_span minimize_btn" @click="closePanel"></span>
+                        <li @click="closePanel">
+                            <span class="close_span minimize_btn" ></span>
                         </li>
-                        <li v-if="application.state === application.stateMax">
-                            <span class="close_span restore_btn" @click="maximize" v-if="application.state === application.stateMax"></span>
+                        <li v-if="application.state === application.stateMax" @click="maximize">
+                            <span class="close_span restore_btn" v-if="application.state === application.stateMax"></span>
                         </li>
-                        <li v-if="application.state === application.stateMin">
-                            <span class="close_span maximize_btn" @click="collapse" v-if="application.state === application.stateMin"></span>
+                        <li v-if="application.state === application.stateMin" @click="collapse">
+                            <span class="close_span maximize_btn"  v-if="application.state === application.stateMin"></span>
                         </li>
                     </ul>
                 </div>
