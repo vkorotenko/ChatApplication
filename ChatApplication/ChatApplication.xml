@@ -240,6 +240,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:ChatApplication.Controllers.ArticleController.GenerateThnumnail(System.String)">
+            <summary>
+            Создаем превьюшку аватарки при необходимости.
+            </summary>
+            <param name="url"></param>
+        </member>
         <member name="M:ChatApplication.Controllers.ArticleController.Articles">
             <summary>
             Получение списка обьявлений, доступных для авторизованного пользователя.
@@ -307,6 +313,12 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.GenerateThnumnail(System.String)">
+            <summary>
+            Создаем превьюшку аватарки при необходимости.
+            </summary>
+            <param name="url"></param>
         </member>
         <member name="M:ChatApplication.Controllers.UserController.AddToTopic(System.Int64,ChatApplication.Models.AddMessageModel)">
             <summary>

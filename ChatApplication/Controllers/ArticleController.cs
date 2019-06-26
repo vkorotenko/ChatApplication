@@ -13,8 +13,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace ChatApplication.Controllers
 {
@@ -77,15 +81,62 @@ namespace ChatApplication.Controllers
 
                 var article = await _ctx.Articles.Get(id);
                 var image = article.Photos.FirstOrDefault();
-                if (image == null)
+
+                if (image ==null)
                     return Redirect(failUrl);
-                return Redirect(image.Photo);
+                else
+                {
+                   return Redirect(GenerateThnumnail(image.Photo));
+                }                                
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 return BadRequest();
             }
+        }
+        /// <summary>
+        /// Создаем превьюшку аватарки при необходимости.
+        /// </summary>
+        /// <param name="url"></param>
+        private string GenerateThnumnail(string url)
+        {
+            try
+            {
+                var basePath = _config.GetValue<string>("Upload:AppDir");
+                var nurl = url.Remove(0, 1);
+                var fullPath = Path.Combine(basePath, nurl);
+
+                var fi = new FileInfo(fullPath);
+
+                var ext = fi.Extension;
+                var name = fi.Name.Replace(ext, "");
+                var th = $"{name}_50{ext}";
+                url = url.Replace($"{name}{ext}", th);
+                nurl = url.Remove(0, 1);
+                var fullThPath = Path.Combine(basePath, nurl);
+
+
+                if (System.IO.File.Exists(fullThPath))
+                {
+                    return url;
+                }
+                else
+                {
+                    using (Image<Rgba32> image = Image.Load(fullPath))
+                    {
+                        image.Mutate(x => x.Resize(50, 50));
+                        image.Save(fullThPath);
+                    }
+                    return url;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "GenerateThnumnail");
+                return url;
+            }
+
         }
         /// <summary>
         /// Получение списка обьявлений, доступных для авторизованного пользователя.

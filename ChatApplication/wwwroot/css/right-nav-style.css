@@ -46,6 +46,7 @@
     -moz-transition: all .4s ease-out;
     transition: all .4s ease-out;*/
     transition: opacity .4s ease-in, height 0.16s ease-in-out;
+    justify-content: flex-end;
 }
 
 
@@ -189,8 +190,10 @@ body {
 }
 
 @keyframes hideout {
-    from{opacity: 0}
-    
+    from {
+        opacity: 0
+    }
+
     50% {
         opacity: 0;
     }
@@ -522,6 +525,10 @@ body {
     height: 7px;
     background: url('/img/rc/dblchk.png') 100% 100% no-repeat;
     background-size: cover; /* Масштабируем фон */
+}
+
+.message_to .tl_readed_ms:after {
+    display: none;
 }
 
 .tl_not_readed:after {
@@ -1179,7 +1186,7 @@ body {
 
 
 
-.minimize_btn, .maximize_btn, .restore_btn, .back_btn {    
+.minimize_btn, .maximize_btn, .restore_btn, .back_btn {
     opacity: 1;
     display: inline-block;
     width: 18px;
@@ -1298,7 +1305,7 @@ body {
 
 
 
-.ul_btn_bar {    
+.ul_btn_bar {
     text-align: right;
     animation: hideout .6s ease-in;
 }
@@ -1318,9 +1325,14 @@ body {
             -moz-border-radius: 3px;
             background-color: #000000;
             background-color: rgba(0,0,0,0.1);
-            
         }
 
             .ul_btn_bar li:hover ~ * {
                 background-color: rgba(0,0,0,0);
             }
+
+.ms_blur {
+    /* Add the blur effect */
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+}

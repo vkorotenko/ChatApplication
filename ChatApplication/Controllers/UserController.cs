@@ -24,7 +24,10 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Migrations.Design;
+using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace ChatApplication.Controllers
 {
@@ -191,6 +194,10 @@ namespace ChatApplication.Controllers
                 var url = user.Url;
                 if (string.IsNullOrWhiteSpace(url))
                     url = avatarImage;
+                else
+                {
+                    url = GenerateThnumnail(url);
+                }
                 return url;
             }
             catch (Exception e)
@@ -200,6 +207,50 @@ namespace ChatApplication.Controllers
                 return avatarImage;
             }
         }
+        /// <summary>
+        /// Создаем превьюшку аватарки при необходимости.
+        /// </summary>
+        /// <param name="url"></param>
+        private string GenerateThnumnail(string url)
+        {
+            try
+            {
+                var basePath = _config.GetValue<string>("Upload:AppDir");
+                var nurl = url.Remove(0, 1);
+                var fullPath = Path.Combine(basePath, nurl);
+
+                var fi = new FileInfo(fullPath);
+
+                var ext = fi.Extension;
+                var name = fi.Name.Replace(ext, "");
+                var th = $"{name}_50{ext}";
+                url = url.Replace($"{name}{ext}", th);
+                nurl = url.Remove(0, 1);
+                var fullThPath = Path.Combine(basePath, nurl);
+
+
+                if (System.IO.File.Exists(fullThPath))
+                {
+                    return url;
+                }
+                else
+                {                    
+                    using (Image<Rgba32> image = Image.Load(fullPath))
+                    {
+                        image.Mutate(x => x.Resize(50, 50));
+                        image.Save(fullThPath);
+                    }
+                    return url;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "GenerateThnumnail");
+                return url;
+            }
+
+        }
+
         /// <summary>
         /// Добавление сообщения в топик. Используется идентификатор залогоненого пользователя.
         /// </summary>
@@ -216,8 +267,8 @@ namespace ChatApplication.Controllers
                 var user = await _ctx.Users.GetUserByName(User.Identity.Name);
 
                 message.Body = Regex.Replace(message.Body, "<.*?>", string.Empty);
-                message.Body = message.Body.Replace("\r\n", "\n");                
-                var msgstring = message.Body.Split(new[] {"\n"}, StringSplitOptions.None);
+                message.Body = message.Body.Replace("\r\n", "\n");
+                var msgstring = message.Body.Split(new[] { "\n" }, StringSplitOptions.None);
                 message.Body = string.Join("<br/>", msgstring);
                 var msg = new DbMessage
                 {
@@ -667,7 +718,7 @@ namespace ChatApplication.Controllers
                 return Json(new LatestMessageModel[0]);
             }
         }
-        
+
         /// <summary>
         /// Вызывается при пользовательском вводе на клиенте. Дергает цикл с сообщениями
         /// </summary>
