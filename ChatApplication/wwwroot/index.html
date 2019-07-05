@@ -1123,194 +1123,192 @@
                 </div>
             </div>
         </div>
-        <input type="text"
-               placeholder="Поиск..."
-               class="rigth_chat_search_input"
-               v-model="query"
-               @input="search"
-               v-show="!showMessagePanel" />
 
-        <div v-if="showMessagePanel" class="anonse_bar">
 
-            <div class="row">
-                <div class="col-md-2 mp-0">
-                    <img class="w48r3" :src="'/api/v1/article/' + actualtopic.id + '/img'">
-                </div>
-                <div class="col-md-10 mp-0">
-                    <div class="anonse_header">
-                        {{actualtopic.title}} <br />
-                        Артикул: {{actualtopic.vendorCode}}<br />
-                        Производитель: {{actualtopic.vendor}} <br />
-                        Цена: {{ actualtopic.price }} <img src='/img/rc/rub13.png' style="height: 11px" />
-                        <a :href="'/article/view?id=' + actualtopic.id">к обьявлению </a>
+        
+
+        <div class="fh_100">
+            <input type="text"
+                   placeholder="Поиск..."
+                   class="rigth_chat_search_input"
+                   v-model="query"
+                   @input="search"
+                   v-show="!showMessagePanel" />
+            <div v-if="showMessagePanel" class="anonse_bar">
+
+                <div class="row">
+                    <div class="col-md-2 mp-0">
+                        <img class="w48r3" :src="'/api/v1/article/' + actualtopic.id + '/img'">
                     </div>
-                </div>
+                    <div class="col-md-10 mp-0">
+                        <div class="anonse_header">
+                            {{actualtopic.title}} <br />
+                            Артикул: {{actualtopic.vendorCode}}<br />
+                            Производитель: {{actualtopic.vendor}} <br />
+                            Цена: {{ actualtopic.price }} <img src='/img/rc/rub13.png' style="height: 11px" />
+                            <a :href="'/article/view?id=' + actualtopic.id">к обьявлению </a>
+                        </div>
+                    </div>
 
+                </div>
             </div>
-        </div>
+            <div class="ms_container first_hider" v-show="!showMessagePanel">
+                <template class="">
+                    <a v-for="topic in topics"
+                       :href="'#message-' + topic.id"
+                       v-bind:class="{active : topic.selected, active: topic.hasMessages}"
+                       class="msg_container mp-0 h100"
+                       v-bind:class="{ selected: topic.selected }"
+                       @click="showThread(topic.id, this, $event)">
 
-
-        <div class="ms_container first_hider" v-show="!showMessagePanel">
-            <template class="">
-                <a v-for="topic in topics"
-                   :href="'#message-' + topic.id"
-                   v-bind:class="{active : topic.selected, active: topic.hasMessages}"
-                   class="msg_container mp-0 h100"
-                   v-bind:class="{ selected: topic.selected }"
-                   @click="showThread(topic.id, this, $event)">
-
-                    <div class="row h68">
-                        <div class="col-md-2 mp-0 ms_first">
-                            <img :src="'/api/v1/user/avatar/' + topic.authorId" class="w48 " />
-                        </div>
-                        <div class="col-md-8 mp-0 ms_body">
-                            <span v-bind:class="{'message-name-active':  topic.hasMessages}"
-                                  class="message-name">
-                                {{ topic.lmName }}
-                            </span>
-                            <span v-bind:class="{ readed : topic.lmIsReaded }"
-                                  class=" message-time-label">
-                                {{topic.lmCreated | formatMonthDayEx }}
-                            </span>
-                            <br />
-
-                            <span class="message-text" v-if="topic.lmIsCurrent">
-                                <!--Вывод последнего сообщения или маркера печати-->
-                                <span v-if="typingData && typingData.topic == topic.id" class="body_typing_i">
-                                    печатает
+                        <div class="row h68">
+                            <div class="col-md-2 mp-0 ms_first">
+                                <img :src="'/api/v1/user/avatar/' + topic.authorId" class="w48 " />
+                            </div>
+                            <div class="col-md-8 mp-0 ms_body">
+                                <span v-bind:class="{'message-name-active':  topic.hasMessages}"
+                                      class="message-name">
+                                    {{ topic.lmName }}
                                 </span>
-                                <template v-else>
-                                    Вы: {{topic.lastMessage |striphtml}}
-                                </template>
-
-                            </span>
-                            <span class="message-text" v-else>
-                                <!--Вывод последнего сообщения или маркера печати-->
-                                <span v-if="typingData && typingData.topic == topic.id" class="body_typing_i">
-                                    печатает
+                                <span v-bind:class="{ readed : topic.lmIsReaded }"
+                                      class=" message-time-label">
+                                    {{topic.lmCreated | formatMonthDayEx }}
                                 </span>
-                                <template v-else>
-                                    {{topic.lastMessage |striphtml}}
-                                </template>
-                            </span>
-                        </div>
-                        <div class="col-md-2 mp-0 end_col">
-                            <img class="w48r3" :src="'/api/v1/article/' + topic.announcementId + '/img'">
-                        </div>
-                    </div>
-                    <div class="row low_row_border">
-                        <div class="col-md-12 mp-0 message-meta">
-                            {{topic.title}} Цена: {{ topic.price }} <img src="/img/rc/run14it.png" style="height: 11px" /> <br />
-                            Артикул: {{topic.vendorCode}} Производитель: {{topic.vendor}}
-                        </div>
-                    </div>
-                </a>
-                <a v-if="topics.length == 0">
-                    <div class="no_result">
-                        Нет результатов
-                    </div>
-                </a>
-            </template>
-        </div>
-
-
-
-
-
-        <div class="ms_container" v-show="showMessagePanel">
-            <div v-if="showMessagePanel">
-                <div v-if="posts.length == 0">
-                    В данном чате пока нет сообщений.
-                </div>
-                <div v-for="msg in posts"
-                     v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
-                     class="row">
-
-                    <div class="col-md-12 day_repeater" v-if="msg.newDay">
-                        {{msg.created | formatMonthDay }}
-                    </div>
-
-                    <div class="col-md-2 mp-0 avatar_flex">
-                        <img :src="msg.avatarUrl"
-                             alt=""
-                             class="w40 mlt-5"
-                             v-if="!msg.isAuthor">
-                    </div>
-                    <div class="col-md-10 mp-0" v-bind:class="{fac_r: msg.isAuthor}">
-                        <div v-if="!msg.isAuthor" class="top_name">{{msg.name}}</div>
-                        <div v-bind:class="{ from_alien: !msg.isAuthor, from_author: msg.isAuthor }">
-                            <div v-html="msg.body" class="mgs_body"></div>
-                            <template v-if="msg.attachment && msg.attachment.name != null">
                                 <br />
-                                <a :href="msg.attachment.url" onclick="//return jsiBoxOpen(this)" target="_self" class="litebox" data-litebox-group="group-1" tabindex="0">
-                                    <img class="img-responsive"
-                                         style="width: 250px !important"
-                                         v-if="msg.attachment.isImage"
-                                         :src="msg.attachment.url"
-                                         :alt="msg.attachment.name" />
-                                </a>
-                                <b>
-                                    <a :href="msg.attachment.url" class="attachment_url" target="_blank">
-                                        <div class="row" v-if="!msg.attachment.isImage">
-                                            <div class="col-md-2 mp-0">
-                                                <img v-if="!msg.attachment.isImage"
-                                                     :src="msg.attachment.name | getIcon"
-                                                     class="document_ico" />
-                                            </div>
-                                            <div class="col-md-10 mp-0 mgs_file" :title="msg.attachment.name">
-                                                {{msg.attachment.name}}
-                                                <div class="download_size">{{msg.attachment.size | fileSize}}</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </b>
-                            </template>
 
+                                <span class="message-text" v-if="topic.lmIsCurrent">
+                                    <!--Вывод последнего сообщения или маркера печати-->
+                                    <span v-if="typingData && typingData.topic == topic.id" class="body_typing_i">
+                                        печатает
+                                    </span>
+                                    <template v-else>
+                                        Вы: {{topic.lastMessage |striphtml}}
+                                    </template>
 
-                            <div v-bind:class="{  tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
-                                 :data-created="msg.created"
-                                 class="time_label tl_short">
-                                {{ msg.created | formatTime }}
+                                </span>
+                                <span class="message-text" v-else>
+                                    <!--Вывод последнего сообщения или маркера печати-->
+                                    <span v-if="typingData && typingData.topic == topic.id" class="body_typing_i">
+                                        печатает
+                                    </span>
+                                    <template v-else>
+                                        {{topic.lastMessage |striphtml}}
+                                    </template>
+                                </span>
                             </div>
-                            <div v-bind:class="{ tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
-                                 :data-created="msg.created"
-                                 class="time_label tl_long">
-                                {{ msg.created | formatDateTime }}
+                            <div class="col-md-2 mp-0 end_col">
+                                <img class="w48r3" :src="'/api/v1/article/' + topic.announcementId + '/img'">
+                            </div>
+                        </div>
+                        <div class="row low_row_border">
+                            <div class="col-md-12 mp-0 message-meta">
+                                {{topic.title}} Цена: {{ topic.price }} <img src="/img/rc/run14it.png" style="height: 11px" /> <br />
+                                Артикул: {{topic.vendorCode}} Производитель: {{topic.vendor}}
+                            </div>
+                        </div>
+                    </a>
+                    <a v-if="topics.length == 0">
+                        <div class="no_result">
+                            Нет результатов
+                        </div>
+                    </a>
+                </template>
+            </div>
+            <div class="ms_container" v-show="showMessagePanel">
+                <div v-if="showMessagePanel">
+                    <div v-if="posts.length == 0">
+                        В данном чате пока нет сообщений.
+                    </div>
+                    <div v-for="msg in posts"
+                         v-bind:class="{ message_to: !msg.isAuthor, message_from: msg.isAuthor}"
+                         class="row">
+
+                        <div class="col-md-12 day_repeater" v-if="msg.newDay">
+                            {{msg.created | formatMonthDay }}
+                        </div>
+
+                        <div class="col-md-2 mp-0 avatar_flex">
+                            <img :src="msg.avatarUrl"
+                                 alt=""
+                                 class="w40 mlt-5"
+                                 v-if="!msg.isAuthor">
+                        </div>
+                        <div class="col-md-10 mp-0" v-bind:class="{fac_r: msg.isAuthor}">
+                            <div v-if="!msg.isAuthor" class="top_name">{{msg.name}}</div>
+                            <div v-bind:class="{ from_alien: !msg.isAuthor, from_author: msg.isAuthor }">
+                                <div v-html="msg.body" class="mgs_body"></div>
+                                <template v-if="msg.attachment && msg.attachment.name != null">
+                                    <br />
+                                    <a :href="msg.attachment.url" onclick="//return jsiBoxOpen(this)" target="_self" class="litebox" data-litebox-group="group-1" tabindex="0">
+                                        <img class="img-responsive"
+                                             style="width: 250px !important"
+                                             v-if="msg.attachment.isImage"
+                                             :src="msg.attachment.url"
+                                             :alt="msg.attachment.name" />
+                                    </a>
+                                    <b>
+                                        <a :href="msg.attachment.url" class="attachment_url" target="_blank">
+                                            <div class="row" v-if="!msg.attachment.isImage">
+                                                <div class="col-md-2 mp-0">
+                                                    <img v-if="!msg.attachment.isImage"
+                                                         :src="msg.attachment.name | getIcon"
+                                                         class="document_ico" />
+                                                </div>
+                                                <div class="col-md-10 mp-0 mgs_file" :title="msg.attachment.name">
+                                                    {{msg.attachment.name}}
+                                                    <div class="download_size">{{msg.attachment.size | fileSize}}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </b>
+                                </template>
+
+
+                                <div v-bind:class="{  tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
+                                     :data-created="msg.created"
+                                     class="time_label tl_short">
+                                    {{ msg.created | formatTime }}
+                                </div>
+                                <div v-bind:class="{ tl_right: true, tl_readed_ms: msg.isRead , tl_not_readed: !msg.isRead  }"
+                                     :data-created="msg.created"
+                                     class="time_label tl_long">
+                                    {{ msg.created | formatDateTime }}
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="body_typing" v-if="typingData && typingData.topic == actualtopic.id">
+                        {{typingData.name}} печатает
+                    </div>
                 </div>
-                <div class="body_typing" v-if="typingData && typingData.topic == actualtopic.id">
-                    {{typingData.name}} печатает
+            </div>
+            <!-- send message bar-->
+            <div class="send_panel" v-show="showMessagePanel" id="send_panel">
+                <div class="loader" v-if="showLoader"></div>
+                <div class="row" style="height: 100%">
+                    <div class="messager__file file file_small col-md-2 mp-0 flx_bt">
+                        <form>
+                            <label for="file-rch">
+                                <img src="/img/rc/attachment.png" title="selectFileName" style="margin-left: 20px; margin-bottom: 11px;" />
+                            </label>
+                            <input type="file" id="file-rch" name="uploads" @change="fileSelected">
+                        </form>
+                    </div>
+                    <div class="col-md-8 mp-0">
+                        <textarea class="send_ta" id="ta_send_panel"
+                                  placeholder="Напишите сообщение..."
+                                  v-model="messageArea"
+                                  @keyup="resizeSendArea"
+                                  @keyup.enter.exact="sendMessage"
+                                  @keyup.enter.ctrl.exact="appendNewLine"></textarea>
+                    </div>
+                    <div class="col-md-2 mp-0 flx_bt">
+                        <img src="/img/rc/send.png" width="23px" class="" @click="sendMessage" title="Отправить" style="margin-bottom: 17px; margin-left: 7px;" />
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- send message bar-->
-        <div class="send_panel" v-show="showMessagePanel" id="send_panel">
-            <div class="loader" v-if="showLoader"></div>
-            <div class="row" style="height: 100%">
-                <div class="messager__file file file_small col-md-2 mp-0 flx_bt">
-                    <form>
-                        <label for="file-rch">
-                            <img src="/img/rc/attachment.png" title="selectFileName" style="margin-left: 20px; margin-bottom: 11px;" />
-                        </label>
-                        <input type="file" id="file-rch" name="uploads" @change="fileSelected">
-                    </form>
-                </div>
-                <div class="col-md-8 mp-0">
-                    <textarea class="send_ta" id="ta_send_panel"
-                              placeholder="Напишите сообщение..."
-                              v-model="messageArea"
-                              @keyup="resizeSendArea"
-                              @keyup.enter.exact="sendMessage"
-                              @keyup.enter.ctrl.exact="appendNewLine"></textarea>
-                </div>
-                <div class="col-md-2 mp-0 flx_bt">
-                    <img src="/img/rc/send.png" width="23px" class="" @click="sendMessage" title="Отправить" style="margin-bottom: 17px;margin-left: 7px; " />
-                </div>
-            </div>
-        </div>
+        
     </nav>
     <script src="/js/rigth-chat.js"></script>
 

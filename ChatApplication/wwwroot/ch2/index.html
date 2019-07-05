@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon href=/favicon.ico><link rel=stylesheet href=/template/styles/css/main-old.css><link rel=stylesheet href=/template/styles/css/style.css><link rel=stylesheet href=/css/right-nav-style.css><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=/template/styles/css/responsive.css><script src=https://unpkg.com/axios/dist/axios.min.js></script><title>rigth chat app</title><link href=/css/app.css rel=preload as=style><link href=/js/app.js rel=preload as=script><link href=/js/chunk-vendors.js rel=preload as=script><link href=/css/app.css rel=stylesheet></head><body><form class=form-signin><h1 class="h3 mb-3 font-weight-normal">Войдите в систему</h1><label for=inputEmail class=sr-only>Email</label> <input type=text id=inputUserName class=form-control placeholder="Имя пользователя" required autofocus> <label for=inputPassword class=sr-only>Пароль</label> <input type=password id=inputPassword class=form-control placeholder=Пароль required><div class="custom-control custom-checkbox mb-3"><input type=checkbox class=custom-control-input id=remimberme> <label class=custom-control-label for=remimberme>Запомнить</label></div><button class="btn btn-outline-primary btn-block" id=login_button type=submit>Войти</button><p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p></form><script>var tokenKey = "accessToken";
+        var btn = document.getElementById('login_button');
+        console.log(btn)
+        document.getElementById('login_button').onclick = function (e) {
+
+            var username = document.getElementById('inputUserName');
+            var password = document.getElementById('inputPassword');
+            var loginData = {
+                username: username.value,
+                password: password.value
+            };
+            var data = JSON.stringify(loginData);
+            console.log(data)
+            axios.post('/api/v1/Account/token', loginData )
+                .then(function (response) {
+                    sessionToken = response.access_token;
+                    sessionStorage.setItem(tokenKey, response.access_token);
+                    // showChat(data.id);
+                    if (loggedinUserId) loggedinUserId = data.id;
+                    if (RigthChatApp) {
+                        RigthChatApp.id = data.id;
+                        RigthChatApp.getUserData();
+                    }
+
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        };</script><noscript><strong>No JS - no <s>cookie</s> chat.</strong></noscript><input type=checkbox id=right-chat-toggle hidden><nav id=rigth-chat-app></nav><div id=floatMessageButton></div><script src=/js/chunk-vendors.js></script><script src=/js/app.js></script></body></html>

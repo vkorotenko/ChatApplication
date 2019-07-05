@@ -310,10 +310,10 @@ body {
 }
 
 .ms_container {
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
     height: 100%;
-    animation: hideout 1.2s ease;
+    /*animation: hideout 1.2s ease;*/    
 }
 
     .ms_container a {
@@ -337,7 +337,7 @@ body {
         border-radius: 1px;
         background-color: #f1c400;
         /*box-shadow: 0px 1px 1px #fff inset;*/
-        background-image: url('assets/59610063.png');
+        /*background-image: url('assets/59610063.png');*/
         background-position: center;
         background-repeat: no-repeat;
     }
@@ -622,6 +622,7 @@ body {
 
 .message_to, .message_from {
     padding-bottom: 1rem;
+    align-self: flex-end;
 }
 
     .message_from .message__wrap_rc:before {
@@ -1335,4 +1336,10 @@ body {
     /* Add the blur effect */
     filter: blur(3px);
     -webkit-filter: blur(3px);
+}
+.chat_panel_collapse {
+    transition: height .8s ease;
+}
+.fh_100 {
+    height: calc(100% - 50px);
 }

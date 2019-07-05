@@ -116,7 +116,7 @@ var RigthChatApp = new Vue({
         },
         fileSelected: function () {
 
-            var file_data = $('#file-rch').prop('files')[0];
+            var file_data = $('#send_panel input[type="file"]').prop('files')[0];
             console.log(file_data);
             RigthChatApp.fileAdded = true;
             RigthChatApp.selectFileName = file_data.name;
@@ -254,67 +254,42 @@ var RigthChatApp = new Vue({
         collapse: function () {
             console.log('collapse: ' + RigthChatApp.application.state);
             RigthChatApp.application.state = RigthChatApp.application.stateMax;
-            var ms = $('.ms_container:visible');
             var container = getVisibleScroolElement();
+            fixHeight(container);
+
             var rc = $("#rigth-chat-app");
-            rc.addClass('notransition');
-            
-
-            g_perf.s = performance.now();
-            var h;
-            var ch = document.body.clientHeight;
-            var ch60 = Math.abs(document.body.clientHeight * 0.6);
-            h = ch60;
-            var duration = 600;
-            var framesize = 15;
-            g_step.s = performance.now();
-            g_step.e = performance.now();
-
-            var timerId = setTimeout(function maxTick(h) {
-                h = h + (ch - ch60) / (1000 / framesize);
-                // console.log(h);
-                rc.height(h + 'px');
-                scroolToBottom(container);
-
-                if (h > ch) {
-                    rc.height('100%');
-                    rc.removeClass('notransition');                    
-                    scroolToBottom(container);
-                    g_perf.e = performance.now();
-                    console.log('Duration: ' + (g_perf.e - g_perf.s) + ' ms');
-                    return;
-                }
-                timerId = setTimeout(maxTick, framesize, h);
-            }, framesize, h);
-        },
-        maximize: function () {
-            console.log('maximize: ' + RigthChatApp.application.state);
-            RigthChatApp.application.state = RigthChatApp.application.stateMin;
-            var rc = $("#rigth-chat-app");
-            var ms = $('.ms_container:visible');
-            var container = getVisibleScroolElement();
             rc.addClass('notransition');
 
             g_perf.s = performance.now();
             var h;
             var ch = document.body.clientHeight;
             var ch60 = document.body.clientHeight * 0.6;
-            h = ch;
-            var duration = 600;
+            h = ch60;
+            var ch40 = ch - ch60;
+            var duration = 800;
             var framesize = 15;
+
             g_step.s = performance.now();
             g_step.e = performance.now();
+
+            var spline = BezierEasing(0.44, .05, .55, .95);
+            // from 60% -> 100%
+
             var timerId = setTimeout(function maxTick(h) {
-                
-                h = h - (ch - ch60) / (1000 / framesize);
-                rc.height(h + 'px');                
-                scroolToBottom(container);
-                
-                if (h < ch60) {
-                    rc.height('60%');
+
+                g_step.e = performance.now();
+                var d = g_step.e - g_step.s;
+                h = ch60 + d * ((ch - ch60) / duration);
+                // console.log(60 + (spline((h - ch60) / (ch40)) / (ch/ch40) ) * 100 + '%');
+                // container.style.opacity = 0;
+                // scroolToBottom(container);
+                rc.height(60 + (spline((h - ch60) / (ch40)) / (ch / ch40)) * 100 + '%');
+                // container.style.opacity = 1;               
+                if (h > ch) {
+                    rc.height('100%');
                     rc.removeClass('notransition');
-                    //ms.removeClass('ms_blur');
                     scroolToBottom(container);
+                    //container.style.opacity = 1;
                     g_perf.e = performance.now();
                     console.log('Duration: ' + (g_perf.e - g_perf.s) + ' ms');
                     return;
@@ -322,6 +297,48 @@ var RigthChatApp = new Vue({
                 timerId = setTimeout(maxTick, framesize, h);
             }, framesize, h);
 
+        },
+        maximize: function () {
+            console.log('maximize: ' + RigthChatApp.application.state);
+            RigthChatApp.application.state = RigthChatApp.application.stateMin;
+            var container = getVisibleScroolElement();
+            var rc = $("#rigth-chat-app");
+            fixHeight(container);
+            rc.addClass('notransition');
+            g_perf.s = performance.now();
+            var h;
+            var ch = document.body.clientHeight;
+            var ch60 = document.body.clientHeight * 0.6;
+            var ch40 = ch - ch60;
+            h = ch;
+            var duration = 800;
+            var framesize = 15;
+
+            g_step.s = performance.now();
+
+            var spline = BezierEasing(0.44, .05, .55, .95);
+            // 100 => 60
+
+            var timerId = setTimeout(function maxTick(h) {
+
+                g_step.e = performance.now();
+                var d = g_step.e - g_step.s;
+                h = ch - d * ((ch - ch60) / duration) + 3;
+                // console.log(60 + (spline((h - ch60) / (ch40)) / (ch/ch40) ) * 100 + '%');
+                // scroolToBottom(container);
+                rc.height(60 + (spline((h - ch60) / (ch40)) / (ch / ch40)) * 100 + '%');
+
+                if (h < ch60) {
+                    rc.height('60%');
+                    rc.removeClass('notransition');
+                    scroolToBottom(container);
+                    //container.style.opacity = 1;
+                    g_perf.e = performance.now();
+                    console.log('Duration: ' + (g_perf.e - g_perf.s) + ' ms');
+                    return;
+                }
+                timerId = setTimeout(maxTick, framesize, h);
+            }, framesize, h);
         },
         typing: function () {
             var tm = RigthChatApp.localtypingdate;
@@ -345,7 +362,17 @@ var RigthChatApp = new Vue({
         }
     }
 });
+function fixHeight(container) {
+    var els = $(container).find("*");
 
+    for (var i = els.length; i >= 0; i--) {
+        var el = $(els[i]);
+        var h = Math.floor(el.height());
+        //console.log(el);
+        //console.log('element: ' + el + ' h: ' + h);
+        el.height(h + 'px');
+    }
+}
 function getIntervalAnimation(percent, total, reverse) {
     var ms = total / 40;
     var duration;
@@ -364,12 +391,16 @@ function clearTypingInterval() {
 RigthChatApp.startUnread();
 RigthChatApp.getUserData();
 
-
+var formatTimeCH = {};
 Vue.filter('formatTime', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
         var opt = { hour: '2-digit', minute: '2-digit' }
-        return d.toLocaleTimeString('ru-RU', opt);
+        if (formatTimeCH[d] != undefined)
+            return formatTimeCH[d];
+        var str = d.toLocaleTimeString('ru-RU', opt);
+        formatTimeCH[d] = str;
+        return str;
     }
 });
 Vue.filter('formatMonthDay', function (value) {
@@ -379,11 +410,17 @@ Vue.filter('formatMonthDay', function (value) {
         return d.toLocaleDateString('ru-RU', opt);
     }
 });
+
+var formatDateTimeCH = {};
 Vue.filter('formatDateTime', function (value) {
     if (value) {
         var d = new Date(Date.parse(value));
         var opt = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
-        return d.toLocaleDateString('ru-RU', opt);
+        if (formatDateTimeCH[d] != undefined)
+            return formatDateTimeCH[d];
+        var str = d.toLocaleDateString('ru-RU', opt);
+        formatDateTimeCH[d] = str;
+        return str;
     }
 });
 
@@ -642,7 +679,8 @@ function sendMessageToTopicRc(body, topicId) {
 // есть ли файл в форме отправки
 function isFileSelectedRc() {
     try {
-        return $('#file-rch').prop('files').length > 0;
+
+        return $('#send_panel input[type="file"]').prop('files').length > 0;
     }
     catch (e) {
         console.log(e)
@@ -651,7 +689,8 @@ function isFileSelectedRc() {
 }
 // загрузка файла
 function uploadFileRc(topicid, messageid) {
-    var file_data = $('#file-rch').prop('files')[0];
+
+    var file_data = $('#send_panel input[type="file"]').prop('files')[0];
     var form_data = new FormData();
     form_data.append('uploads', file_data);
     RigthChatApp.showLoader = true;
@@ -670,6 +709,7 @@ function uploadFileRc(topicid, messageid) {
         success: function (data) {
             RigthChatApp.fileAdded = false;
             RigthChatApp.selectFileName = null;
+            $('#send_panel input[type="file"]').val('')
             RigthChatApp.showLoader = false;
             assignAttacmentToMessageRc(messageid, data);
             setTimeout(function () {
@@ -745,7 +785,7 @@ function showRigthChat(ifShow, id) {
     console.log('switch chat ' + ifShow);
     RigthChatApp.showRC = ifShow;
     RigthChatApp.application.state = RigthChatApp.application.stateMin;
-    $('#rigth-chat-app').height('60%');
+    //$('#rigth-chat-app').height('60%');
 
     var st = localStorage.getItem(openPanelKey);
     if (st != null) {
@@ -1077,5 +1117,161 @@ function sortTopics(array, id) {
 }
 
 
+/*--------------Library code----------------*/
+/**
+ * BezierEasing - use bezier curve for transition easing function
+ * by Gaëtan Renaudeau 2014 – MIT License
+ *
+ * Credits: is based on Firefox's nsSMILKeySpline.cpp
+ * Usage:
+ * var spline = BezierEasing(0.25, 0.1, 0.25, 1.0)
+ * spline(x) => returns the easing value | x must be in [0, 1] range
+ *
+ */
+(function (definition) {
+    if (typeof exports === "object") {
+        module.exports = definition();
+    } else if (typeof define === 'function' && define.amd) {
+        define([], definition);
+    } else {
+        window.BezierEasing = definition();
+    }
+}(function () {
+    var global = this;
 
+    // These values are established by empiricism with tests (tradeoff: performance VS precision)
+    var NEWTON_ITERATIONS = 4;
+    var NEWTON_MIN_SLOPE = 0.001;
+    var SUBDIVISION_PRECISION = 0.0000001;
+    var SUBDIVISION_MAX_ITERATIONS = 10;
+
+    var kSplineTableSize = 11;
+    var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
+
+    var float32ArraySupported = 'Float32Array' in global;
+
+    function A(aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
+    function B(aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
+    function C(aA1) { return 3.0 * aA1; }
+
+    // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+    function calcBezier(aT, aA1, aA2) {
+        return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
+    }
+
+    // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
+    function getSlope(aT, aA1, aA2) {
+        return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
+    }
+
+    function binarySubdivide(aX, aA, aB) {
+        var currentX, currentT, i = 0;
+        do {
+            currentT = aA + (aB - aA) / 2.0;
+            currentX = calcBezier(currentT, mX1, mX2) - aX;
+            if (currentX > 0.0) {
+                aB = currentT;
+            } else {
+                aA = currentT;
+            }
+        } while (Math.abs(currentX) > SUBDIVISION_PRECISION && ++i < SUBDIVISION_MAX_ITERATIONS);
+        return currentT;
+    }
+
+    function BezierEasing(mX1, mY1, mX2, mY2) {
+        // Validate arguments
+        if (arguments.length !== 4) {
+            throw new Error("BezierEasing requires 4 arguments.");
+        }
+        for (var i = 0; i < 4; ++i) {
+            if (typeof arguments[i] !== "number" || isNaN(arguments[i]) || !isFinite(arguments[i])) {
+                throw new Error("BezierEasing arguments should be integers.");
+            }
+        }
+        if (mX1 < 0 || mX1 > 1 || mX2 < 0 || mX2 > 1) {
+            throw new Error("BezierEasing x values must be in [0, 1] range.");
+        }
+
+        var mSampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
+
+        function newtonRaphsonIterate(aX, aGuessT) {
+            for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
+                var currentSlope = getSlope(aGuessT, mX1, mX2);
+                if (currentSlope === 0.0) return aGuessT;
+                var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+                aGuessT -= currentX / currentSlope;
+            }
+            return aGuessT;
+        }
+
+        function calcSampleValues() {
+            for (var i = 0; i < kSplineTableSize; ++i) {
+                mSampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
+            }
+        }
+
+        function getTForX(aX) {
+            var intervalStart = 0.0;
+            var currentSample = 1;
+            var lastSample = kSplineTableSize - 1;
+
+            for (; currentSample != lastSample && mSampleValues[currentSample] <= aX; ++currentSample) {
+                intervalStart += kSampleStepSize;
+            }
+            --currentSample;
+
+            // Interpolate to provide an initial guess for t
+            var dist = (aX - mSampleValues[currentSample]) / (mSampleValues[currentSample + 1] - mSampleValues[currentSample]);
+            var guessForT = intervalStart + dist * kSampleStepSize;
+
+            var initialSlope = getSlope(guessForT, mX1, mX2);
+            if (initialSlope >= NEWTON_MIN_SLOPE) {
+                return newtonRaphsonIterate(aX, guessForT);
+            } else if (initialSlope === 0.0) {
+                return guessForT;
+            } else {
+                return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize);
+            }
+        }
+
+        var _precomputed = false;
+        function precompute() {
+            _precomputed = true;
+            if (mX1 != mY1 || mX2 != mY2)
+                calcSampleValues();
+        }
+
+        var f = function (aX) {
+            if (!_precomputed) precompute();
+            if (mX1 === mY1 && mX2 === mY2) return aX; // linear
+            // Because JavaScript number are imprecise, we should guarantee the extremes are right.
+            if (aX === 0) return 0;
+            if (aX === 1) return 1;
+            return calcBezier(getTForX(aX), mY1, mY2);
+        };
+
+        f.getControlPoints = function () { return [{ x: mX1, y: mY1 }, { x: mX2, y: mY2 }]; };
+
+        var args = [mX1, mY1, mX2, mY2];
+        var str = "BezierEasing(" + args + ")";
+        f.toString = function () { return str; };
+
+        var css = "cubic-bezier(" + args + ")";
+        f.toCSS = function () { return css; };
+
+        return f;
+    }
+
+    // CSS mapping
+    BezierEasing.css = {
+        "ease": BezierEasing(0.25, 0.1, 0.25, 1.0),
+        "linear": BezierEasing(0.00, 0.0, 1.00, 1.0),
+        "ease-in": BezierEasing(0.42, 0.0, 1.00, 1.0),
+        "ease-out": BezierEasing(0.00, 0.0, 0.58, 1.0),
+        "ease-in-out": BezierEasing(0.42, 0.0, 0.58, 1.0)
+    };
+
+    return BezierEasing;
+
+}));
 

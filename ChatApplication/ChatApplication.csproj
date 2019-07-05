@@ -11,6 +11,52 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="rcv2\public\css\right-nav-style.css" />
+    <None Remove="rcv2\public\template\fonts\RobotoCondensedBold.ttf" />
+    <None Remove="rcv2\public\template\fonts\RobotoCondensedBold.woff" />
+    <None Remove="rcv2\public\template\fonts\RobotoCondensedRegular.ttf" />
+    <None Remove="rcv2\public\template\fonts\RobotoCondensedRegular.woff" />
+    <None Remove="rcv2\public\template\libs\fancybox\dist\jquery.fancybox.css" />
+    <None Remove="rcv2\public\template\libs\fancybox\dist\jquery.fancybox.min.css" />
+    <None Remove="rcv2\public\template\styles\css\main-old.css" />
+    <None Remove="rcv2\public\template\styles\css\responsive.css" />
+    <None Remove="rcv2\public\template\styles\css\style.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="rcv2\public\css\right-nav-style.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\fonts\RobotoCondensedBold.ttf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\fonts\RobotoCondensedBold.woff">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\fonts\RobotoCondensedRegular.ttf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\fonts\RobotoCondensedRegular.woff">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\libs\fancybox\dist\jquery.fancybox.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\libs\fancybox\dist\jquery.fancybox.min.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\styles\css\main-old.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\styles\css\responsive.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="rcv2\public\template\styles\css\style.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -23,6 +69,7 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
+    <Folder Include="rcv2\public\template\libs\slick-carousel\slick\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\storage\web\source\1\" />
     <Folder Include="wwwroot\template\libs\fancybox\dist\" />
