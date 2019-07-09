@@ -9,6 +9,14 @@ var openPanelKey = 'openPanelKey';
 
 var rc = new Vue({
     router,
+    methods: {        
+        setLogin: function (data) {            
+            this.$store.commit('setLoginUser', data);
+        },
+        refreshToken: function(token) {
+
+        }
+    },
     store,
     render: h => h(App)
 });
@@ -17,6 +25,7 @@ window.RigthChat = rc;
 
 
 window.FloatMessageButton = new Vue({    
+    store,
     render: h => h(FloatButton)
 });
 

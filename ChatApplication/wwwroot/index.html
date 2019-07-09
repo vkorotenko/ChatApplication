@@ -1086,16 +1086,16 @@
         elem.src = "/viewbox/jquery.viewbox.min.js";
         document.body.appendChild(elem);
     </script>
-    <nav class="nav" id="rigth-chat-app">
+    <nav class="nav container-fluid" id="rigth-chat-app">
 
         <div class="nav-header">
             <div class="row btn_bar">
                 <div class="col-md-2 mp-0 w36">
                     <ul class="ul_btn_bar">
-                        <li v-if="showMessagePanel" @click="backToTopics">                            
-                            <img src="/img/rc/back_ico.png" class="back_span back_btn" >
+                        <li v-if="showMessagePanel" @click="backToTopics">
+                            <img src="/img/rc/back_ico.png" class="back_span back_btn">
                         </li>
-                    </ul>                    
+                    </ul>
                 </div>
                 <div class="col-md-8 mp-0" style="padding-top: 9px;">
                     <h2 v-show="!showMessagePanel">
@@ -1111,13 +1111,13 @@
                 <div class="col-md-2 mp-0" style="width: 74px;margin-left: auto;">
                     <ul class="ul_btn_bar">
                         <li @click="closePanel">
-                            <span class="close_span minimize_btn" ></span>
+                            <span class="close_span minimize_btn"></span>
                         </li>
-                        <li v-if="application.state === application.stateMax" @click="maximize">
+                        <li v-if="application.state === application.stateMax" @click="toggle">
                             <span class="close_span restore_btn" v-if="application.state === application.stateMax"></span>
                         </li>
-                        <li v-if="application.state === application.stateMin" @click="collapse">
-                            <span class="close_span maximize_btn"  v-if="application.state === application.stateMin"></span>
+                        <li v-if="application.state === application.stateMin" @click="toggle">
+                            <span class="close_span maximize_btn" v-if="application.state === application.stateMin"></span>
                         </li>
                     </ul>
                 </div>
@@ -1125,7 +1125,7 @@
         </div>
 
 
-        
+
 
         <div class="fh_100">
             <input type="text"
@@ -1241,7 +1241,7 @@
                                     <br />
                                     <a :href="msg.attachment.url" onclick="//return jsiBoxOpen(this)" target="_self" class="litebox" data-litebox-group="group-1" tabindex="0">
                                         <img class="img-responsive"
-                                             style="width: 250px !important"
+                                             style="width: 205px !important; max-width: 205px !important;"
                                              v-if="msg.attachment.isImage"
                                              :src="msg.attachment.url"
                                              :alt="msg.attachment.name" />
@@ -1308,8 +1308,10 @@
                 </div>
             </div>
         </div>
-        
+
     </nav>
+    <script src="/js/ResizeSensor.js"></script>
+    <script src="/js/ElementQueries.js"></script>
     <script src="/js/rigth-chat.js"></script>
 
     <div id="floatMessageButton">

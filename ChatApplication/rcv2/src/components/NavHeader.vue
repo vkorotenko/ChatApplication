@@ -53,8 +53,7 @@
             }
         },
         computed: {
-            appstatemax() {
-                //console.log(this.$store.state.appstatemax)
+            appstatemax() {                
                 return this.$store.state.appstatemax;
             }
         },

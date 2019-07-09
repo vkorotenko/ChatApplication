@@ -8,8 +8,8 @@ var openPanelKey = 'openPanelKey';
 var sessionToken = sessionStorage.getItem(tokenKey);
 var id = findIdFromUrl();
 var gcOut = 0;
-var g_perf = { s: null, e: null };
-var g_step = { s: null, e: null };
+var gPerf = { s: null, e: null };
+var gStep = { s: null, e: null };
 checkMessagesForUser();
 setInterval(function () { RefreshToken(sessionToken); }, 55000);
 
@@ -28,8 +28,13 @@ $(document).ready(function () {
         localStorage.setItem(openPanelKey, RigthChatApp.showRC);
     });
 });
-
+/**
+ * Плавающая кнопка 
+ */
 var FloatMessageButton;
+/**
+ * Инициализируем приложение в момент загрузки DOM
+ */
 $(document).ready(function () {
     /**
      * Плавающая кнопка и индикатор.
@@ -53,7 +58,9 @@ $(document).ready(function () {
     /*end*/
 });
 
-
+/**
+ * Приложение чата.
+ */
 var RigthChatApp = new Vue({
     el: '#rigth-chat-app',
     data: {
@@ -185,6 +192,9 @@ var RigthChatApp = new Vue({
                 RigthChatApp.getUserData();
             }, 1100);
         },
+        /**
+         * Добавляем символ перевода новой строки к сообщению.
+         */
         appendNewLine: function () {
             RigthChatApp.messageArea = RigthChatApp.messageArea + '\n';
         },
@@ -251,94 +261,37 @@ var RigthChatApp = new Vue({
             sp.style.height = str * fs + 'px';
             RigthChatApp.typing();
         },
-        collapse: function () {
-            console.log('collapse: ' + RigthChatApp.application.state);
-            RigthChatApp.application.state = RigthChatApp.application.stateMax;
+        /**
+         * Переключение размера чата. 
+         */
+        toggle: function () {
+            window.console.log('min/max');
+            var chat = document.getElementById('rigth-chat-app');
+            var state;
             var container = getVisibleScroolElement();
-            fixHeight(container);
 
-            var rc = $("#rigth-chat-app");
-            rc.addClass('notransition');
-
-            g_perf.s = performance.now();
-            var h;
-            var ch = document.body.clientHeight;
-            var ch60 = document.body.clientHeight * 0.6;
-            h = ch60;
-            var ch40 = ch - ch60;
-            var duration = 800;
-            var framesize = 15;
-
-            g_step.s = performance.now();
-            g_step.e = performance.now();
-
-            var spline = BezierEasing(0.44, .05, .55, .95);
-            // from 60% -> 100%
-
-            var timerId = setTimeout(function maxTick(h) {
-
-                g_step.e = performance.now();
-                var d = g_step.e - g_step.s;
-                h = ch60 + d * ((ch - ch60) / duration);
-                // console.log(60 + (spline((h - ch60) / (ch40)) / (ch/ch40) ) * 100 + '%');
-                // container.style.opacity = 0;
-                // scroolToBottom(container);
-                rc.height(60 + (spline((h - ch60) / (ch40)) / (ch / ch40)) * 100 + '%');
-                // container.style.opacity = 1;               
-                if (h > ch) {
-                    rc.height('100%');
-                    rc.removeClass('notransition');
-                    scroolToBottom(container);
-                    //container.style.opacity = 1;
-                    g_perf.e = performance.now();
-                    console.log('Duration: ' + (g_perf.e - g_perf.s) + ' ms');
-                    return;
-                }
-                timerId = setTimeout(maxTick, framesize, h);
-            }, framesize, h);
-
-        },
-        maximize: function () {
-            console.log('maximize: ' + RigthChatApp.application.state);
-            RigthChatApp.application.state = RigthChatApp.application.stateMin;
-            var container = getVisibleScroolElement();
-            var rc = $("#rigth-chat-app");
-            fixHeight(container);
-            rc.addClass('notransition');
-            g_perf.s = performance.now();
-            var h;
-            var ch = document.body.clientHeight;
-            var ch60 = document.body.clientHeight * 0.6;
-            var ch40 = ch - ch60;
-            h = ch;
-            var duration = 800;
-            var framesize = 15;
-
-            g_step.s = performance.now();
-
-            var spline = BezierEasing(0.44, .05, .55, .95);
-            // 100 => 60
-
-            var timerId = setTimeout(function maxTick(h) {
-
-                g_step.e = performance.now();
-                var d = g_step.e - g_step.s;
-                h = ch - d * ((ch - ch60) / duration) + 3;
-                // console.log(60 + (spline((h - ch60) / (ch40)) / (ch/ch40) ) * 100 + '%');
-                // scroolToBottom(container);
-                rc.height(60 + (spline((h - ch60) / (ch40)) / (ch / ch40)) * 100 + '%');
-
-                if (h < ch60) {
-                    rc.height('60%');
-                    rc.removeClass('notransition');
-                    scroolToBottom(container);
-                    //container.style.opacity = 1;
-                    g_perf.e = performance.now();
-                    console.log('Duration: ' + (g_perf.e - g_perf.s) + ' ms');
-                    return;
-                }
-                timerId = setTimeout(maxTick, framesize, h);
-            }, framesize, h);
+            var expand = false;
+            var height = chat.style.height;
+            if (height === "") {
+                height = '60%';
+            }
+            if (height == '60%') {
+                expand = true;
+                state = RigthChatApp.application.stateMax;
+            } else {
+                state = RigthChatApp.application.stateMin;
+            }
+            window.console.log('Expand: ' + expand);
+            /** Текущая высота чата в пикселях*/
+            var chat100H = document.body.offsetHeight;
+            /** 60% высоты чата в пикселях*/
+            var chat60H = document.body.offsetHeight * .6;
+            gPerf.s = performance.now();
+            if (expand) {
+                scrollStartExpand(container, chat, chat100H, chat100H - chat60H);
+            } else {
+                scrollChat(container, chat, chat60H, chat100H - chat60H);
+            }
         },
         typing: function () {
             var tm = RigthChatApp.localtypingdate;
@@ -362,26 +315,150 @@ var RigthChatApp = new Vue({
         }
     }
 });
-function fixHeight(container) {
-    var els = $(container).find("*");
 
-    for (var i = els.length; i >= 0; i--) {
-        var el = $(els[i]);
-        var h = Math.floor(el.height());
-        //console.log(el);
-        //console.log('element: ' + el + ' h: ' + h);
-        el.height(h + 'px');
-    }
+
+/**
+ * Подтягиваем позицию после ресайза 150 мс
+ * @param {any} container - контейнер
+ * @param {boolean} expand - тип расширения
+ */
+function pullDownScroolPosition(container, expand) {
+    var cnt = 300;
+    var step = 15;
+    var total = Math.floor(container.scrollHeight - container.clientHeight);
+    var delta = Math.floor(total - container.scrollTop);
+    var lstep = step * (delta / cnt);
+    var calcHeight = container.scrollTop;
+    //console.log('expand: ' + expand);
+    //console.log('delta: ' + delta);
+    //console.log('lstep: ' + lstep);
+    var timer = setInterval(function () {
+        cnt -= step;
+        //console.log('cnt: ' + cnt);
+        calcHeight += lstep;
+        if (Math.floor(container.scrollTop) !== Math.floor(calcHeight)) {
+            //console.log('container.scrollTop: ' + container.scrollTop + lstep);
+            container.scrollTop = calcHeight;
+        }
+        if (cnt <= 0) {
+            //container.scrollTop = container.scrollHeight - container.clientHeight;
+            clearInterval(timer);
+            gPerf.e = performance.now();
+            console.log('Stop pullDownScroolPosition after, ms:' + (gPerf.e - gPerf.s));
+        }
+    }, step);
 }
-function getIntervalAnimation(percent, total, reverse) {
-    var ms = total / 40;
-    var duration;
-    if (reverse)
-        duration = Math.abs((percent - 100)) * ms;
-    else
-        duration = (percent - 60) * ms;
-    //console.log('percent ' + percent + ' duration: ' + duration);
-    return 100;
+/**
+ * Прокрутка чата вниз.
+ * @param {any} container - Контейнер который изменяется
+ * @param {any} chat - Элемент чата
+ * @param {any} end - Конечная высота
+ * @param {any} length - Разница в длине между высотами
+ */
+function scrollChat(container, chat, end, length) {
+    console.log('scrollChat');
+    var cnt = 600;
+    var step = 15;
+    var lstep = step * (length / cnt);
+    var ch = $(chat);
+    ch.addClass('notransition');
+    //console.log('length: ' + length);
+    //console.log('lstep: ' + lstep);
+
+    var timer = setInterval(function () {
+        ch.height(ch.height() - lstep + 'px');
+
+        if (!RigthChatApp.showMessagePanel)
+            container.scrollTop = 0;
+        else
+            container.scrollTop = container.scrollTop + (lstep);
+
+        //console.log(container.scrollTop);
+        cnt -= step;
+        if (cnt <= 0) {
+            $(chat).height('60%');
+            ch.removeClass('notransition');
+            clearInterval(timer);
+
+            gPerf.e = performance.now();
+            console.log('Stop scrollChat after, ms:' + (gPerf.e - gPerf.s));
+            gPerf.s = performance.now();
+            if (RigthChatApp.showMessagePanel)
+                pullDownScroolPosition(container, false);
+        }
+    }, step);
+}
+
+/**
+ * Расширение чата. 600 ms, step 15
+ * @param {any} container - контейнер ресайза
+ * @param {any} chat - чат
+ * @param { Number} end - Конечная высота в пикселях
+ * @param { Number } length - Длина изменения
+ */
+function scrollStartExpand(container, chat, end, length) {
+    console.log('scrollStartExpand');
+    var spline = BezierEasing(0.44, .05, .55, .95);
+    // from 60% -> 100%
+    var cnt = 600;
+    var step = 15;
+    var lstep = step * (length / cnt);
+    var ch = $(chat);
+    ch.addClass('notransition');
+
+    var chInitialHeight = ch.height();
+    var scrollTopInitial = container.scrollTop;
+
+    //console.log('length: ' + length);
+    //console.log('lstep: ' + lstep);         
+    var timer = setInterval(function () {
+        if (!RigthChatApp.showMessagePanel)
+            container.scrollTop = 0;
+        else
+            container.scrollTop = container.scrollTop - (lstep);
+
+        ch.height(ch.height() + lstep + 'px');
+        // console.log(container.scrollTop);        
+        cnt -= step;
+        if (cnt <= 0) {
+            $(chat).height('100%');
+            ch.removeClass('notransition');
+            clearInterval(timer);
+
+            gPerf.e = performance.now();
+            console.log('Stop scrollStartExpand after, ms:' + (gPerf.e - gPerf.s));
+            gPerf.s = performance.now();
+            if (RigthChatApp.showMessagePanel)
+                pullDownScroolPosition(container, true);
+        }
+    }, step);
+}
+
+/**
+ * Получаем видимый контейнер.
+ */
+function getVisibleScroolElement() {
+    return $('.ms_container:visible')[0];
+}
+
+/**
+ * Прокрутка чата до нижней позиции.
+ * @param {any} container
+ */
+function scroolToBottom(container) {
+
+    console.log('container.scrollTop: ' + container.scrollTop);
+    console.log('container.scrollHeight: ' + container.scrollHeight);
+    console.log('container.clientHeight: ' + container.clientHeight);
+
+    var sh = container.scrollHeight - container.clientHeight;
+    console.log(sh);
+    if (!RigthChatApp.showMessagePanel) {
+        container.scrollTop = 0;
+    } else {
+        container.scrollTop = sh;
+    }
+    return sh;
 }
 function clearTypingInterval() {
     RigthChatApp.typingData.id = null;
@@ -626,20 +703,7 @@ function getMessagesForTopicRc(id, authorId) {
     });
 }
 
-function getVisibleScroolElement() {
-    return $('.ms_container:visible')[0];
-}
-function scroolToBottom(container) {
 
-    var sh = container.scrollHeight;
-
-    if (!RigthChatApp.showMessagePanel) {
-        container.scrollTop = 0;
-    } else {
-        container.scrollTop = sh;
-    }
-    return sh;
-}
 // Отправка сообщения в топик
 function sendMessageToTopicRc(body, topicId) {
 

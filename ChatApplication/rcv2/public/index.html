@@ -17,9 +17,9 @@
     <form class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">Войдите в систему</h1>
         <label for="inputEmail" class="sr-only">Email</label>
-        <input type="text" id="inputUserName" class="form-control" placeholder="Имя пользователя" required autofocus>
+        <input type="text" id="inputUserName" class="form-control" placeholder="Имя пользователя" required autofocus value="79210843080">
         <label for="inputPassword" class="sr-only">Пароль</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required value="210236">
 
         <div class="custom-control custom-checkbox mb-3">
             <input type="checkbox" class="custom-control-input" id="remimberme">
@@ -40,17 +40,19 @@
                 username: username.value,
                 password: password.value
             };
+            axios.defaults.headers.post['Content-Type'] = 'application/json' // for POST requests
             var data = JSON.stringify(loginData);
             console.log(data)
-            axios.post('/api/v1/Account/token', data)
+            axios.post('http://web.nelikvida-net.ru/api/v1/Account/token', data)
                 .then(function (response) {
-                    sessionToken = response.access_token;
-                    sessionStorage.setItem(tokenKey, response.access_token);
+                    sessionToken = response.data.access_token;
+                    console.log(response)
+                    sessionStorage.setItem(tokenKey, response.data.access_token);
                     // showChat(data.id);
-                    if (loggedinUserId) loggedinUserId = data.id;
-                    if (RigthChatApp) {
-                        RigthChatApp.id = data.id;
-                        RigthChatApp.getUserData();
+                    //if (loggedinUserId) loggedinUserId = data.id;
+                    if (RigthChat) {
+                        RigthChat.setLogin(response.data);
+                        RigthChat.refreshToken(response.data)
                     }
 
                     console.log(response);
