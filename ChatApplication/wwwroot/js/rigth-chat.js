@@ -349,7 +349,7 @@ function pullDownScroolPosition(container, expand) {
     }, step);
 }
 /**
- * Прокрутка чата вниз.
+ * Уменьшение чата вниз.
  * @param {any} container - Контейнер который изменяется
  * @param {any} chat - Элемент чата
  * @param {any} end - Конечная высота
@@ -357,35 +357,50 @@ function pullDownScroolPosition(container, expand) {
  */
 function scrollChat(container, chat, end, length) {
     console.log('scrollChat');
-    var cnt = 600;
-    var step = 15;
-    var lstep = step * (length / cnt);
+    const duration = 600;
+    var cnt = duration;
+    const step = 4;
+    var lstep = step * (length / duration);
+    var initialHeight = chat.clientHeight;
+    console.log('initial:' + initialHeight);
     var ch = $(chat);
     ch.addClass('notransition');
     //console.log('length: ' + length);
     //console.log('lstep: ' + lstep);
+    gStep.s = performance.now();
 
     var timer = setInterval(function () {
-        ch.height(ch.height() - lstep + 'px');
-
-        if (!RigthChatApp.showMessagePanel)
-            container.scrollTop = 0;
-        else
-            container.scrollTop = container.scrollTop + (lstep);
+        gStep.e = performance.now();
+        var ex = gStep.e - gStep.s;
 
         //console.log(container.scrollTop);
         cnt -= step;
-        if (cnt <= 0) {
-            $(chat).height('60%');
-            ch.removeClass('notransition');
+        if (ex > duration) {
+            setTimeout(function () {
+                chat.style.height = "60%";
+                ch.removeClass('notransition');                
+            }, 4);
             clearInterval(timer);
-
             gPerf.e = performance.now();
             console.log('Stop scrollChat after, ms:' + (gPerf.e - gPerf.s));
             gPerf.s = performance.now();
-            if (RigthChatApp.showMessagePanel)
-                pullDownScroolPosition(container, false);
+            if (RigthChatApp.showMessagePanel) {
+                // pullDownScroolPosition(container, false);
+            }
         }
+        chat.style.height = Math.floor(initialHeight - (length / duration) * ex) + 'px';
+        if (!RigthChatApp.showMessagePanel) {
+            container.scrollTop = 0;
+        }
+        else {
+            container.scrollTop = Math.floor(container.scrollTop + (lstep)) ;
+        }
+        
+
+        // console.log('perf: ' + (gStep.e - gStep.s) + 'height: ' + chat.style.height);
+        // ch.height(ch.height() - lstep + 'px');
+
+
     }, step);
 }
 
