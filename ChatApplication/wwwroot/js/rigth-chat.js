@@ -17,7 +17,6 @@ setInterval(function () { RefreshToken(sessionToken); }, 55000);
 // Обработчики  событий закрытия панели правого чата
 $(document).ready(function () {
 
-
     $('.mask-content').click(function () {
 
         localStorage.setItem(openPanelKey, RigthChatApp.showRC);
@@ -27,6 +26,7 @@ $(document).ready(function () {
         RigthChatApp.showRC = document.getElementById('right-chat-toggle').checked;
         localStorage.setItem(openPanelKey, RigthChatApp.showRC);
     });
+    
 });
 /**
  * Плавающая кнопка 
@@ -288,9 +288,9 @@ var RigthChatApp = new Vue({
             var chat60H = document.body.offsetHeight * .6;
             gPerf.s = performance.now();
             if (expand) {
-                scrollStartExpand(container, chat, chat100H, chat100H - chat60H);
+                scrollStartExpand(container, chat, chat100H, chat100H - chat60H);                
             } else {
-                scrollChat(container, chat, chat60H, chat100H - chat60H);
+                scrollChat(container, chat, chat60H, chat100H - chat60H);                
             }
         },
         typing: function () {
@@ -393,14 +393,8 @@ function scrollChat(container, chat, end, length) {
             container.scrollTop = 0;
         }
         else {
-            container.scrollTop = Math.floor(container.scrollTop + (lstep)) ;
-        }
-        
-
-        // console.log('perf: ' + (gStep.e - gStep.s) + 'height: ' + chat.style.height);
-        // ch.height(ch.height() - lstep + 'px');
-
-
+            // scroolToBottom(container);
+        }        
     }, step);
 }
 
@@ -429,8 +423,10 @@ function scrollStartExpand(container, chat, end, length) {
     var timer = setInterval(function () {
         if (!RigthChatApp.showMessagePanel)
             container.scrollTop = 0;
-        else
-            container.scrollTop = container.scrollTop - (lstep);
+        else {
+            //container.scrollTop = container.scrollTop - (lstep);
+        }
+            
 
         ch.height(ch.height() + lstep + 'px');
         // console.log(container.scrollTop);        
@@ -443,8 +439,8 @@ function scrollStartExpand(container, chat, end, length) {
             gPerf.e = performance.now();
             console.log('Stop scrollStartExpand after, ms:' + (gPerf.e - gPerf.s));
             gPerf.s = performance.now();
-            if (RigthChatApp.showMessagePanel)
-                pullDownScroolPosition(container, true);
+            //if (RigthChatApp.showMessagePanel)
+            //    pullDownScroolPosition(container, true);
         }
     }, step);
 }
@@ -708,9 +704,10 @@ function getMessagesForTopicRc(id, authorId) {
                 ulbar1.style.opacity = 1;
 
                 RigthChatApp.showMessagePanel = true;
-
+                setTimeout(function () { resizeSpacer();}, 5);
                 setTimeout(function () {
                     var container = getVisibleScroolElement();
+                    
                     scroolToBottom(container);
                 }, 600);
             }, 600);
@@ -718,6 +715,26 @@ function getMessagesForTopicRc(id, authorId) {
     });
 }
 
+/**
+ * Подгоняем высоту распорки, для прижатия сообщений к нижнему краю
+ */
+function resizeSpacer() {
+    var container = document.querySelector('.message_container');
+    var spacer = document.querySelector('.spike-nail');    
+    var child = container.firstElementChild.children;
+    if (container.scrollHeight < container.clientHeight) {        
+        spacer.style.height = 0;
+    }
+        
+    else {        
+        var space = 0;
+        for (var i = 0; i < child.length; i++) {
+            if (child[i] !== spacer)
+                space += child[i].offsetHeight;
+        }
+        spacer.style.height = 'calc(100% - '+ space +'px)';
+    }
+}
 
 // Отправка сообщения в топик
 function sendMessageToTopicRc(body, topicId) {
@@ -872,6 +889,7 @@ function showRigthChat(ifShow, id) {
     }
     if (id) {
         ifShow = true;
+        createTopic(id);
         RigthChatApp.showThread(id);
     }
     if (ifShow) {

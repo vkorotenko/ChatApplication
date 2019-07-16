@@ -1214,9 +1214,10 @@
                     </a>
                 </template>
             </div>
-            <div class="ms_container" v-show="showMessagePanel">
+            <div class="ms_container message_container" v-show="showMessagePanel">
                 <div v-if="showMessagePanel">
-                    <div v-if="posts.length == 0">
+                    <div class="spike-nail"></div>
+                    <div v-if="posts.length == 0" class="no_messages_panel">
                         В данном чате пока нет сообщений.
                     </div>
                     <div v-for="msg in posts"
@@ -1238,13 +1239,13 @@
                             <div v-bind:class="{ from_alien: !msg.isAuthor, from_author: msg.isAuthor }">
                                 <div v-html="msg.body" class="mgs_body"></div>
                                 <template v-if="msg.attachment && msg.attachment.name != null">
-                                    <br />
+                                    <br/>
                                     <a :href="msg.attachment.url" onclick="//return jsiBoxOpen(this)" target="_self" class="litebox" data-litebox-group="group-1" tabindex="0">
                                         <img class="img-responsive"
                                              style="width: 205px !important; max-width: 205px !important;"
                                              v-if="msg.attachment.isImage"
                                              :src="msg.attachment.url"
-                                             :alt="msg.attachment.name" />
+                                             :alt="msg.attachment.name"/>
                                     </a>
                                     <b>
                                         <a :href="msg.attachment.url" class="attachment_url" target="_blank">
@@ -1252,7 +1253,7 @@
                                                 <div class="col-md-2 mp-0">
                                                     <img v-if="!msg.attachment.isImage"
                                                          :src="msg.attachment.name | getIcon"
-                                                         class="document_ico" />
+                                                         class="document_ico"/>
                                                 </div>
                                                 <div class="col-md-10 mp-0 mgs_file" :title="msg.attachment.name">
                                                     {{msg.attachment.name}}
