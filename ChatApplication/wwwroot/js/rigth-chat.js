@@ -26,7 +26,7 @@ $(document).ready(function () {
         RigthChatApp.showRC = document.getElementById('right-chat-toggle').checked;
         localStorage.setItem(openPanelKey, RigthChatApp.showRC);
     });
-    
+
 });
 /**
  * Плавающая кнопка 
@@ -267,20 +267,20 @@ var RigthChatApp = new Vue({
         toggle: function () {
             window.console.log('min/max');
             var chat = document.getElementById('rigth-chat-app');
-            var state;
             var container = getVisibleScroolElement();
 
             var expand = false;
             var height = chat.style.height;
             if (height === "") {
-                height = '60%';
+                height = "60%";
             }
-            if (height == '60%') {
+            if (height === "60%") {
                 expand = true;
-                state = RigthChatApp.application.stateMax;
+                RigthChatApp.application.state = RigthChatApp.application.stateMax;
             } else {
-                state = RigthChatApp.application.stateMin;
+                RigthChatApp.application.state = RigthChatApp.application.stateMin;
             }
+
             window.console.log('Expand: ' + expand);
             /** Текущая высота чата в пикселях*/
             var chat100H = document.body.offsetHeight;
@@ -288,9 +288,9 @@ var RigthChatApp = new Vue({
             var chat60H = document.body.offsetHeight * .6;
             gPerf.s = performance.now();
             if (expand) {
-                scrollStartExpand(container, chat, chat100H, chat100H - chat60H);                
+                scrollStartExpand(container, chat, chat100H, chat100H - chat60H);
             } else {
-                scrollChat(container, chat, chat60H, chat100H - chat60H);                
+                scrollChat(container, chat, chat60H, chat100H - chat60H);
             }
         },
         typing: function () {
@@ -348,6 +348,16 @@ function pullDownScroolPosition(container, expand) {
         }
     }, step);
 }
+
+/**
+ * Форматируем строку длительности перехода
+ * @param {any} duration - длительность в микросекундах.
+ */
+function getDurationString(duration) {
+    duration = duration / 1000;
+    return "height " + duration + "s ease-in-out";
+}
+
 /**
  * Уменьшение чата вниз.
  * @param {any} container - Контейнер который изменяется
@@ -357,45 +367,21 @@ function pullDownScroolPosition(container, expand) {
  */
 function scrollChat(container, chat, end, length) {
     console.log('scrollChat');
-    const duration = 600;
-    var cnt = duration;
-    const step = 4;
-    var lstep = step * (length / duration);
+    var duration = 600;    
+    var step = 4;
+
     var initialHeight = chat.clientHeight;
-    console.log('initial:' + initialHeight);
-    var ch = $(chat);
-    ch.addClass('notransition');
-    //console.log('length: ' + length);
-    //console.log('lstep: ' + lstep);
+    console.log("initial:" + initialHeight);
+    
     gStep.s = performance.now();
-
-    var timer = setInterval(function () {
-        gStep.e = performance.now();
-        var ex = gStep.e - gStep.s;
-
-        //console.log(container.scrollTop);
-        cnt -= step;
-        if (ex > duration) {
-            setTimeout(function () {
-                chat.style.height = "60%";
-                ch.removeClass('notransition');                
-            }, 4);
-            clearInterval(timer);
-            gPerf.e = performance.now();
-            console.log('Stop scrollChat after, ms:' + (gPerf.e - gPerf.s));
-            gPerf.s = performance.now();
-            if (RigthChatApp.showMessagePanel) {
-                // pullDownScroolPosition(container, false);
-            }
-        }
-        chat.style.height = Math.floor(initialHeight - (length / duration) * ex) + 'px';
-        if (!RigthChatApp.showMessagePanel) {
-            container.scrollTop = 0;
-        }
-        else {
-            // scroolToBottom(container);
-        }        
+    chat.style.transition = "";
+    setTimeout(function () {
+        chat.style.transition = getDurationString(duration);
+        chat.style.height = "60%";
     }, step);
+    setTimeout(function () {
+        chat.style.transition = "";
+    }, duration + step);   
 }
 
 /**
@@ -407,42 +393,20 @@ function scrollChat(container, chat, end, length) {
  */
 function scrollStartExpand(container, chat, end, length) {
     console.log('scrollStartExpand');
-    var spline = BezierEasing(0.44, .05, .55, .95);
-    // from 60% -> 100%
-    var cnt = 600;
-    var step = 15;
-    var lstep = step * (length / cnt);
-    var ch = $(chat);
-    ch.addClass('notransition');
-
-    var chInitialHeight = ch.height();
-    var scrollTopInitial = container.scrollTop;
-
-    //console.log('length: ' + length);
-    //console.log('lstep: ' + lstep);         
-    var timer = setInterval(function () {
-        if (!RigthChatApp.showMessagePanel)
-            container.scrollTop = 0;
-        else {
-            //container.scrollTop = container.scrollTop - (lstep);
-        }
-            
-
-        ch.height(ch.height() + lstep + 'px');
-        // console.log(container.scrollTop);        
-        cnt -= step;
-        if (cnt <= 0) {
-            $(chat).height('100%');
-            ch.removeClass('notransition');
-            clearInterval(timer);
-
-            gPerf.e = performance.now();
-            console.log('Stop scrollStartExpand after, ms:' + (gPerf.e - gPerf.s));
-            gPerf.s = performance.now();
-            //if (RigthChatApp.showMessagePanel)
-            //    pullDownScroolPosition(container, true);
-        }
+    // from 60% -> 100%    
+    var duration = 600;
+    var step = 15;   
+    chat.style.transition = "";
+    setTimeout(function () {
+        chat.style.transition = getDurationString(duration);
+        chat.style.height = "100%";
     }, step);
+
+    setTimeout(function () {
+        chat.style.transition = "";
+    }, duration + step);
+
+    return;    
 }
 
 /**
@@ -704,10 +668,10 @@ function getMessagesForTopicRc(id, authorId) {
                 ulbar1.style.opacity = 1;
 
                 RigthChatApp.showMessagePanel = true;
-                setTimeout(function () { resizeSpacer();}, 5);
+                setTimeout(function () { resizeSpacer(); }, 5);
                 setTimeout(function () {
                     var container = getVisibleScroolElement();
-                    
+
                     scroolToBottom(container);
                 }, 600);
             }, 600);
@@ -720,19 +684,19 @@ function getMessagesForTopicRc(id, authorId) {
  */
 function resizeSpacer() {
     var container = document.querySelector('.message_container');
-    var spacer = document.querySelector('.spike-nail');    
+    var spacer = document.querySelector('.spike-nail');
     var child = container.firstElementChild.children;
-    if (container.scrollHeight < container.clientHeight) {        
+    if (container.scrollHeight < container.clientHeight) {
         spacer.style.height = 0;
     }
-        
-    else {        
+
+    else {
         var space = 0;
         for (var i = 0; i < child.length; i++) {
             if (child[i] !== spacer)
                 space += child[i].offsetHeight;
         }
-        spacer.style.height = 'calc(100% - '+ space +'px)';
+        spacer.style.height = 'calc(100% - ' + space + 'px)';
     }
 }
 
@@ -1372,3 +1336,11 @@ function sortTopics(array, id) {
 
 }));
 
+function fixH() {
+    var child = document.querySelector('.message_container').querySelectorAll('*');
+    var len = child.length;
+    for (var i = 0; i < len; i++) {
+
+        child[i].style.height = child[i].offsetHeight + 'px';
+    }
+}
