@@ -960,6 +960,7 @@ body {
     margin: 0 0 0 -10px;
     padding: 10px 10px 10px 10px;
     animation: hideout_ab .6s ease-in-out;
+    z-index: 5;
 }
 
     .anonse_bar .row {
@@ -1087,6 +1088,7 @@ body {
     padding-top: 8px;
     min-height: 47px;
     animation: hideout_sp .6s ease-out;
+    z-index: 5;
 }
 
 

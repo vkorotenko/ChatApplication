@@ -318,38 +318,6 @@ var RigthChatApp = new Vue({
 
 
 /**
- * Подтягиваем позицию после ресайза 150 мс
- * @param {any} container - контейнер
- * @param {boolean} expand - тип расширения
- */
-function pullDownScroolPosition(container, expand) {
-    var cnt = 300;
-    var step = 15;
-    var total = Math.floor(container.scrollHeight - container.clientHeight);
-    var delta = Math.floor(total - container.scrollTop);
-    var lstep = step * (delta / cnt);
-    var calcHeight = container.scrollTop;
-    //console.log('expand: ' + expand);
-    //console.log('delta: ' + delta);
-    //console.log('lstep: ' + lstep);
-    var timer = setInterval(function () {
-        cnt -= step;
-        //console.log('cnt: ' + cnt);
-        calcHeight += lstep;
-        if (Math.floor(container.scrollTop) !== Math.floor(calcHeight)) {
-            //console.log('container.scrollTop: ' + container.scrollTop + lstep);
-            container.scrollTop = calcHeight;
-        }
-        if (cnt <= 0) {
-            //container.scrollTop = container.scrollHeight - container.clientHeight;
-            clearInterval(timer);
-            gPerf.e = performance.now();
-            console.log('Stop pullDownScroolPosition after, ms:' + (gPerf.e - gPerf.s));
-        }
-    }, step);
-}
-
-/**
  * Форматируем строку длительности перехода
  * @param {any} duration - длительность в микросекундах.
  */
@@ -367,22 +335,41 @@ function getDurationString(duration) {
  */
 function scrollChat(container, chat, end, length) {
     console.log('scrollChat');
-    var duration = 600;    
+    var duration = 600;
     var step = 4;
 
     var initialHeight = chat.clientHeight;
     console.log("initial:" + initialHeight);
-    
+
     gStep.s = performance.now();
     chat.style.transition = "";
     setTimeout(function () {
+        if (RigthChatApp.showMessagePanel) {
+            fixPosition(container, calculateMaxHeight(chat, container));
+        }                
         chat.style.transition = getDurationString(duration);
         chat.style.height = "60%";
     }, step);
     setTimeout(function () {
         chat.style.transition = "";
-    }, duration + step);   
+        resizeSpacer();
+    }, duration + step);
 }
+
+/**
+ * Фиксируем позицию чата, задавая позицию блока. 
+ * @param {any} container - контейнер прокрутки
+ * @param {any} maxHeight - максимальная высота контейнера
+ */
+function fixPosition(container, maxHeight) {
+
+    console.log('maxHeight: ' + maxHeight);
+    var sizer = container.firstElementChild;
+    sizer.style.position = "fixed";
+    sizer.style.bottom = "0px";
+    sizer.style.height = maxHeight + "px"; // тут должна быть полная высота контейнера.
+}
+
 
 /**
  * Расширение чата. 600 ms, step 15
@@ -395,19 +382,34 @@ function scrollStartExpand(container, chat, end, length) {
     console.log('scrollStartExpand');
     // from 60% -> 100%    
     var duration = 600;
-    var step = 15;   
+    var step = 4;
     chat.style.transition = "";
     setTimeout(function () {
+        if (RigthChatApp.showMessagePanel) {
+            fixPosition(container, calculateMaxHeight(chat, container));
+        }        
         chat.style.transition = getDurationString(duration);
         chat.style.height = "100%";
     }, step);
 
     setTimeout(function () {
         chat.style.transition = "";
+        resizeSpacer();
     }, duration + step);
 
-    return;    
+    return;
 }
+/**
+ * Вычисляет полную ывсоту контейнера
+ * @param {any} chat
+ * @param {any} container
+ */
+function calculateMaxHeight(chat, container) {
+    var delta = chat.offsetHeight - container.offsetHeight;
+    var docHeight = document.body.offsetHeight;
+    return docHeight - delta;
+}
+
 
 /**
  * Получаем видимый контейнер.
@@ -658,8 +660,8 @@ function getMessagesForTopicRc(id, authorId) {
                 top.style.webkitAnimation = "";
                 search.style.webkitAnimation = "";
 
-                ulbar.style.webkitAnimation = '';
-                ulbar1.style.webkitAnimation = '';
+                ulbar.style.webkitAnimation = "";
+                ulbar1.style.webkitAnimation = "";
 
                 top.style.opacity = 1;
                 search.style.opacity = 1;
@@ -682,9 +684,15 @@ function getMessagesForTopicRc(id, authorId) {
 /**
  * Подгоняем высоту распорки, для прижатия сообщений к нижнему краю
  */
+/***
+ * Расширяем контейнер для подгонки высоты отдельного элемента.
+ */
+/**
+ * Изменение контейнера заполнителя, для подгонки высоты под контейнер.
+ */
 function resizeSpacer() {
-    var container = document.querySelector('.message_container');
-    var spacer = document.querySelector('.spike-nail');
+    var container = document.querySelector(".message_container");
+    var spacer = document.querySelector(".spike-nail");
     var child = container.firstElementChild.children;
     if (container.scrollHeight < container.clientHeight) {
         spacer.style.height = 0;
@@ -696,7 +704,7 @@ function resizeSpacer() {
             if (child[i] !== spacer)
                 space += child[i].offsetHeight;
         }
-        spacer.style.height = 'calc(100% - ' + space + 'px)';
+        spacer.style.height = "calc(100% - " + space + "px)";
     }
 }
 
@@ -705,7 +713,7 @@ function sendMessageToTopicRc(body, topicId) {
 
     if (topicId == null) return;
     var sessionToken = sessionStorage.getItem(tokenKey);
-    console.log('sendMessageToTopicRc');
+    console.log("sendMessageToTopicRc");
     console.log(body);
     var container = getVisibleScroolElement();
     var bd = {
@@ -733,6 +741,7 @@ function sendMessageToTopicRc(body, topicId) {
             RigthChatApp.topics = sortTopics(arr, topicId);
             console.log(data);
             RigthChatApp.posts.push(data);
+            setTimeout(resizeSpacer, 4);
         }
     });
 }
