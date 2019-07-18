@@ -265,7 +265,7 @@ var RigthChatApp = new Vue({
          * Переключение размера чата. 
          */
         toggle: function () {
-            window.console.log('min/max');
+            console.group("min/max");
             var chat = document.getElementById('rigth-chat-app');
             var container = getVisibleScroolElement();
 
@@ -346,7 +346,7 @@ function scrollChat(container, chat, end, length) {
     setTimeout(function () {
         if (RigthChatApp.showMessagePanel) {
             fixPosition(container, calculateMaxHeight(chat, container));
-        }                
+        }
         chat.style.transition = getDurationString(duration);
         chat.style.height = "60%";
     }, step);
@@ -366,8 +366,9 @@ function fixPosition(container, maxHeight) {
     console.log('maxHeight: ' + maxHeight);
     var sizer = container.firstElementChild;
     sizer.style.position = "fixed";
-    sizer.style.bottom = "0px";
+    sizer.style.bottom = "0px";    
     sizer.style.height = maxHeight + "px"; // тут должна быть полная высота контейнера.
+    // container.screenTop = container.scrollHeight - container.clientHeight;
 }
 
 
@@ -387,7 +388,7 @@ function scrollStartExpand(container, chat, end, length) {
     setTimeout(function () {
         if (RigthChatApp.showMessagePanel) {
             fixPosition(container, calculateMaxHeight(chat, container));
-        }        
+        }
         chat.style.transition = getDurationString(duration);
         chat.style.height = "100%";
     }, step);
@@ -429,7 +430,7 @@ function scroolToBottom(container) {
     console.log('container.clientHeight: ' + container.clientHeight);
 
     var sh = container.scrollHeight - container.clientHeight;
-    console.log(sh);
+    console.log("sh %s", sh);
     if (!RigthChatApp.showMessagePanel) {
         container.scrollTop = 0;
     } else {
@@ -607,6 +608,8 @@ function selectItemRc(id) {
     }
 }
 function getMessagesForTopicRc(id, authorId) {
+    console.group("getMessagesForTopicRc");
+
     var sessionToken = sessionStorage.getItem(tokenKey);
     var container = getVisibleScroolElement();
     var top = $('.nav-header h2:visible')[0];
@@ -670,12 +673,12 @@ function getMessagesForTopicRc(id, authorId) {
                 ulbar1.style.opacity = 1;
 
                 RigthChatApp.showMessagePanel = true;
-                setTimeout(function () { resizeSpacer(); }, 5);
+                //setTimeout(function () { resizeSpacer(); }, 20);
                 setTimeout(function () {
-                    var container = getVisibleScroolElement();
-
-                    scroolToBottom(container);
-                }, 600);
+                     var sc = getVisibleScroolElement();
+                    scroolToBottom(sc);
+                    resizeSpacer();
+                }, 300);
             }, 600);
         }
     });
@@ -691,10 +694,12 @@ function getMessagesForTopicRc(id, authorId) {
  * Изменение контейнера заполнителя, для подгонки высоты под контейнер.
  */
 function resizeSpacer() {
+    console.log("resizeSpacer");
     var container = document.querySelector(".message_container");
     var spacer = document.querySelector(".spike-nail");
     var child = container.firstElementChild.children;
-    if (container.scrollHeight < container.clientHeight) {
+    console.log('container.scrollHeight: %i', container.scrollHeight);
+    if (container.scrollHeight > container.clientHeight) {
         spacer.style.height = 0;
     }
 
@@ -706,6 +711,7 @@ function resizeSpacer() {
         }
         spacer.style.height = "calc(100% - " + space + "px)";
     }
+    console.groupEnd();
 }
 
 // Отправка сообщения в топик

@@ -624,7 +624,7 @@ body {
 
 .message_to, .message_from {
     padding-bottom: 1rem;
-    align-self: flex-end;
+    /*align-self: flex-end;*/
 }
 
     .message_from .message__wrap_rc:before {
@@ -1350,7 +1350,8 @@ body {
     display: flex;
     flex-direction: column;
 }
-.spike-nail {    
+.spike-nail {
+    margin-top: auto;
 }
 .message_container {
     display: flex;
