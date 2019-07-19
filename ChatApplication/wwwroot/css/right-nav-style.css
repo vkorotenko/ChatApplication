@@ -1357,6 +1357,7 @@ body {
     display: flex;
     flex-direction: row;
     transform: translate3d(0, 0, 0);
+    opacity: 0;
 }
 .no_messages_panel {
     padding: 10px;

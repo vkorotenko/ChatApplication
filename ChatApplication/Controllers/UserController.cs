@@ -17,6 +17,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,10 +27,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Drawing;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using ChatApplication.Bl;
 
 namespace ChatApplication.Controllers
 {
@@ -234,7 +234,7 @@ namespace ChatApplication.Controllers
                     return url;
                 }
                 else
-                {                    
+                {
                     using (Image<Rgba32> image = Image.Load(fullPath))
                     {
                         image.Mutate(x => x.Resize(50, 50));
@@ -564,56 +564,22 @@ namespace ChatApplication.Controllers
         {
             try
             {
-                query = query.ToLower();
                 var user = await _ctx.Users.GetUserByName(User.Identity.Name);
                 var appUser = Mapper.Map<ApplicationUser>(user);
                 List<DbTopic> matchTopics;
+
                 if (await IsAdminOrManager(user.Id))
-                {
                     matchTopics = await _ctx.Topics.GetByAdminId(user.Id);
-                }
                 else
-                {
                     matchTopics = await _ctx.Topics.GetByUserId(user.Id);
-                }
 
-                // поиск по пустой строке, все результаты
-                if (!string.IsNullOrWhiteSpace(query))
-                {
-
-                    matchTopics = matchTopics.Where(x => x.Title.ToLower().Contains(query)
-                                      || x.Vendor.ToLower().Contains(query)
-                                      || x.VendorCode.ToLower().Contains(query)).ToList();
-                }
-
-                var authId = -1;
-                var url = string.Empty;
-                foreach (var topic in matchTopics)
-                {
-                    topic.FullName = user.FullName;
-                    topic.Name = appUser.Name;
-                    topic.Price = await _ctx.Articles.GetPrice(topic.AnnouncementId);
-                    await FillTopicLastMessage(topic, user);
-                    if (string.IsNullOrWhiteSpace(url))
-                    {
-                        url = await GetAvatarImage(topic.AuthorId);
-                        authId = topic.AuthorId;
-                    }
-
-                    if (authId != topic.AuthorId)
-                    {
-                        url = await GetAvatarImage(topic.AuthorId);
-                        authId = topic.AuthorId;
-                    }
-
-
-                    if (topic.Unread > 0)
-                        topic.HasMessages = true;
-                }
-
-                appUser.Topics = matchTopics;
+                FillNames(matchTopics, user, appUser.Name);
+                var searchProcessor = new SearchProcessor(matchTopics);
+                var resultTopics = searchProcessor.Contains(query);
+                await FillResultTopics(matchTopics, user);
+                appUser.Topics = resultTopics;
                 var unreadMessage = await _ctx.Messages.GetUnreadMessages(user.Id);
-                appUser.NewMessages = (int)unreadMessage;
+                appUser.NewMessages = unreadMessage;
                 return Json(appUser);
             }
             catch (Exception e)
@@ -622,21 +588,61 @@ namespace ChatApplication.Controllers
                 return BadRequest();
             }
         }
+        /// <summary>
+        /// Заполняем структуру именами
+        /// </summary>
+        /// <param name="resultTopics"></param>
+        /// <param name="user"></param>
+        /// <param name="appUserName"></param>
+        /// <returns></returns>
+        private void FillNames(IEnumerable<DbTopic> resultTopics, DbUser user, string appUserName)
+        {            
+            foreach (var topic in resultTopics)
+            {
+                topic.FullName = user.FullName;
+                topic.Name = appUserName;         
+            }
+        }
+        private async Task FillResultTopics(IEnumerable<DbTopic> resultTopics, DbUser user)
+        {
+            var authId = -1;
+            var url = string.Empty;
+            foreach (var topic in resultTopics)
+            {                
+                topic.Price = await _ctx.Articles.GetPrice(topic.AnnouncementId);
+                await FillTopicLastMessage(topic, user.Id);
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    url = await GetAvatarImage(topic.AuthorId);
+                    authId = topic.AuthorId;
+                }
+
+                if (authId != topic.AuthorId)
+                {
+                    url = await GetAvatarImage(topic.AuthorId);
+                    authId = topic.AuthorId;
+                }
+
+
+                if (topic.Unread > 0)
+                    topic.HasMessages = true;
+            }
+        }
 
         /// <summary>
         /// Заполняем поля последнего сообщения в топике, признак прочтения и флаг автор или нет
         /// </summary>
         /// <param name="topic"></param>
-        /// <param name="user"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        private async Task<DbTopic> FillTopicLastMessage(DbTopic topic, DbUser user)
+        private async Task<DbTopic> FillTopicLastMessage(DbTopic topic, int userId)
         {
             var msg = await _ctx.Messages.GetLastMessageForTopic(topic.Id);
             if (msg != null)
             {
                 var msgUser = await GetCachedUser(msg.AuthorId);
                 topic.LmAuthorId = msg.AuthorId;
-                topic.LmIsCurrent = msg.AuthorId == user.Id;
+                topic.LmIsCurrent = msg.AuthorId == userId;
                 topic.LastMessage = msg.Body;
                 topic.LmIsReaded = msg.IsRead;
                 topic.LmCreated = msg.Created;

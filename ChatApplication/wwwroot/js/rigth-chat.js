@@ -386,8 +386,9 @@ function scrollStartExpand(container, chat, end, length) {
     var step = 4;
     chat.style.transition = "";
     setTimeout(function () {
-        if (RigthChatApp.showMessagePanel) {
+        if (RigthChatApp.showMessagePanel) {            
             fixPosition(container, calculateMaxHeight(chat, container));
+            resizeSpacer(true);
         }
         chat.style.transition = getDurationString(duration);
         chat.style.height = "100%";
@@ -633,7 +634,6 @@ function getMessagesForTopicRc(id, authorId) {
     setTimeout(function () {
         top.style.webkitAnimation = "hideout .6s ease-in reverse";
         search.style.webkitAnimation = "movetop .6s ease-out reverse";
-
         ulbar.style.webkitAnimation = 'hideout .6s ease-in reverse';
         ulbar1.style.webkitAnimation = 'hideout .6s ease-in reverse';
     }, 600);
@@ -659,7 +659,7 @@ function getMessagesForTopicRc(id, authorId) {
             }, 1200);
 
             setTimeout(function () {
-                container.style.webkitAnimation = "";
+                container.style.webkitAnimation = "";                
                 top.style.webkitAnimation = "";
                 search.style.webkitAnimation = "";
 
@@ -673,29 +673,38 @@ function getMessagesForTopicRc(id, authorId) {
                 ulbar1.style.opacity = 1;
 
                 RigthChatApp.showMessagePanel = true;
-                //setTimeout(function () { resizeSpacer(); }, 20);
-                setTimeout(function () {
-                     var sc = getVisibleScroolElement();
+                var sc = document.querySelector(".message_container");
+                sc.style.opacity = "0";
+                sc.webkitAnimation = "";                
+                setTimeout(function () {                    
                     scroolToBottom(sc);
+                    sc.webkitAnimation = "";
                     resizeSpacer();
                 }, 300);
+                setTimeout(function () {                    
+                    scroolToBottom(sc);                    
+                    sc.style.opacity = "1";
+                }, 600);
             }, 600);
         }
     });
 }
 
-/**
- * Подгоняем высоту распорки, для прижатия сообщений к нижнему краю
- */
-/***
- * Расширяем контейнер для подгонки высоты отдельного элемента.
- */
+
 /**
  * Изменение контейнера заполнителя, для подгонки высоты под контейнер.
  */
-function resizeSpacer() {
+function resizeSpacer( expand) {
     console.log("resizeSpacer");
     var container = document.querySelector(".message_container");
+    var delta = document.body.clientHeight - container.offsetHeight;
+    var topSpacer = container.firstElementChild;
+    if (expand && container.scrollHeight < container.clientHeight) {
+        topSpacer.style.height = (container.offsetHeight + delta) + "px";
+    } else {
+        topSpacer.style.height = container.offsetHeight + "px";
+    }
+    
     var spacer = document.querySelector(".spike-nail");
     var child = container.firstElementChild.children;
     console.log('container.scrollHeight: %i', container.scrollHeight);
@@ -711,6 +720,7 @@ function resizeSpacer() {
         }
         spacer.style.height = "calc(100% - " + space + "px)";
     }
+    scroolToBottom(container);
     console.groupEnd();
 }
 
@@ -841,20 +851,6 @@ function clearNewMessagesRc(id) {
         }
     });
 }
-function sortTopics(array, id) {
-    for (i = 0; i < array.length; i++) {
-        if (array[i].id == id) {
-            array[i].updated = Date().toLocaleString();
-            console.log(Date().toLocaleString());
-            break;
-        }
-    }
-    var na = array.sort(function (a, b) {
-        var x = new Date(a.updated) > new Date(b.updated) ? -1 : 1;
-        return x;
-    });
-    return na;
-}
 
 function showRigthChat(ifShow, id) {
     console.log('switch chat ' + ifShow);
@@ -931,15 +927,7 @@ function RefreshToken(token) {
 
 
 
-function selectItem(id) {
-    for (i = 0; i < ChatApp.topics.length; i++) {
-        ChatApp.topics[i].selected = false;
-        if (ChatApp.topics[i].id == id) {
-            ChatApp.topicAuthor = ChatApp.topics[i].authorId;
-            ChatApp.topics[i].selected = true;
-        }
-    }
-}
+
 function applyTopicsSelected(topics) {
     for (i = 0; i < topics.length; i++) {
         topics[i].selected = false;

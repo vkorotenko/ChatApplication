@@ -80,7 +80,7 @@ namespace ChatApplication.Dbl.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<long> GetUnreadMessages(int userId);
+        Task<int> GetUnreadMessages(int userId);
         /// <summary>
         /// Получение количества непрочтенных писем для администратора или менеджера
         /// </summary>

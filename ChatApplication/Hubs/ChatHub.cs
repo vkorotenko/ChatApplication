@@ -5,11 +5,8 @@
 // https://vkorotenko.ru
 // Создано:  13.05.2019 13:57
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
 namespace ChatApplication.Hubs
 {

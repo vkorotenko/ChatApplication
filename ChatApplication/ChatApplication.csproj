@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CharApplication.Dbl\ChatApplication.Dbl.csproj" />
+    <ProjectReference Include="..\ChatApplication.Bl\ChatApplication.Bl.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="ChatApplication.xml">

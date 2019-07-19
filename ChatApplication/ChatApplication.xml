@@ -368,12 +368,21 @@
             <param name="query"></param>
             <returns></returns>
         </member>
-        <member name="M:ChatApplication.Controllers.UserController.FillTopicLastMessage(ChatApplication.Dbl.Models.DbTopic,ChatApplication.Dbl.Models.DbUser)">
+        <member name="M:ChatApplication.Controllers.UserController.FillNames(System.Collections.Generic.IEnumerable{ChatApplication.Dbl.Models.DbTopic},ChatApplication.Dbl.Models.DbUser,System.String)">
+            <summary>
+            Заполняем структуру именами
+            </summary>
+            <param name="resultTopics"></param>
+            <param name="user"></param>
+            <param name="appUserName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ChatApplication.Controllers.UserController.FillTopicLastMessage(ChatApplication.Dbl.Models.DbTopic,System.Int32)">
             <summary>
             Заполняем поля последнего сообщения в топике, признак прочтения и флаг автор или нет
             </summary>
             <param name="topic"></param>
-            <param name="user"></param>
+            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="M:ChatApplication.Controllers.UserController.GetCachedUser(System.Int32)">
@@ -394,23 +403,6 @@
             Вызывается при пользовательском вводе на клиенте. Дергает цикл с сообщениями
             </summary>
             <param name="topicid"></param>
-            <returns></returns>
-        </member>
-        <member name="T:ChatApplication.Controllers.ValuesController">
-            <summary>
-            Контроллер значений
-            </summary>
-        </member>
-        <member name="M:ChatApplication.Controllers.ValuesController.GetLogin">
-            <summary>
-            Информация о логоне
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:ChatApplication.Controllers.ValuesController.GetRole">
-            <summary>
-            Получение роли пользователя
-            </summary>
             <returns></returns>
         </member>
         <member name="T:ChatApplication.Models.AddMessageModel">

@@ -165,7 +165,7 @@ namespace ChatApplication.Dbl.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<long> GetUnreadMessages(int userId)
+        public async Task<int> GetUnreadMessages(int userId)
         {
             var sql = @"SELECT count(isread) as count
                           FROM dbmessages
@@ -174,7 +174,7 @@ namespace ChatApplication.Dbl.Repository
                                           WHERE authorid=@userId) AND NOT isread AND authorid != @userId";
 
 
-            var results = await _dbConn.QueryAsync<long>(sql, new { userId });
+            var results = await _dbConn.QueryAsync<int>(sql, new { userId });
             var result = results.FirstOrDefault();
             return result;
         }
